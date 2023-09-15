@@ -1,6 +1,6 @@
-# SCRIVA Pubblicazione e Osservazioni
+# TRISPE - TRIbuto SPEciale Deposito in Discarica dei Rifiuti
 
-Progetto contenente i sorgenti dell'applicativo di FE SCRIVA consultazione pratiche e gestione osservazioni.
+Progetto contenente i sorgenti dell'applicativo di FE TSDDR.
 Basato su template Angular 11 per CSI Regione Piemonte. Basata su Bootstrap-Italia.
 
 ## Conventional commit
