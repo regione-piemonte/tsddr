@@ -1,0 +1,1 @@
+UPDATE tsddr_t_messaggi SET titolo_msg = 'Attenzione !', testo_msg = 'Il dato selezionato verrà annullato. Vuoi Procedere ?' WHERE cod_msg = 'A005' AND id_messaggio = 11

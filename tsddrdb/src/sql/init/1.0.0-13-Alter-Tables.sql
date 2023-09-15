@@ -1,0 +1,1 @@
+ALTER TABLE ONLY tsddr_t_indirizzi ADD COLUMN cap character varying(5);

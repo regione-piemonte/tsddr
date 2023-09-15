@@ -1,0 +1,1 @@
+UPDATE tsddr_t_sotto_linee SET data_fine_validita=null, data_inizio_validita='2022-01-01';

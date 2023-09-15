@@ -1,0 +1,1 @@
+UPDATE tsddr_c_parametri SET valore_parametro_s='pec,legalmail' WHERE nome_parametro='Valori email non validi';

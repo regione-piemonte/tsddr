@@ -1,0 +1,2 @@
+INSERT INTO tsddr_t_messaggi(id_messaggio, cod_msg, id_tipo_msg, titolo_msg, testo_msg) VALUES
+(65, 'I006', 2, 'Informazione', 'L''impianto è collegato a Dichiarazioni\Richieste. Cancellazione non possibile.');

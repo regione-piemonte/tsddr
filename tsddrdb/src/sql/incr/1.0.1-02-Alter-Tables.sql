@@ -1,0 +1,1 @@
+ALTER TABLE ONLY tsddr_t_soggetti_mr ALTER COLUMN rag_sociale TYPE character varying(100);
