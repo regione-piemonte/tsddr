@@ -1,0 +1,305 @@
+<ivy-module version="1.0">
+<!--
+   * SPDX-License-Identifier: EUPL-1.2
+   * Copyright Regione Piemonte - 2022
+-->
+	<info organisation="csipiemonte" module="tsddrbl" />
+	<dependencies>
+
+		<!-- librerie per il logging applicativo e la misurazione
+		     delle performance. Nota: la piattaforma jboss impone l'utilizzo della
+		     versione 1.2.14.
+		-->
+		<dependency org="apache" name="log4j" rev="1.2.17">
+			<artifact name="log4j-1.2.17" type="jar" />
+		</dependency>
+
+		<dependency org="apache" name="commons-httpclient" rev="3.1">
+			<artifact name="commons-httpclient-3.1" type="jar" />
+		</dependency>
+
+		<dependency org="apache" name="commons-validator" rev="1.6">
+			<artifact name="commons-validator-1.6" type="jar" />
+		</dependency>
+		
+		<!-- dependency org="csipiemonte" name="util-perf" rev="1.0.2">
+			<artifact name="util-perf-1.0.2" type="jar"/>
+		</dependency-->
+
+		<dependency org="apache" name="commons-logging" rev="1.1.3">
+			<artifact name="commons-logging-1.1.3" type="jar"/>
+			<artifact name="commons-logging-api-1.1" type="jar"/>
+		</dependency>
+
+	  	<dependency org="others" name="aopalliance" rev="1.0.0" >
+			<artifact name="aopalliance-1.0.0" type="jar" />
+		</dependency> 
+
+    	<dependency org="others" name="cglib" rev="2.2.2">
+			<artifact name="cglib-2.2.2" type="jar"/>
+		</dependency>
+		
+		<dependency org="others" name="asm" rev="3.3.1">
+			<artifact name="asm-3.3.1" type="jar"/>
+		</dependency>
+		
+		<!-- ############################################################## -->
+    	<!-- # ZXING                                                     # -->
+    	<!-- ############################################################## -->
+    	<!--  -->
+	    <dependency org="google" name="zxing" rev="3.3.3" transitive="false" >
+	      <artifact name="zxing-core-3.3.3" type="jar" />
+	      <artifact name="zxing-javase-3.3.3" type="jar" />
+	    </dependency>	    
+		
+	
+		<!-- ############################################################## -->
+    	<!-- # SPRING                                                     # -->
+    	<!-- ############################################################## -->
+
+    	
+	    <dependency org="others" name="spring" rev="4.3.24.RELEASE" transitive="false" >
+	           
+		    <artifact name="spring-aop-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-aspects-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-beans-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-context-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-context-support-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-core-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-expression-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-instrument-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-jms-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-messaging-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-orm-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-oxm-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-web-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-webmvc-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-jdbc-4.3.24.RELEASE" type="jar"/>
+	    	<artifact name="spring-tx-4.3.24.RELEASE" type="jar"/>
+		    <artifact name="spring-test-4.3.24.RELEASE" type="jar" />
+	    	<artifact name="spring-websocket-4.3.24.RELEASE" type="jar"/>
+	      
+	    </dependency>
+	    
+	    <!--Solo per test -->
+		<dependency org="others" name="jboss" rev="eap-6.0" >			
+				
+				<!-- artifact name="dom4j-1.6.1-redhat-1" type="jar"/-->	
+				<artifact name="antlr-2.7.7-redhat-1" type="jar" />			
+		</dependency>
+ 
+	    <!-- librerie per JAX-RS -->
+	    <dependency org="others" name="jettison" rev="1.3.1">
+			<artifact name="jettison-1.3.1" type="jar"/>
+		</dependency>
+		
+		<dependency org="sun" name="servlet-api" rev="2.5">
+		</dependency>
+		
+		<!-- Cooperative Systems Infrastructure
+		<dependency org="csipiemonte" name="csi" rev="1.4.6">
+			<artifact name="csi-core-1.4.6" type="jar"/>
+			<artifact name="csi-rmi-1.4.6" type="jar"/>
+			<artifact name="csi-ejb-1.4.6" type="jar"/>
+			<artifact name="csi-apachesoap-1.4.6" type="jar"/>
+			<artifact name="csi-stadapter-1.4.6" type="jar"/>
+		</dependency>
+		 -->
+		<!-- Iride2 PEP 
+		<dependency org="csipiemonte" name="iridev2" rev="2.0.0">
+		</dependency>
+-->
+
+		<!-- Inserire qui le dipendenze aggiuntive -->
+
+		<!-- Inserire qui le dipendenze aggiuntive -->
+		<dependency org="redhat" name="jboss-jaxrs-api_2.1_spec" rev="2.0.1.Final">
+			<artifact name="jboss-jaxrs-api_2.1_spec-2.0.1.Final" type="jar"/>
+		</dependency>
+		
+		
+		<!-- packaging di redhat (per wf23 servirebbe la 2.0.0) -->
+		<dependency org="redhat" name="jboss-servlet-api_4.0_spec" rev="1.0.0.Final">
+		</dependency>
+		
+		<!--  verificare se serve davvero -->
+		<dependency org="redhat" name="resteasy-jaxrs" rev="3.15.1.Final">
+			<artifact name="resteasy-jaxrs-3.15.1.Final" type="jar" />
+			<artifact name="resteasy-client-3.15.1.Final" type="jar" />
+		</dependency>
+		
+		<!--  per upload -->
+		<dependency org="redhat" name="resteasy-multipart-provider" rev="3.15.1.Final">
+            <artifact name="resteasy-multipart-provider-3.15.1.Final" type="jar" />
+        </dependency>
+                
+		<dependency org="redhat" name="validation-api" rev="1.0.0.GA-redhat-3">
+			<artifact name="validation-api-1.0.0.GA-redhat-3" type="jar" />
+		</dependency>
+		<dependency org="redhat" name="jboss-annotations-api_1.3_spec" rev="1.0.1.Final">
+			<artifact name="jboss-annotations-api_1.3_spec-1.0.1.Final" type="jar" />
+		</dependency>
+
+		<dependency org="redhat" name="jboss-jaxb-api_2.3_spec" rev="1.0.1.Final">
+			<artifact name="jboss-jaxb-api_2.3_spec-1.0.1.Final" type="jar" />
+		</dependency>
+
+		<!-- la versione corretta sarebbe la 3.4.0 -->
+		<dependency org="redhat" name="jboss-logging" rev="3.1.4.GA-redhat-2">
+			<artifact name="jboss-logging-3.1.4.GA-redhat-2" type="jar"/>
+		</dependency>
+
+		<dependency org="redhat" name="resteasy-jackson2-provider" rev="3.15.1.Final">
+			<artifact name="resteasy-jackson2-provider-3.15.1.Final" type="jar" />
+		</dependency>
+
+		<dependency org="others" name="swagger-annotations" rev="1.5.18">
+			<artifact name="swagger-annotations-1.5.18" type="jar" />
+		</dependency>
+		
+		<dependency org="others" name="swagger-jaxrs" rev="1.5.18">
+			<artifact name="swagger-jaxrs-1.5.18" type="jar" />
+		</dependency>
+
+		<dependency org="apache" name="commons-io" rev="2.5">
+			<artifact name="commons-io-2.5" type="jar" />
+		</dependency>
+		
+		<dependency org="apache" name="httpcore" rev="4.4.5">
+			<artifact name="httpcore-4.4.5" type="jar" />
+		</dependency>
+
+		<dependency org="reactivestreams" name="reactive-streams" rev="1.0.2">
+			<artifact name="reactive-streams-1.0.2" type="jar" />
+		</dependency>
+
+		<!-- dosign -->
+		<dependency org="doqui" name="dosign" rev="6.2.0" >
+			<artifact name="dosign-client-service-6.2.0-jdk160-38" type="jar"/>
+		</dependency>
+		<dependency org="csipiemonte" name="csi" rev="1.4.6">
+			<artifact name="csi-stadapter-1.4.6" type="jar"/>
+		</dependency>
+		
+		<dependency org="postgresql" name="postgresql-jdbc" rev="42.2.6">
+			<artifact name="postgresql-42.2.6" type="jar" />
+		</dependency>
+
+		<dependency org="apache" name="commons-lang" rev="2.4">
+			<artifact name="commons-lang-2.4" type="jar" />
+		</dependency>
+		
+		<dependency org="apache" name="xmlbeans" rev="3.0.1">
+			<artifact name="xmlbeans-3.0.1" type="jar" />
+		</dependency>
+		
+		<dependency org="apache" name="xml-serializer" rev="2.7.1">
+			<artifact name="serializer-2.7.1" type="jar" />
+		</dependency>
+		
+		<!-- 
+		-->
+	  	<dependency org="others" name="dom4j" rev="1.6.1" >
+			<artifact name="dom4j-1.6.1" type="jar" />
+		</dependency> 
+		<dependency org="google" name="guava" rev="18.0" >
+			<artifact name="guava-18.0" type="jar" />
+		</dependency> 
+		
+		<dependency org="fasterxml" name="jackson-core" rev="2.12.1">
+			<artifact name="jackson-core-2.12.1" type="jar" />
+		</dependency>
+		<dependency org="fasterxml" name="jackson-annotations" rev="2.12.1">
+			<artifact name="jackson-annotations-2.12.1" type="jar" />
+		</dependency>
+		<dependency org="fasterxml" name="jackson-databind" rev="2.12.1">
+			<artifact name="jackson-databind-2.12.1" type="jar" />
+		</dependency>
+		
+		<dependency org="fasterxml" name="jackson-jaxrs-json-provider" rev="2.12.1">
+			<artifact name="jackson-module-jaxb-annotations-2.12.1" type="jar" />
+		</dependency>
+				
+		<dependency org="others" name="jandex" rev="1.1.0.Final">
+			<artifact name="jandex-1.1.0.Final" type="jar" />
+		</dependency>
+		
+		<dependency org="archibus" name="archibus" rev="24.1.1">
+			<artifact name="javassist-3.20.0-GA" type="jar" />
+		</dependency>
+		
+		<dependency org="apache" name="commons-collections" rev="4.4.1">
+			<artifact name="commons-collections4-4.1" type="jar" />
+		</dependency>
+		
+		        
+        <dependency org="apache" name="xerces" rev="2.9.0">
+	    	<artifact name="xercesImpl-2.9.0" type="jar" /> 
+	    	<exclude name="xml-apis-1.3.04" type="jar"/>
+	    </dependency>
+		
+	    <!-- jasper report -->
+    	<dependency org="jaspersoft" name="jasperreports" rev="6.16.0" transitive="false"/>
+    	<dependency org="others" name="itext" rev="2.1.7"/>
+    	<dependency org="apache" name="commons-beanutils" rev="1.9.1"/>
+    	<dependency org="apache" name="commons-digester" rev="2.1"/>
+    	<dependency org="krysalis" name="barcode4j" rev="2.1.0"/>
+    	<dependency org="apache" name="lucene-analyzers-common" rev="4.5.1"/>
+    	<dependency org="apache" name="lucene-core" rev="4.5.1"/>
+    	<dependency org="apache" name="lucene-queryparser" rev="4.5.1"/>
+    	<dependency org="apache" name="castor-xml" rev="1.3.3">
+       		<artifact name="castor-xml-1.3.3" type="jar"/>
+    	</dependency>
+    	<dependency org="jfree" name="jcommon" rev="1.0.23"/>
+    	<dependency org="jfree" name="jfreechart" rev="1.0.19"/>
+    	<dependency org="joda" name="joda-time" rev="1.6" />
+    	<dependency org="apache" name="httpclient" rev="4.3.4"/>
+    	
+    	<!-- axis per fruire servizi esterni -->
+		<dependency org="csipiemonte" name="axiscsi" rev="1.0.0">
+			<artifact name="axis-1.4.csi-1.0.0" type="jar" />
+		</dependency>
+		<dependency org="apache" name="axis-ant" rev="1.4">
+			<artifact name="axis-ant-1.4" type="jar" />
+		</dependency>
+		<!--  ACTA
+		<dependency org="doqui" name="actasrv-client" rev="3.5.0" />
+		<dependency org="doqui" name="actasrv-client" rev="4.0.0" /> -->
+		<dependency org="doqui" name="actasrv-client" rev="5.2.0" />
+		
+		<dependency org="jboss" name="jboss-jaxws" rev="4.3.0" />
+		<dependency org="sun" name="jaxb" rev="2.2.6" />
+		<dependency org="apache" name="cxf" rev="3.3.2" />
+		
+		<dependency org="codehaus" name="xstream" rev="1.3.1" />
+		
+		
+	    <!-- librerie necessarie pe ri binding WSFAD -->
+	    <dependency org="csipiemonte" name="wsadp" rev="2.1.0">
+	    	<artifact name="wsadp-2.1.0" type="jar" /> 
+	    	<!-- test esclude la 2.0.0 -->
+	    	<exclude name="tokenretry-2.0.0" type="jar"/>
+	    </dependency>
+	    
+	            <!-- tokenretry 
+        <dependency org="csipiemonte" name="tokenretry" rev="2.2.0"/>-->
+        <dependency org="csipiemonte" name="tokenretry" rev="3.0.1" />
+        
+        <dependency org="csipiemonte" name="bdijpa" rev="1.0.0">
+			<artifact name="spring-data-commons-1.13.22.RELEASE" type="jar"/>
+			<artifact name="spring-data-jpa-1.11.22.RELEASE" type="jar"/>
+		</dependency>
+		
+		 <dependency org="others" name="mapstruct" rev="1.5.3.Final">
+			<artifact name="mapstruct-1.5.3.Final" type="jar"/>
+			<artifact name="mapstruct-processor-1.5.3.Final" type="jar"/>
+		</dependency>
+		
+		
+		<!-- 20230530_PP reportistica xlsx -->
+		<dependency org="apache" name="poi" rev="3.17"/>
+		<dependency org="apache" name="xmlbeans" rev="3.0.1"/>
+		<dependency org="apache" name="commons-collections" rev="4.4.1"/>
+		
+	</dependencies>
+</ivy-module>

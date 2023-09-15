@@ -1,0 +1,4253 @@
+info:
+  description: TSDDR API description
+  title: Swagger TSDDR - Swagger 2.0
+  version: 1.2.0
+swagger: '2.0'
+host: 'localhost:10110'
+schemes:
+  - http
+basePath: /tsddr/rest
+x-components: {}
+definitions:
+  AreaPersonaleUtenteVO:
+    properties:
+      codiceFiscale:
+        type: string
+      cognome:
+        type: string
+      email:
+        type: string
+      nome:
+        type: string
+      telefono:
+        type: string
+    type: object
+  AttoVO:
+    properties:
+      dataFineAutorizzazione:
+        format: date-time
+        type: string
+      dataInizioAutorizzazione:
+        format: date-time
+        type: string
+      dataProvvedimento:
+        format: date-time
+        type: string
+      idAtto:
+        format: int64
+        type: integer
+      numProvvedimento:
+        type: string
+      tipoProvvedimento:
+        $ref: '#/definitions/TipoProvvedimentoVO'
+    type: object
+  CheckImpiantoVO:
+    properties:
+      result:
+        type: boolean
+    type: object
+  ComuneVO:
+    properties:
+      cap:
+        type: string
+      codCatasto:
+        type: string
+      comune:
+        type: string
+      idComune:
+        format: int64
+        type: integer
+      idComuneIstat:
+        format: int64
+        type: integer
+      provincia:
+        $ref: '#/definitions/ProvinciaVO'
+    type: object
+  ConferimentoVO:
+    properties:
+      anno:
+        format: int64
+        type: integer
+      idConferimento:
+        format: int64
+        type: integer
+      importo:
+        format: double
+        type: number
+      justBeenInsert:
+        type: boolean
+      periodo:
+        $ref: '#/definitions/PeriodoVO'
+      quantita:
+        format: double
+        type: number
+      rifiutoTariffa:
+        $ref: '#/definitions/RifiutoTariffaVO'
+      unitaMisura:
+        $ref: '#/definitions/UnitaMisuraVO'
+    type: object
+  DatiSoggVO:
+    properties:
+      codFiscale:
+        type: string
+      cognome:
+        type: string
+      email:
+        type: string
+      idDatiSogg:
+        format: int64
+        type: integer
+      nome:
+        type: string
+      pec:
+        type: string
+      telefono:
+        type: string
+      telefono2:
+        type: string
+    type: object
+  DatiUtenteVO:
+    properties:
+      codiceFiscale:
+        type: string
+      cognome:
+        type: string
+      dataFineValidita:
+        format: date-time
+        type: string
+      dataInizioValidita:
+        format: date-time
+        type: string
+      deletable:
+        type: boolean
+      idUtente:
+        format: int64
+        type: integer
+      mail:
+        type: string
+      nome:
+        type: string
+      pec:
+        type: string
+      telefono:
+        type: string
+      telefono2:
+        type: string
+    type: object
+  DichAnnualeBasicVO:
+    properties:
+      anno:
+        format: int64
+        type: integer
+      annullable:
+        type: boolean
+      dataDichiarazione:
+        format: date-time
+        type: string
+      dataProtocollo:
+        format: date-time
+        type: string
+      idDichAnnuale:
+        format: int64
+        type: integer
+      impianto:
+        $ref: '#/definitions/ImpiantoVO'
+      numProtocollo:
+        type: string
+      printable:
+        type: boolean
+      statoDichiarazione:
+        $ref: '#/definitions/StatoDichiarazioneVO'
+      versione:
+        format: int64
+        type: integer
+    type: object
+  DichAnnualeVO:
+    properties:
+      anno:
+        format: int64
+        type: integer
+      annotazioni:
+        type: string
+      annullable:
+        type: boolean
+      creditoImposta:
+        format: int64
+        type: integer
+      dataDichiarazione:
+        format: date-time
+        type: string
+      dataProtocollo:
+        format: date-time
+        type: string
+      idDichAnnuale:
+        format: int64
+        type: integer
+      impianto:
+        $ref: '#/definitions/ImpiantoVO'
+      indirizzo:
+        $ref: '#/definitions/IndirizzoVO'
+      numProtocollo:
+        type: string
+      printable:
+        type: boolean
+      rifiutiConferiti:
+        $ref: '#/definitions/RifiutiConferitiVO'
+      saldoImposta:
+        format: int64
+        type: integer
+      soggettiMr:
+        items:
+          $ref: '#/definitions/SoggettoMrVO'
+        type: array
+      statoDichiarazione:
+        $ref: '#/definitions/StatoDichiarazioneVO'
+      versamenti:
+        $ref: '#/definitions/VersamentiVO'
+      versione:
+        format: int64
+        type: integer
+    type: object
+  DocumentoProtocollatoVO:
+    properties:
+      classificazione:
+        type: string
+      classificazioneId:
+        type: string
+      dataOraProtocollo:
+        type: string
+      documentoUUID:
+        type: string
+      file:
+        items:
+          format: byte
+          type: string
+        type: array
+      filename:
+        type: string
+      folderId:
+        type: string
+      idActa:
+        type: string
+      numProtocollo:
+        type: string
+      objectIdDocumento:
+        type: string
+      registrazioneId:
+        type: string
+    type: object
+  DomandaAccreditamentoVO:
+    properties:
+      dataRichiesta:
+        format: date-time
+        type: string
+      dataRisposta:
+        format: date-time
+        type: string
+      gestore:
+        $ref: '#/definitions/GestoreVO'
+      idDomanda:
+        format: int64
+        type: integer
+      notaLavorazione:
+        type: string
+      notaUtente:
+        type: string
+      profilo:
+        $ref: '#/definitions/ProfiloVO'
+      richiedente:
+        $ref: '#/definitions/DatiSoggVO'
+      stato:
+        $ref: '#/definitions/StatoDomandaVO'
+    type: object
+  EerVO:
+    properties:
+      codiceEer:
+        type: string
+      descrizione:
+        type: string
+      idEer:
+        format: int64
+        type: integer
+    type: object
+  FunzionalitaProfiloVO:
+    properties:
+      delete:
+        type: boolean
+      descFunzione:
+        type: string
+      idFunzione:
+        format: int64
+        type: integer
+      idProfilo:
+        format: int64
+        type: integer
+      insert:
+        type: boolean
+      read:
+        type: boolean
+      update:
+        type: boolean
+    type: object
+  GenericLineaVO:
+    properties:
+      codLinea:
+        type: string
+      codSottoLinea:
+        type: string
+      dataFineValidita:
+        format: date-time
+        type: string
+      dataInizioValidita:
+        format: date-time
+        type: string
+      descLinea:
+        type: string
+      descSottoLinea:
+        type: string
+      flagSottoLinea:
+        type: boolean
+      idLinea:
+        format: int64
+        type: integer
+      idSottoLinea:
+        format: int64
+        type: integer
+    type: object
+  GenericResponseAreaPersonaleUtenteVO:
+    properties:
+      content:
+        $ref: '#/definitions/AreaPersonaleUtenteVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseAttoVO:
+    properties:
+      content:
+        $ref: '#/definitions/AttoVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseBoolean:
+    properties:
+      content:
+        type: boolean
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseCheckImpiantoVO:
+    properties:
+      content:
+        $ref: '#/definitions/CheckImpiantoVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseDatiSoggVO:
+    properties:
+      content:
+        $ref: '#/definitions/DatiSoggVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseDatiUtenteVO:
+    properties:
+      content:
+        $ref: '#/definitions/DatiUtenteVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseDichAnnualeVO:
+    properties:
+      content:
+        $ref: '#/definitions/DichAnnualeVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseDocumentoProtocollatoVO:
+    properties:
+      content:
+        $ref: '#/definitions/DocumentoProtocollatoVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseDomandaAccreditamentoVO:
+    properties:
+      content:
+        $ref: '#/definitions/DomandaAccreditamentoVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseFunzionalitaProfiloVO:
+    properties:
+      content:
+        $ref: '#/definitions/FunzionalitaProfiloVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseGestoreVO:
+    properties:
+      content:
+        $ref: '#/definitions/GestoreVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseImpiantoVO:
+    properties:
+      content:
+        $ref: '#/definitions/ImpiantoVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseLineaVO:
+    properties:
+      content:
+        $ref: '#/definitions/LineaVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListAttoVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/AttoVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListDatiUtenteVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/DatiUtenteVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListDichAnnualeBasicVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/DichAnnualeBasicVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListDomandaAccreditamentoVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/DomandaAccreditamentoVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListFunzionalitaProfiloVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/FunzionalitaProfiloVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListGenericLineaVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/GenericLineaVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListGestoreVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/GestoreVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListImpiantoLineeVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/ImpiantoLineeVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListImpiantoVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/ImpiantoVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListLong:
+    properties:
+      content:
+        items:
+          format: int64
+          type: integer
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListMenuCardVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/MenuCardVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListPeriodoVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/PeriodoVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListPrevConsBasicVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/PrevConsBasicVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListPrevConsLineeExtendedVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/PrevConsLineeExtendedVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListProfiloVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/ProfiloVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListRifiutoTariffaVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/RifiutoTariffaVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListSelectVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/SelectVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListUtenteGestoreProfiloVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/UtenteGestoreProfiloVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseListUtenteProfiloVO:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/UtenteProfiloVO'
+        type: array
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseMessaggioVO:
+    properties:
+      content:
+        $ref: '#/definitions/MessaggioVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseNotaInfoVO:
+    properties:
+      content:
+        $ref: '#/definitions/NotaInfoVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponsePrevConsExtendedVO:
+    properties:
+      content:
+        $ref: '#/definitions/PrevConsExtendedVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponsePrevConsVO:
+    properties:
+      content:
+        $ref: '#/definitions/PrevConsVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseProfiloVO:
+    properties:
+      content:
+        $ref: '#/definitions/ProfiloVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseReportVO:
+    properties:
+      content:
+        $ref: '#/definitions/ReportVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseSoggettoMrVO:
+    properties:
+      content:
+        $ref: '#/definitions/SoggettoMrVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseSottoLineaVO:
+    properties:
+      content:
+        $ref: '#/definitions/SottoLineaVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseString:
+    properties:
+      content:
+        type: string
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseUserInfoVO:
+    properties:
+      content:
+        $ref: '#/definitions/UserInfoVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseUtenteGestoreProfiloVO:
+    properties:
+      content:
+        $ref: '#/definitions/UtenteGestoreProfiloVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseUtenteProfiloVO:
+    properties:
+      content:
+        $ref: '#/definitions/UtenteProfiloVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GenericResponseUtenteVO:
+    properties:
+      content:
+        $ref: '#/definitions/UtenteVO'
+      message:
+        $ref: '#/definitions/MessaggioVO'
+    type: object
+  GestoreVO:
+    properties:
+      codFiscPartiva:
+        type: string
+      dataFineValidita:
+        format: date-time
+        type: string
+      dataInizioValidita:
+        format: date-time
+        type: string
+      email:
+        type: string
+      idGestore:
+        format: int64
+        type: integer
+      idIscrizioneAlbo:
+        type: string
+      legaleRappresentante:
+        $ref: '#/definitions/LegaleRappresentanteVO'
+      naturaGiuridica:
+        $ref: '#/definitions/NaturaGiuridicaVO'
+      pec:
+        type: string
+      ragSociale:
+        type: string
+      sedeLegale:
+        $ref: '#/definitions/IndirizzoVO'
+      telefono:
+        type: string
+    type: object
+  ImpiantoLineeVO:
+    properties:
+      dataFineValidita:
+        format: date-time
+        type: string
+      dataInizioValidita:
+        format: date-time
+        type: string
+      idImpianto:
+        format: int64
+        type: integer
+      idImpiantoLinea:
+        format: int64
+        type: integer
+      idLinea:
+        format: int64
+        type: integer
+      idSottoLinea:
+        format: int64
+        type: integer
+    type: object
+  ImpiantoVO:
+    properties:
+      atti:
+        items:
+          $ref: '#/definitions/AttoVO'
+        type: array
+      dataFineValidita:
+        format: date-time
+        type: string
+      dataInizioValidita:
+        format: date-time
+        type: string
+      deletable:
+        type: boolean
+      denominazione:
+        type: string
+      gestore:
+        $ref: '#/definitions/GestoreVO'
+      idImpianto:
+        format: int64
+        type: integer
+      indirizzo:
+        $ref: '#/definitions/IndirizzoVO'
+      linee:
+        items:
+          $ref: '#/definitions/GenericLineaVO'
+        type: array
+      readOnly:
+        type: boolean
+      statoImpianto:
+        $ref: '#/definitions/StatoImpiantoVO'
+      tipoImpianto:
+        $ref: '#/definitions/TipoImpiantoVO'
+    type: object
+  IndirizzoVO:
+    properties:
+      cap:
+        type: string
+      comune:
+        $ref: '#/definitions/ComuneVO'
+      hasBeenUpdated:
+        type: boolean
+      idIndirizzo:
+        format: int64
+        type: integer
+      indirizzo:
+        type: string
+      nazione:
+        $ref: '#/definitions/NazioneVO'
+      originalId:
+        format: int64
+        type: integer
+      sedime:
+        $ref: '#/definitions/SedimeVO'
+      tipoIndirizzo:
+        $ref: '#/definitions/TipoIndirizzoVO'
+      versione:
+        format: int64
+        type: integer
+    type: object
+  InsertUtenteVO:
+    properties:
+      codiceFiscale:
+        type: string
+      cognome:
+        type: string
+      idGestore:
+        format: int64
+        type: integer
+      idProfilo:
+        format: int64
+        type: integer
+      mail:
+        type: string
+      nome:
+        type: string
+      telefono:
+        type: string
+    type: object
+  LegaleRappresentanteVO:
+    properties:
+      dataFineValidita:
+        format: date-time
+        type: string
+      dataInizioValidita:
+        format: date-time
+        type: string
+      datiSogg:
+        $ref: '#/definitions/DatiSoggVO'
+      idLegaleRapp:
+        format: int64
+        type: integer
+      qualifica:
+        type: string
+    type: object
+  LineaVO:
+    properties:
+      codLinea:
+        type: string
+      dataFineValidita:
+        format: date-time
+        type: string
+      dataInizioValidita:
+        format: date-time
+        type: string
+      descLinea:
+        type: string
+      flagSottoLinea:
+        type: boolean
+      idLinea:
+        format: int64
+        type: integer
+    type: object
+  MenuCardVO:
+    properties:
+      descCard:
+        type: string
+      descFunzione:
+        type: string
+      descrizioneVoceMenu:
+        type: string
+      idFunzione:
+        format: int64
+        type: integer
+      idMenu:
+        format: int64
+        type: integer
+      idPadre:
+        format: int64
+        type: integer
+      livello:
+        format: int64
+        type: integer
+    type: object
+  MessaggioVO:
+    properties:
+      campo:
+        type: string
+      codMsg:
+        type: string
+      descTipoMsg:
+        type: string
+      testoMsg:
+        type: string
+      titoloMsg:
+        type: string
+    type: object
+  NaturaGiuridicaVO:
+    properties:
+      dataFineValidita:
+        format: date-time
+        type: string
+      dataInizioValidita:
+        format: date-time
+        type: string
+      descNaturaGiuridica:
+        type: string
+      idNaturaGiuridica:
+        format: int64
+        type: integer
+    type: object
+  NazioneVO:
+    properties:
+      descNazione:
+        type: string
+      idIstatNazione:
+        type: string
+      idNazione:
+        format: int64
+        type: integer
+    type: object
+  NotaInfoVO:
+    properties:
+      codNotaInfo:
+        type: string
+      etichettaCampo:
+        type: string
+      idNotaInfo:
+        format: int64
+        type: integer
+      media:
+        items:
+          format: byte
+          type: string
+        type: array
+      nomeForm:
+        type: string
+      testoInfo:
+        type: string
+      titoloInfo:
+        type: string
+    type: object
+  PeriodoVO:
+    properties:
+      descPeriodo:
+        type: string
+      idPeriodo:
+        format: int64
+        type: integer
+    type: object
+  PrevConsBasicVO:
+    properties:
+      annoTributo:
+        format: int64
+        type: integer
+      annullable:
+        type: boolean
+      dataInvioDoc:
+        format: date-time
+        type: string
+      denominazione:
+        type: string
+      descrStatoDichiarazione:
+        type: string
+      idPrevCons:
+        format: int64
+        type: integer
+      lineeRichiesta:
+        type: string
+      numProtocollo:
+        type: string
+      printable:
+        type: boolean
+      ragSociale:
+        type: string
+    type: object
+  PrevConsDettVO:
+    properties:
+      descMatUscita:
+        type: string
+      destinazione:
+        type: string
+      eer:
+        $ref: '#/definitions/EerVO'
+      hasBeenUpdated:
+        type: boolean
+      idPrevConsDett:
+        format: int64
+        type: integer
+      idPrevConsDettRmr:
+        format: int64
+        type: integer
+      prevConsDettRichiesta:
+        $ref: '#/definitions/PrevConsDettVO'
+      quantita:
+        type: number
+      quantitaRichiesta:
+        type: number
+      sezione:
+        $ref: '#/definitions/SezioneVO'
+      unitaMisura:
+        $ref: '#/definitions/UnitaMisuraVO'
+    type: object
+  PrevConsExtendedVO:
+    properties:
+      annoTributo:
+        format: int64
+        type: integer
+      dataDoc:
+        format: date-time
+        type: string
+      dataInvioDoc:
+        format: date-time
+        type: string
+      dataProtocollo:
+        format: date-time
+        type: string
+      idPrevCons:
+        format: int64
+        type: integer
+      idPrevConsRMr:
+        format: int64
+        type: integer
+      impianto:
+        $ref: '#/definitions/ImpiantoVO'
+      indirizzo:
+        $ref: '#/definitions/IndirizzoVO'
+      modalita:
+        type: string
+      numProtocollo:
+        type: string
+      percRecupero:
+        type: number
+      percScarto:
+        type: number
+      prevConsLinee:
+        items:
+          $ref: '#/definitions/PrevConsLineeExtendedVO'
+        type: array
+      prevConsRichiesta:
+        $ref: '#/definitions/PrevConsExtendedVO'
+      richiestaAmmissioneHasBeenUpdated:
+        type: boolean
+      statoDichiarazione:
+        $ref: '#/definitions/StatoDichiarazioneVO'
+      tipoDoc:
+        $ref: '#/definitions/TipoDocVO'
+    type: object
+  PrevConsLineeExtendedVO:
+    properties:
+      codLinea:
+        type: string
+      descLinea:
+        type: string
+      descSommaria:
+        type: string
+      hasBeenUpdated:
+        type: boolean
+      idImpiantoLinea:
+        format: int64
+        type: integer
+      idPrevCons:
+        format: int64
+        type: integer
+      idPrevConsLinee:
+        format: int64
+        type: integer
+      percRecupero:
+        type: number
+      percScarto:
+        type: number
+      prevConsDett:
+        items:
+          $ref: '#/definitions/PrevConsDettVO'
+        type: array
+      totMat:
+        type: number
+      totRii:
+        type: number
+      totRru:
+        type: number
+      totRu:
+        type: number
+    type: object
+  PrevConsLineeVO:
+    properties:
+      descSommaria:
+        type: string
+      hasBeenUpdated:
+        type: boolean
+      idImpiantoLinea:
+        format: int64
+        type: integer
+      idPrevCons:
+        format: int64
+        type: integer
+      idPrevConsLinee:
+        format: int64
+        type: integer
+      percRecupero:
+        type: number
+      percScarto:
+        type: number
+      prevConsDett:
+        items:
+          $ref: '#/definitions/PrevConsDettVO'
+        type: array
+    type: object
+  PrevConsVO:
+    properties:
+      annoTributo:
+        format: int64
+        type: integer
+      dataDoc:
+        format: date-time
+        type: string
+      dataInvioDoc:
+        format: date-time
+        type: string
+      dataProtocollo:
+        format: date-time
+        type: string
+      idPrevCons:
+        format: int64
+        type: integer
+      idPrevConsRMr:
+        format: int64
+        type: integer
+      indirizzo:
+        $ref: '#/definitions/IndirizzoVO'
+      modalita:
+        type: string
+      numProtocollo:
+        type: string
+      percRecupero:
+        type: number
+      percScarto:
+        type: number
+      prevConsLinee:
+        items:
+          $ref: '#/definitions/PrevConsLineeVO'
+        type: array
+      richiestaAmmissioneHasBeenUpdated:
+        type: boolean
+      statoDichiarazione:
+        $ref: '#/definitions/StatoDichiarazioneVO'
+      tipoDoc:
+        $ref: '#/definitions/TipoDocVO'
+    type: object
+  ProfiloVO:
+    properties:
+      dataFineValidita:
+        format: date-time
+        type: string
+      dataInizioValidita:
+        format: date-time
+        type: string
+      deletable:
+        type: boolean
+      descProfilo:
+        type: string
+      idProfilo:
+        format: int64
+        type: integer
+      tipologiaProfilo:
+        $ref: '#/definitions/TipologiaProfiloVO'
+    type: object
+  ProvinciaVO:
+    properties:
+      descProvincia:
+        type: string
+      idProvincia:
+        format: int64
+        type: integer
+      idProvinciaIstat:
+        format: int64
+        type: integer
+      regione:
+        $ref: '#/definitions/RegioneVO'
+      siglaProv:
+        type: string
+    type: object
+  RegioneVO:
+    properties:
+      descRegione:
+        type: string
+      idIstatRegione:
+        format: int64
+        type: integer
+      idRegione:
+        format: int64
+        type: integer
+    type: object
+  ReportVO:
+    properties:
+      file:
+        items:
+          format: byte
+          type: string
+        type: array
+      filename:
+        type: string
+    type: object
+  RiepilogoTotale:
+    properties:
+      importo:
+        format: double
+        type: number
+      quantita:
+        format: double
+        type: number
+    type: object
+  RifiutiConferitiVO:
+    properties:
+      rifiutiConferiti:
+        items:
+          $ref: '#/definitions/RifiutoConferitoVO'
+        type: array
+      totali:
+        $ref: '#/definitions/TotaliRifiutiConferiti'
+    type: object
+  RifiutoConferitoVO:
+    properties:
+      conferimenti:
+        items:
+          $ref: '#/definitions/ConferimentoVO'
+        type: array
+      rifiutoTariffa:
+        $ref: '#/definitions/RifiutoTariffaVO'
+      totale:
+        $ref: '#/definitions/RiepilogoTotale'
+      unitaMisura:
+        $ref: '#/definitions/UnitaMisuraVO'
+    type: object
+  RifiutoTariffaVO:
+    properties:
+      descrizione:
+        type: string
+      descrizioneCompleta:
+        type: string
+      flagRiduzione:
+        type: boolean
+      idRifiutoTariffa:
+        format: int64
+        type: integer
+      idTipoRifiuto:
+        type: string
+      idTipologia2:
+        type: string
+      idTipologia3:
+        type: string
+      importo:
+        format: double
+        type: number
+      stringRiduzione:
+        type: string
+    type: object
+  SedimeVO:
+    properties:
+      descSedime:
+        type: string
+      idSedime:
+        format: int64
+        type: integer
+    type: object
+  SelectVO:
+    properties:
+      additionalValue:
+        type: string
+      id:
+        type: string
+      value:
+        type: string
+    type: object
+  SezioneVO:
+    properties:
+      descSezione:
+        type: string
+      idSezione:
+        format: int64
+        type: integer
+    type: object
+  SoggettoMrVO:
+    properties:
+      codFiscPartiva:
+        type: string
+      idSoggettiMr:
+        format: int64
+        type: integer
+      obbRagg:
+        type: string
+      ragSociale:
+        type: string
+    type: object
+  SottoLineaVO:
+    properties:
+      codSottoLinea:
+        type: string
+      dataFineValidita:
+        format: date-time
+        type: string
+      dataInizioValidita:
+        format: date-time
+        type: string
+      descSottoLinea:
+        type: string
+      idSottoLinea:
+        format: int64
+        type: integer
+    type: object
+  StatoDichiarazioneVO:
+    properties:
+      descrStatoDichiarazione:
+        type: string
+      idStatoDichiarazione:
+        format: int64
+        type: integer
+    type: object
+  StatoDomandaVO:
+    properties:
+      desc:
+        type: string
+      id:
+        format: int64
+        type: integer
+      step:
+        format: int64
+        type: integer
+    type: object
+  StatoImpiantoVO:
+    properties:
+      descStatoImpianto:
+        type: string
+      idStatoImpianto:
+        format: int64
+        type: integer
+    type: object
+  TipoDocVO:
+    properties:
+      descTipoDoc:
+        type: string
+      idTipoDoc:
+        format: int64
+        type: integer
+    type: object
+  TipoImpiantoVO:
+    properties:
+      descTipoImpianto:
+        type: string
+      idTipoImpianto:
+        format: int64
+        type: integer
+    type: object
+  TipoIndirizzoVO:
+    properties:
+      descTipoIndirizzo:
+        type: string
+      idTipoIndirizzo:
+        format: int64
+        type: integer
+    type: object
+  TipoProvvedimentoVO:
+    properties:
+      descTipoProvvedimento:
+        type: string
+      idTipoProvvedimento:
+        format: int64
+        type: integer
+    type: object
+  TipologiaProfiloVO:
+    properties:
+      descTipoProfilo:
+        type: string
+      idTipoProfilo:
+        format: int64
+        type: integer
+    type: object
+  TotalePeriodo:
+    properties:
+      periodo:
+        $ref: '#/definitions/PeriodoVO'
+      totale:
+        $ref: '#/definitions/RiepilogoTotale'
+    type: object
+  TotaliRifiutiConferiti:
+    properties:
+      totale:
+        $ref: '#/definitions/RiepilogoTotale'
+      totaliPeriodi:
+        items:
+          $ref: '#/definitions/TotalePeriodo'
+        type: array
+    type: object
+  UnitaMisuraVO:
+    properties:
+      descUnitaMisura:
+        type: string
+      idUnitaMisura:
+        format: int64
+        type: integer
+    type: object
+  UserInfoVO:
+    properties:
+      codiceFiscale:
+        type: string
+      cognome:
+        type: string
+      descProfilo:
+        type: string
+      idProfilo:
+        format: int64
+        type: integer
+      nome:
+        type: string
+    type: object
+  UtenteGestoreProfiloVO:
+    properties:
+      dataFineValidita:
+        format: date-time
+        type: string
+      dataInizioValidita:
+        format: date-time
+        type: string
+      gestore:
+        $ref: '#/definitions/GestoreVO'
+      idGestore:
+        format: int64
+        type: integer
+      idProfilo:
+        format: int64
+        type: integer
+      idUtente:
+        format: int64
+        type: integer
+    type: object
+  UtenteParametriRicercaVO:
+    properties:
+      codiceFiscale:
+        type: string
+      cognome:
+        type: string
+      idGestore:
+        format: int64
+        type: integer
+      idProfilo:
+        format: int64
+        type: integer
+      nome:
+        type: string
+    type: object
+  UtenteProfiloVO:
+    properties:
+      codiceFiscale:
+        type: string
+      cognome:
+        type: string
+      idUtente:
+        format: int64
+        type: integer
+      nome:
+        type: string
+    type: object
+  UtenteVO:
+    properties:
+      codiceFiscale:
+        type: string
+      cognome:
+        type: string
+      dataFineValidita:
+        format: date-time
+        type: string
+      dataInizioValidita:
+        format: date-time
+        type: string
+      gestori:
+        items:
+          $ref: '#/definitions/GestoreVO'
+        type: array
+      idUtente:
+        format: int64
+        type: integer
+      nome:
+        type: string
+      profilo:
+        $ref: '#/definitions/ProfiloVO'
+    type: object
+  VersamentiVO:
+    properties:
+      credito:
+        format: double
+        type: number
+      creditoAP:
+        format: double
+        type: number
+      debito:
+        format: double
+        type: number
+      totale:
+        format: double
+        type: number
+      versamenti:
+        items:
+          $ref: '#/definitions/VersamentoVO'
+        type: array
+    type: object
+  VersamentoVO:
+    properties:
+      dataVersamento:
+        format: date-time
+        type: string
+      idVersamento:
+        format: int64
+        type: integer
+      importoVersato:
+        format: double
+        type: number
+      periodo:
+        $ref: '#/definitions/PeriodoVO'
+    type: object
+paths:
+  /accreditamento:
+    get:
+      operationId: getListaDomande
+      parameters:
+        - in: query
+          name: idDomanda
+          type: string
+        - collectionFormat: multi
+          in: query
+          items:
+            format: int64
+            type: integer
+          name: idStatoDomanda
+          type: array
+        - collectionFormat: multi
+          in: query
+          items:
+            format: int64
+            type: integer
+          name: idGestore
+          type: array
+        - collectionFormat: multi
+          in: query
+          items:
+            format: int64
+            type: integer
+          name: idRichiedente
+          type: array
+        - in: query
+          name: dataDomandaDal
+          type: string
+        - in: query
+          name: dataDomandaAl
+          type: string
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListDomandaAccreditamentoVO'
+    post:
+      consumes:
+        - application/json
+      operationId: createDomanda
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/DomandaAccreditamentoVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDomandaAccreditamentoVO'
+  /accreditamento/acl:
+    get:
+      operationId: getACLAccreditamento
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+  /accreditamento/downloadReport:
+    post:
+      operationId: downloadReport
+      parameters:
+        - in: query
+          name: idDomanda
+          type: string
+        - collectionFormat: multi
+          in: query
+          items:
+            format: int64
+            type: integer
+          name: idStatoDomanda
+          type: array
+        - collectionFormat: multi
+          in: query
+          items:
+            format: int64
+            type: integer
+          name: idGestore
+          type: array
+        - collectionFormat: multi
+          in: query
+          items:
+            format: int64
+            type: integer
+          name: idRichiedente
+          type: array
+        - in: query
+          name: dataDomandaDal
+          type: string
+        - in: query
+          name: dataDomandaAl
+          type: string
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseReportVO'
+  /accreditamento/gestori/combo:
+    get:
+      operationId: getComboGestori
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /accreditamento/parametri-filtro-applicati:
+    get:
+      operationId: getParametriFiltroApplicatiAccreditamento
+      parameters:
+        - in: query
+          name: idDomanda
+          type: string
+        - collectionFormat: multi
+          in: query
+          items:
+            format: int64
+            type: integer
+          name: idStatoDomanda
+          type: array
+        - collectionFormat: multi
+          in: query
+          items:
+            format: int64
+            type: integer
+          name: idGestore
+          type: array
+        - collectionFormat: multi
+          in: query
+          items:
+            format: int64
+            type: integer
+          name: idRichiedente
+          type: array
+        - in: query
+          name: dataDomandaDal
+          type: string
+        - in: query
+          name: dataDomandaAl
+          type: string
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /accreditamento/richiedenti/combo:
+    get:
+      operationId: getComboRichiedenti
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /accreditamento/stati/combo:
+    get:
+      operationId: getComboStatiDomanda
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /accreditamento/stati/combo-all:
+    get:
+      operationId: getAllComboStatiDomanda
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /accreditamento/verifica-dati-obbligatori:
+    post:
+      consumes:
+        - application/json
+      operationId: verificaDatiObbligatoriAccreditamento
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/DomandaAccreditamentoVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  '/accreditamento/{idDomanda}':
+    delete:
+      operationId: removeDomanda
+      parameters:
+        - format: int64
+          in: path
+          name: idDomanda
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDomandaAccreditamentoVO'
+    get:
+      operationId: getDomanda
+      parameters:
+        - format: int64
+          in: path
+          name: idDomanda
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDomandaAccreditamentoVO'
+    put:
+      consumes:
+        - application/json
+      operationId: updateDomanda
+      parameters:
+        - format: int64
+          in: path
+          name: idDomanda
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/DomandaAccreditamentoVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDomandaAccreditamentoVO'
+  '/accreditamento/{idDomanda}/profili/combo':
+    get:
+      operationId: getComboProfili
+      parameters:
+        - format: int64
+          in: path
+          name: idDomanda
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /area-personale/acl:
+    get:
+      operationId: getACLAreaPersonale
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+  /area-personale/logout:
+    post:
+      operationId: logLogout
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /area-personale/utente-corrente:
+    get:
+      operationId: getDatiUtenteCorrente
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseAreaPersonaleUtenteVO'
+    put:
+      consumes:
+        - application/json
+      operationId: updateAreaPersonaleUtenteCorrente
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/AreaPersonaleUtenteVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDatiSoggVO'
+  /area-personale/utente-corrente/nome-cognome:
+    get:
+      operationId: getUtenteCorrenteNomeCognome
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseAreaPersonaleUtenteVO'
+  /area-personale/verifica-dati-obbligatori:
+    post:
+      consumes:
+        - application/json
+      operationId: verificaDatiObbligatoriAreaPersonale
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/AreaPersonaleUtenteVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /comuni/combo:
+    get:
+      operationId: getComboComuni
+      parameters:
+        - format: int64
+          in: query
+          name: idProvincia
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /dichiarazioni:
+    get:
+      operationId: getListaDichiarazioni
+      parameters:
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+        - format: int64
+          in: query
+          name: idImpianto
+          type: integer
+        - format: int64
+          in: query
+          name: annoDal
+          type: integer
+        - format: int64
+          in: query
+          name: annoAl
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListDichAnnualeBasicVO'
+    post:
+      consumes:
+        - application/json
+      operationId: insertDichAnnuale
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/DichAnnualeVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDichAnnualeVO'
+  /dichiarazioni/acl:
+    get:
+      operationId: getACLDichiarazioni
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+  /dichiarazioni/allow-duplica:
+    get:
+      operationId: allowDuplica
+      parameters:
+        - format: int64
+          in: query
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idGestore
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: anno
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: versione
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseBoolean'
+  /dichiarazioni/anni/combo:
+    get:
+      operationId: getComboAnni
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListLong'
+  /dichiarazioni/bozza:
+    post:
+      consumes:
+        - application/json
+      operationId: insertBozzaDichAnnuale
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/DichAnnualeVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDichAnnualeVO'
+  /dichiarazioni/downloadReport:
+    post:
+      operationId: downloadReport_1
+      parameters:
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+        - format: int64
+          in: query
+          name: idImpianto
+          type: integer
+        - format: int64
+          in: query
+          name: annoDal
+          type: integer
+        - format: int64
+          in: query
+          name: annoAl
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseReportVO'
+  /dichiarazioni/exists:
+    get:
+      operationId: existsDichiarazione
+      parameters:
+        - format: int64
+          in: query
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idGestore
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: anno
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseBoolean'
+  /dichiarazioni/gestore/combo:
+    get:
+      operationId: getComboGestore
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /dichiarazioni/impianti/combo:
+    get:
+      operationId: getComboImpianti
+      parameters:
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /dichiarazioni/parametri-filtro-applicati:
+    get:
+      operationId: getParametriFiltroApplicati
+      parameters:
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+        - format: int64
+          in: query
+          name: idImpianto
+          type: integer
+        - format: int64
+          in: query
+          name: annoDal
+          type: integer
+        - format: int64
+          in: query
+          name: annoAl
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /dichiarazioni/single-result:
+    get:
+      operationId: getDichiarazioneByIdGestoreIdImpiantoAnno
+      parameters:
+        - format: int64
+          in: query
+          name: idGestore
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: anno
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDichAnnualeVO'
+  '/dichiarazioni/{idDichAnnuale}':
+    delete:
+      operationId: deleteDichiarazione
+      parameters:
+        - format: int64
+          in: path
+          name: idDichAnnuale
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDichAnnualeVO'
+    get:
+      operationId: getDichiarazioneByIdDichAnnuale
+      parameters:
+        - format: int64
+          in: path
+          name: idDichAnnuale
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDichAnnualeVO'
+  '/dichiarazioni/{idDichAnnuale}/conferimenti/{idRifiutoTariffa}':
+    delete:
+      operationId: deteteConferimenti
+      parameters:
+        - format: int64
+          in: path
+          name: idDichAnnuale
+          required: true
+          type: integer
+        - format: int64
+          in: path
+          name: idRifiutoTariffa
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDichAnnualeVO'
+  '/dichiarazioni/{idDichAnnuale}/download':
+    get:
+      operationId: downloadDichiarazioneAnnuale
+      parameters:
+        - format: int64
+          in: path
+          name: idDichAnnuale
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDocumentoProtocollatoVO'
+  '/dichiarazioni/{idDichAnnuale}/genera':
+    post:
+      operationId: generaDichiarazioneAnnuale
+      parameters:
+        - format: int64
+          in: path
+          name: idDichAnnuale
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  '/dichiarazioni/{idDichAnnuale}/nuova-versione':
+    get:
+      operationId: getNuovaVersioneDichiarazione
+      parameters:
+        - format: int64
+          in: path
+          name: idDichAnnuale
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDichAnnualeVO'
+  '/dichiarazioni/{idDichAnnuale}/soggetti-mr/{idSoggettoMr}':
+    delete:
+      operationId: removeDichiarazioneSoggettoMr
+      parameters:
+        - format: int64
+          in: path
+          name: idDichAnnuale
+          required: true
+          type: integer
+        - format: int64
+          in: path
+          name: idSoggettoMr
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseSoggettoMrVO'
+  /eer/combo:
+    get:
+      operationId: getComboEer
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /funzionalita-profilo:
+    delete:
+      operationId: removeFunzionalitaProfilo
+      parameters:
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idFunzionalita
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+    get:
+      operationId: getListaFunzionalitaProfilo
+      parameters:
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idFunzionalita
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListFunzionalitaProfiloVO'
+    post:
+      consumes:
+        - application/json
+      operationId: createFunzionalitaProfilo
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/FunzionalitaProfiloVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+    put:
+      consumes:
+        - application/json
+      operationId: updateFunzionalitaProfilo
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/FunzionalitaProfiloVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+  /funzionalita-profilo/acl:
+    get:
+      operationId: getACLFunzionalitaProfilo
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+  /funzionalita-profilo/combo:
+    get:
+      operationId: getComboFunzionalita
+      parameters:
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /funzionalita-profilo/combo-nuova-funzionalita:
+    get:
+      operationId: getComboNuovaFunzionalitaProfilo
+      parameters:
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /funzionalita-profilo/log-conf-funzionalita-profilo:
+    post:
+      operationId: logConfFunzionalitaProfilo
+      parameters:
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idFunzionalita
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /gestori:
+    get:
+      operationId: getListaGestori
+      parameters:
+        - in: query
+          name: codFiscPartiva
+          type: string
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+        - format: int64
+          in: query
+          name: idNaturaGiuridica
+          type: integer
+        - format: int64
+          in: query
+          name: idComune
+          type: integer
+        - format: int64
+          in: query
+          name: idProvincia
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListGestoreVO'
+    post:
+      consumes:
+        - application/json
+      operationId: createGestore
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/GestoreVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseGestoreVO'
+  /gestori/acl:
+    get:
+      operationId: getACLGestori
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+  /gestori/combo:
+    get:
+      operationId: getComboGestore_1
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /gestori/downloadReport:
+    post:
+      operationId: downloadReport_2
+      parameters:
+        - in: query
+          name: codFiscPartiva
+          type: string
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+        - format: int64
+          in: query
+          name: idNaturaGiuridica
+          type: integer
+        - format: int64
+          in: query
+          name: idComune
+          type: integer
+        - format: int64
+          in: query
+          name: idProvincia
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseReportVO'
+  '/gestori/exists/{codFiscPartiva}':
+    get:
+      operationId: existsGestore
+      parameters:
+        - in: path
+          name: codFiscPartiva
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseBoolean'
+  /gestori/parametri-filtro-applicati:
+    get:
+      operationId: getParametriFiltoApplicati
+      parameters:
+        - in: query
+          name: codFiscPartiva
+          type: string
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+        - format: int64
+          in: query
+          name: idNaturaGiuridica
+          type: integer
+        - format: int64
+          in: query
+          name: idComune
+          type: integer
+        - format: int64
+          in: query
+          name: idProvincia
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  '/gestori/rappresentante-legale/{codFiscPartiva}':
+    get:
+      operationId: getRappresentanteLegale
+      parameters:
+        - in: path
+          name: codFiscPartiva
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDatiSoggVO'
+  '/gestori/{idGestore}':
+    delete:
+      operationId: removeGestore
+      parameters:
+        - format: int64
+          in: path
+          name: idGestore
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseGestoreVO'
+    get:
+      operationId: getGestore
+      parameters:
+        - format: int64
+          in: path
+          name: idGestore
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseGestoreVO'
+    put:
+      consumes:
+        - application/json
+      operationId: updatGestore
+      parameters:
+        - format: int64
+          in: path
+          name: idGestore
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/GestoreVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseGestoreVO'
+  '/gestori/{idGestore}/accreditamento/exists':
+    get:
+      operationId: existsDomandeAccreditamentoGestore
+      parameters:
+        - format: int64
+          in: path
+          name: idGestore
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseBoolean'
+  '/gestori/{idGestore}/impianti/exists':
+    get:
+      operationId: existsImpiantiGestore
+      parameters:
+        - format: int64
+          in: path
+          name: idGestore
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseBoolean'
+  /impianti:
+    get:
+      operationId: getListaImpianti
+      parameters:
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+        - in: query
+          name: denominazione
+          type: string
+        - format: int64
+          in: query
+          name: idProvincia
+          type: integer
+        - format: int64
+          in: query
+          name: idComune
+          type: integer
+        - format: int64
+          in: query
+          name: idTipoImpianto
+          type: integer
+        - format: int64
+          in: query
+          name: idStatoImpianto
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListImpiantoVO'
+    post:
+      consumes:
+        - application/json
+      operationId: addImpianto
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ImpiantoVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseImpiantoVO'
+  /impianti-linee:
+    get:
+      operationId: getImpiantoLinee
+      parameters:
+        - format: int64
+          in: query
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idPrevCons
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListImpiantoLineeVO'
+  /impianti/acl:
+    get:
+      operationId: getACLImpianti
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+  /impianti/atti/combo:
+    get:
+      operationId: getComboTipoProvvedimento
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  '/impianti/checkDelete/{idImpianto}':
+    get:
+      operationId: checkDeleteImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseCheckImpiantoVO'
+  /impianti/downloadReport:
+    post:
+      operationId: downloadReport_3
+      parameters:
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+        - in: query
+          name: denominazione
+          type: string
+        - format: int64
+          in: query
+          name: idProvincia
+          type: integer
+        - format: int64
+          in: query
+          name: idComune
+          type: integer
+        - format: int64
+          in: query
+          name: idTipoImpianto
+          type: integer
+        - format: int64
+          in: query
+          name: idStatoImpianto
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseReportVO'
+  /impianti/linee/combo:
+    get:
+      operationId: getComboLinee
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /impianti/parametri-filtro-applicati:
+    get:
+      operationId: getParametriFiltoApplicati_1
+      parameters:
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+        - in: query
+          name: denominazione
+          type: string
+        - format: int64
+          in: query
+          name: idProvincia
+          type: integer
+        - format: int64
+          in: query
+          name: idComune
+          type: integer
+        - format: int64
+          in: query
+          name: idTipoImpianto
+          type: integer
+        - format: int64
+          in: query
+          name: idStatoImpianto
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /impianti/stati/combo:
+    get:
+      operationId: getComboStatiImpianto
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /impianti/tipi/combo:
+    get:
+      operationId: getComboTipiImpianto
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  '/impianti/{idImpianto}':
+    delete:
+      operationId: removeImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseImpiantoVO'
+    get:
+      operationId: getImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseImpiantoVO'
+    put:
+      consumes:
+        - application/json
+      operationId: updateImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ImpiantoVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseImpiantoVO'
+  '/impianti/{idImpianto}/atti':
+    get:
+      operationId: getAttiImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListAttoVO'
+    post:
+      consumes:
+        - application/json
+      operationId: addAttoImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/AttoVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseAttoVO'
+  '/impianti/{idImpianto}/atti/{idAtto}':
+    delete:
+      operationId: removeAttoImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: path
+          name: idAtto
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseAttoVO'
+    put:
+      consumes:
+        - application/json
+      operationId: updateAttoImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: path
+          name: idAtto
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/AttoVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseAttoVO'
+  '/impianti/{idImpianto}/linee':
+    get:
+      operationId: getLineeImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListGenericLineaVO'
+  '/impianti/{idImpianto}/linee/combo':
+    get:
+      operationId: getComboLineeImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  '/impianti/{idImpianto}/linee/{idLinea}':
+    delete:
+      operationId: removeLineaImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: path
+          name: idLinea
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseLineaVO'
+    post:
+      consumes:
+        - application/json
+      operationId: addLineaImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: path
+          name: idLinea
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/LineaVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseLineaVO'
+    put:
+      consumes:
+        - application/json
+      operationId: updateLineaImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: path
+          name: idLinea
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/LineaVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseLineaVO'
+  '/impianti/{idImpianto}/sottolinee/{idSottoLinea}':
+    delete:
+      operationId: removeSottoLineaImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: path
+          name: idSottoLinea
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseSottoLineaVO'
+    post:
+      consumes:
+        - application/json
+      operationId: addSottoLineaImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: path
+          name: idSottoLinea
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/SottoLineaVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseSottoLineaVO'
+    put:
+      consumes:
+        - application/json
+      operationId: updateSottoLineaImpianto
+      parameters:
+        - format: int64
+          in: path
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: path
+          name: idSottoLinea
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/SottoLineaVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseSottoLineaVO'
+  /login/combo-profilo:
+    get:
+      operationId: getComboProfiloLogin
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /login/id-profilo:
+    get:
+      consumes:
+        - application/json
+      operationId: getIdProfilo
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: string
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseUserInfoVO'
+  /login/log-cambio-profilo:
+    post:
+      operationId: logCambioProfilo
+      parameters:
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /login/struttura-menue-card:
+    get:
+      operationId: getStrutturaMenueCard
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListMenuCardVO'
+  '/messaggi/{codMsg}':
+    get:
+      operationId: getMessaggioByCodMsg
+      parameters:
+        - in: path
+          name: codMsg
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseMessaggioVO'
+  /nature-giuridiche/combo:
+    get:
+      operationId: getComboNatura
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /nazioni/combo:
+    get:
+      operationId: getComboNazioni
+      parameters:
+        - in: query
+          name: nazioniEstere
+          type: boolean
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  '/note-info/{cod-nota-info}':
+    get:
+      operationId: getNotaInfoByCodNotaInfo
+      parameters:
+        - in: path
+          name: cod-nota-info
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseNotaInfoVO'
+  /periodi:
+    get:
+      operationId: getListaPeriodi
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListPeriodoVO'
+  /prev-cons:
+    get:
+      operationId: getListaPrevCons
+      parameters:
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+        - format: int64
+          in: query
+          name: idImpianto
+          type: integer
+        - format: int64
+          in: query
+          name: annoTributoDal
+          type: integer
+        - format: int64
+          in: query
+          name: annoTributoAl
+          type: integer
+        - format: int64
+          in: query
+          name: idTipoDoc
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idStatoDichiarazione
+          type: integer
+        - format: int64
+          in: query
+          name: annoTributo
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListPrevConsBasicVO'
+    post:
+      consumes:
+        - application/json
+      operationId: insertPrevCons
+      parameters:
+        - format: int64
+          in: query
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idGestore
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/PrevConsVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponsePrevConsVO'
+  '/prev-cons-dett/{idPrevConsDett}':
+    delete:
+      operationId: deletePrevConsDett
+      parameters:
+        - format: int64
+          in: path
+          name: idPrevConsDett
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseMessaggioVO'
+  /prev-cons/acl:
+    get:
+      operationId: getACLPrevCons
+      parameters:
+        - format: int64
+          in: query
+          name: idTipoDoc
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+  /prev-cons/anni/combo:
+    get:
+      operationId: getComboAnni_1
+      parameters:
+        - format: int64
+          in: query
+          name: idTipoDoc
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idStatoDichiarazione
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListLong'
+  /prev-cons/bozza:
+    post:
+      consumes:
+        - application/json
+      operationId: insertBozzaPrevCons
+      parameters:
+        - format: int64
+          in: query
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idGestore
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/PrevConsVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponsePrevConsVO'
+  /prev-cons/downloadReport:
+    post:
+      operationId: downloadReport_4
+      parameters:
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+        - format: int64
+          in: query
+          name: idImpianto
+          type: integer
+        - format: int64
+          in: query
+          name: annoTributoDal
+          type: integer
+        - format: int64
+          in: query
+          name: annoTributoAl
+          type: integer
+        - format: int64
+          in: query
+          name: idTipoDoc
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idStatoDichiarazione
+          type: integer
+        - format: int64
+          in: query
+          name: annoTributo
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseReportVO'
+  /prev-cons/exists:
+    get:
+      operationId: existsPrevCons
+      parameters:
+        - format: int64
+          in: query
+          name: idImpianto
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idGestore
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: annoTributo
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idTipoDoc
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseBoolean'
+  /prev-cons/gestore/combo:
+    get:
+      operationId: getComboGestore_2
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /prev-cons/impianti/combo:
+    get:
+      operationId: getComboImpianti_1
+      parameters:
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /prev-cons/linee:
+    delete:
+      operationId: deleteLinee
+      parameters:
+        - format: int64
+          in: query
+          name: idPrevConsLinee
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idSezione
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseMessaggioVO'
+  /prev-cons/parametri-filtro-applicati:
+    get:
+      operationId: getParametriFiltroApplicati_1
+      parameters:
+        - format: int64
+          in: query
+          name: idGestore
+          type: integer
+        - format: int64
+          in: query
+          name: idImpianto
+          type: integer
+        - format: int64
+          in: query
+          name: annoTributoDal
+          type: integer
+        - format: int64
+          in: query
+          name: annoTributoAl
+          type: integer
+        - format: int64
+          in: query
+          name: idTipoDoc
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idStatoDichiarazione
+          type: integer
+        - format: int64
+          in: query
+          name: annoTributo
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  '/prev-cons/{idPrevCons}':
+    delete:
+      operationId: deletePrevCons
+      parameters:
+        - format: int64
+          in: path
+          name: idPrevCons
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idTipoDoc
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponsePrevConsVO'
+    get:
+      operationId: getPrevCons
+      parameters:
+        - format: int64
+          in: path
+          name: idPrevCons
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idTipoDoc
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponsePrevConsExtendedVO'
+  '/prev-cons/{idPrevCons}/download':
+    get:
+      operationId: downloadPrevConsPDF
+      parameters:
+        - format: int64
+          in: path
+          name: idPrevCons
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idTipoDoc
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDocumentoProtocollatoVO'
+  '/prev-cons/{idPrevCons}/linee-richiesta':
+    get:
+      operationId: getLineeRichiesta
+      parameters:
+        - format: int64
+          in: path
+          name: idPrevCons
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListPrevConsLineeExtendedVO'
+  /profili:
+    delete:
+      operationId: removeProfilo
+      parameters:
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseProfiloVO'
+    get:
+      operationId: getListaProfili
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListProfiloVO'
+    post:
+      consumes:
+        - application/json
+      operationId: createProfilo
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ProfiloVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseProfiloVO'
+    put:
+      consumes:
+        - application/json
+      operationId: updateProfilo
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ProfiloVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseProfiloVO'
+  /profili/acl:
+    get:
+      operationId: getACLProfili
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+  /profili/combo:
+    get:
+      operationId: getComboProfilo
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /profili/combo-all:
+    get:
+      operationId: getComboProfiloAll
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /profili/is-profilo-BO:
+    get:
+      operationId: isProfiloBO
+      parameters:
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseBoolean'
+  /profili/verifica:
+    post:
+      consumes:
+        - application/json
+      operationId: verificaProfilo
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ProfiloVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /province/combo:
+    get:
+      operationId: getComboProvince
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /rifiuti-tariffe:
+    get:
+      operationId: getRifiutoTariffa
+      parameters:
+        - format: int64
+          in: query
+          name: idDichAnnuale
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListRifiutoTariffaVO'
+  /rifiuti-tariffe/combo:
+    get:
+      operationId: getComboRifiutoTariffa
+      parameters:
+        - format: int64
+          in: query
+          name: idDichAnnuale
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /sedime/combo:
+    get:
+      operationId: getComboSedime
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /sedimi/combo:
+    get:
+      operationId: getComboSedime_1
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /tipi-profilo/combo:
+    get:
+      operationId: getComboTipoProfilo
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /utenti:
+    delete:
+      operationId: removeUtente
+      parameters:
+        - format: int64
+          in: query
+          name: idUtente
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+    post:
+      consumes:
+        - application/json
+      operationId: createUtente
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/InsertUtenteVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseUtenteVO'
+    put:
+      consumes:
+        - application/json
+      operationId: updateUtente
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/DatiUtenteVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDatiUtenteVO'
+  /utenti-profilo:
+    delete:
+      operationId: deleteUtenteProfilo
+      parameters:
+        - format: int64
+          in: query
+          name: idUtente
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+    get:
+      operationId: getListaUtentiProfilo
+      parameters:
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListUtenteProfiloVO'
+    post:
+      operationId: createUtenteProfilo
+      parameters:
+        - format: int64
+          in: query
+          name: idUtente
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseUtenteProfiloVO'
+  /utenti-profilo/acl:
+    get:
+      operationId: getACLUtenteProfilo
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+  /utenti-profilo/combo-nuovo-utente:
+    get:
+      operationId: getComboNuovoUtente
+      parameters:
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /utenti/acl:
+    get:
+      operationId: getACLUtente
+      parameters: []
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseFunzionalitaProfiloVO'
+  /utenti/combo-nuovo-gestore:
+    get:
+      operationId: getComboGrigliaGestori
+      parameters:
+        - format: int64
+          in: query
+          name: idUtente
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /utenti/combo-profili:
+    get:
+      operationId: getProfiliUtente
+      parameters:
+        - format: int64
+          in: query
+          name: idUtente
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListSelectVO'
+  /utenti/dati-utente:
+    get:
+      operationId: getDatiUtente
+      parameters:
+        - format: int64
+          in: query
+          name: idUtente
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseDatiUtenteVO'
+  /utenti/dati-utente/gestori:
+    get:
+      operationId: getDatiUtenteGestori
+      parameters:
+        - format: int64
+          in: query
+          name: idUtente
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idProfilo
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListUtenteGestoreProfiloVO'
+  /utenti/griglia-utenti:
+    post:
+      consumes:
+        - application/json
+      operationId: getGrigliaUtenti
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/UtenteParametriRicercaVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseListDatiUtenteVO'
+  /utenti/parametri-filtro-applicati:
+    post:
+      consumes:
+        - application/json
+      operationId: getParametriFiltroApplicati_2
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/UtenteParametriRicercaVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /utenti/utente-gestore-profilo:
+    delete:
+      operationId: removeUtenteGestoreProfilo
+      parameters:
+        - format: int64
+          in: query
+          name: idUtente
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idGestore
+          required: true
+          type: integer
+        - format: int64
+          in: query
+          name: idProfilo
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+    post:
+      consumes:
+        - application/json
+      operationId: createUtenteGestoreProfilo
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/UtenteGestoreProfiloVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseUtenteGestoreProfiloVO'
+    put:
+      consumes:
+        - application/json
+      operationId: updateUtenteGestoreProfilo
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/UtenteGestoreProfiloVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseUtenteGestoreProfiloVO'
+  /utenti/verifica-parametri-ricerca:
+    post:
+      consumes:
+        - application/json
+      operationId: verificaParametriRicerca
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/UtenteParametriRicercaVO'
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /utenti/verifica-utente:
+    get:
+      operationId: verificaUtente
+      parameters:
+        - in: query
+          name: codiceFiscale
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /validazione/verifica-formato-cf:
+    get:
+      operationId: verificaFormatoCodiceFiscale
+      parameters:
+        - in: query
+          name: codiceFiscale
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /validazione/verifica-formato-email:
+    get:
+      operationId: verificaFormatoEmail
+      parameters:
+        - in: query
+          name: email
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'
+  /validazione/verifica-formato-pec:
+    get:
+      operationId: verificaFormatoPec
+      parameters:
+        - in: query
+          name: pec
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        default:
+          description: default response
+          schema:
+            $ref: '#/definitions/GenericResponseString'

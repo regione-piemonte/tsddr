@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   * SPDX-License-Identifier: EUPL-1.2
+   * Copyright Regione Piemonte - 2022
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    					http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+    					http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx.xsd
+    					http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+    					http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+  
+  	   <!-- Ambiente dev CSI -->
+      <jee:jndi-lookup id="tsddrDS" jndi-name="${datasource_jndi}" />
+      
+      
+  
+	 <!--  <bean id="conamblDS" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://tst-domdb46.csi.it:5432/PGDEV02"/>
+        <property name="username" value="findom"/>
+        <property name="password" value="ial2sei4"/>
+    </bean>
+   -->
+   
+     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+ 
+    <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="showSql" value="${showSql}"/>
+        <property name="generateDdl" value="${generateDdl}"/>
+        <property name="database" value="${database}"/>
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="tsddrDS"/>
+        <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
+        <property name="packagesToScan">
+         <array>
+              <value>it.csi.tsddr.tsddrbl.business.be.entity</value>
+         </array>
+     	</property>
+        
+        
+        
+        <property name="jpaProperties">
+            <props>
+            	<prop key="hibernate.temp.use_jdbc_metadata_defaults">${hibernate.temp.use_jdbc_metadata_defaults}</prop>
+            	<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+            </props>
+        </property>
+    </bean>
+
+   <!-- JPA REPOSITORIES -->
+  <jpa:repositories base-package="it.csi.tsddr.tsddrbl.business.be.repository"/>  
+  
+  <!-- abilitare hibernate generate static x vedere le prestazioni delle query  
+   <bean id="jmxExporter" class="org.springframework.jmx.export.MBeanExporter">
+	    <property name="beans">
+	        <map>
+	            <entry key="Hibernate:application=Statistics" value-ref="hibernateStatisticsBean"/>
+	        </map>
+	    </property>
+ 	</bean>
+	
+ 	<bean id="hibernateStatisticsBean" class="org.hibernate.jmx.StatisticsService">
+	    <property name="statisticsEnabled" value="true"/>
+	     <property name="sessionFactory">
+	        <util:property-path path="entityManagerFactory.sessionFactory" />
+	    </property>
+ 	</bean>
+ 	-->
+</beans>
+	
