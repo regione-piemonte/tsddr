@@ -30,7 +30,7 @@ Questo Codice di condotta si applica sia all'interno degli spazi del progetto ch
 rappresentante a un evento online o offline. La rappresentazione di un progetto può essere ulteriormente definito e chiarito dai manutentori del progetto.
 
 ## Applicazione esecutiva
-Possono esserci casi di comportamento abusivo, molesto o altrimenti inaccettabile segnalato contattando il team di progetto all'indirizzo giancarlo.cantoni@csi.it . Tutti i reclami verranno esaminati e esaminati e daranno una risposta che sia ritenuta necessaria e appropriata alle circostanze. Il team del progetto è
+Possono esserci casi di comportamento abusivo, molesto o altrimenti inaccettabile segnalato contattando il team di progetto all'indirizzo giovanna.bertinetti@csi.it . Tutti i reclami verranno esaminati e esaminati e daranno una risposta che sia ritenuta necessaria e appropriata alle circostanze. Il team del progetto è
 obbligato a mantenere la riservatezza per quanto riguarda l’accadimento di un incidente.
 Ulteriori dettagli su specifiche politiche di attuazione possono essere affisse separatamente.
 
