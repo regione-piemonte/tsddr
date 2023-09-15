@@ -3,25 +3,25 @@
 TRISPE - TRIbuto SPEciale Deposito in Discarica dei Rifiuti
 
 # Descrizione del prodotto
- Il sistema TRISPE è composto da due applicativi.
+Il sistema TRISPE è composto da due applicativi.
      
-     TRISPE-FO per gli operatori delle società che gestiscono impianti di trattamento e conferimento dei rifiuti e sono tenute ad assolvere agli adempimenti previsti dalla normativa vigente. Comprende le seguenti funzionalità:
+TRISPE-FO per gli operatori delle società che gestiscono impianti di trattamento e conferimento dei rifiuti e sono tenute ad assolvere agli adempimenti previsti dalla normativa vigente. Comprende le seguenti funzionalità:
      
-     - Accreditamento consente di presentare la richiesta di accesso al sistema.
+- Accreditamento consente di presentare la richiesta di accesso al sistema.
      
-     - Dichiarazione annuale permette di presentare la dichiarazione annuale sui quantitativi conferiti nell’anno e sui versamenti effettuati. L'applicativo permette di imputare i dati, inviare la dichiarazione con contestuale generazione del PDF e protocollazione. E’ a disposizione, anche, la funzionalità di ricerca delle dichiarazioni in lavorazione e inviate.
+- Dichiarazione annuale permette di presentare la dichiarazione annuale sui quantitativi conferiti nell’anno e sui versamenti effettuati. L'applicativo permette di imputare i dati, inviare la dichiarazione con contestuale generazione del PDF e protocollazione. E’ a disposizione, anche, la funzionalità di ricerca delle dichiarazioni in lavorazione e inviate.
 
-     - Dichiarazioni con obiettivi MR permette di presentare la dichiarazione annuale di effettivo raggiungimento delle percentuali di recupero o di non superamento delle percentuali di scarto. L'applicativo permette di imputare i dati, inviare la dichiarazione 
-     con contestuale generazione del PDF e protocollazione. Per la compilazione è possibile utilizzare i dati di una richiesta di ammissione al pagamento in misura ridotta presentata con TRISPE.  E’ a disposizione, anche, la funzionalità di ricerca delle dichiarazioni in lavorazione e inviate.
+- Dichiarazioni con obiettivi MR permette di presentare la dichiarazione annuale di effettivo raggiungimento delle percentuali di recupero o di non superamento delle percentuali di scarto. L'applicativo permette di imputare i dati, inviare la dichiarazione 
+  con contestuale generazione del PDF e protocollazione. Per la compilazione è possibile utilizzare i dati di una richiesta di ammissione al pagamento in misura ridotta presentata con TRISPE.  E’ a disposizione, anche, la funzionalità di ricerca delle dichiarazioni in lavorazione e inviate.
 
-     - Richieste ammissione MR permette di presentare la domanda per il pagamento in misura ridotta del tributo. L'applicativo permette di imputare i dati, inviare la richiesta con contestuale generazione del PDF e protocollazione. E’ a disposizione, anche, la funzionalità di ricerca delle domande in lavorazione e inviate.
+- Richieste ammissione MR permette di presentare la domanda per il pagamento in misura ridotta del tributo. L'applicativo permette di imputare i dati, inviare la richiesta con contestuale generazione del PDF e protocollazione. E’ a disposizione, anche, la funzionalità di ricerca delle domande in lavorazione e inviate.
      
-     TRISPE-BO per gli utenti della P.A. addetti al controllo. Comprende le seguenti funzionalità:
+TRISPE-BO per gli utenti della P.A. addetti al controllo. Comprende le seguenti funzionalità:
      
-     - Gestione accreditamento permette la consultazione e lavorazione delle domande di accreditamento presentate dagli operatori delle aziende per poter usufruire delle funzionalità rivolte alle imprese.
-     - Gestione dichiarazione annuale consente la consultazione delle dichiarazioni presentate.
-     - Gestione dichiarazione MR consente la consultazione delle dichiarazioni raggiungimento degli obiettivi presentate.
-     - Gestione richieste di ammissione a pagamento in misura ridotta consente la consultazione delle domande presentate per il pagamento ridotto del tributo.
+- Gestione accreditamento permette la consultazione e lavorazione delle domande di accreditamento presentate dagli operatori delle aziende per poter usufruire delle funzionalità rivolte alle imprese.
+- Gestione dichiarazione annuale consente la consultazione delle dichiarazioni presentate.
+- Gestione dichiarazione MR consente la consultazione delle dichiarazioni raggiungimento degli obiettivi presentate.
+- Gestione richieste di ammissione a pagamento in misura ridotta consente la consultazione delle domande presentate per il pagamento ridotto del tributo.
 
 
 Il prodotto è strutturato nelle seguenti componenti specifiche:
