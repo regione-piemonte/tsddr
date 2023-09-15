@@ -1,0 +1,65 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Table -->
+        <div class="col-12">
+            <app-card [containerStyle]="'box-shadow: 1px 2px 8px #c4c4c4 !important; border-radius: 0 !important;'"
+                      *ngIf="dataSource">
+                <app-card-body>
+                    <app-table
+                          [columns]='columns'
+                          [dataSource]='dataSource'
+                          [showPager]='true'
+                    ></app-table>
+                    <div class="row pt-4">
+                        <div class="col-12">
+                            <span class="bold">
+                                {{ 'UTILS.FILTER' | translate }}
+                            </span>
+
+                            <span class="current-filter">
+                            {{ filtro }}
+                            </span>
+                        </div>
+                    </div>
+                </app-card-body>
+            </app-card>
+        </div>
+    </div>
+    <div class="row pt-4">
+        <div class="col-6">
+            <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link px-0">
+                {{'UTILS.BACK'|translate}}
+            </button>
+            <button
+                [disabled]="dataSource?.rows?.length===0"
+                (click)="onExportExcelDichLista()"
+                aria-label="Esporta elenco"
+                type="button"
+                class="btn btn-light csi-secondary-button ml-4" >
+                {{ 'UTILS.EXPORT' | translate }}
+            </button>
+        </div>
+        <div class="col-6" *ngIf="acl.content.insert && !checkSuperAdmn">
+            <button (click)="onCreate()" aria-label="Inserisci nuovo utente" type="button"
+                    class="btn btn-primary float-right">
+                {{'DICHIARAZIONI.LISTA.NUOVA_DICHIARAZIONE'|translate}}
+            </button>
+        </div>
+    </div>
+</div>
+<ng-template let-row='row' #actionsTemplate>
+    <div class="actions ng-star-inserted">
+        <button *ngIf="row && acl.content.read" (click)="detail(row)" aria-label="Visualizza dati della dichiarazione annuale"
+        title="Visualizza dati della dichiarazione annuale"
+                class="btn btn-action p-0 px-2">
+            <img alt="Visualizza dati della dichiarazione annuale" style="max-width:60%" height="24px" src="assets/icon/icon-view.svg">
+        </button>
+        <button *ngIf="row && row.printable" (click)="pdf(row)" aria-label="Scarica dichiarazione annuale in pdf" title="Scarica dichiarazione annuale in pdf" class="btn btn-action p-0 px-2">
+            <img alt="Scarica dichiarazione annuale in pdf" height="20px" src="assets/icon/pdf.svg">
+        </button>
+        <button *ngIf="row && acl.content.delete && row.annullable" (click)="delete(row)" aria-label="Elimina dichiarazione annuale"  title="Elimina dichiarazione annuale" class="btn btn-action p-0 px-2">
+            <img alt="Elimina dichiarazione annuale" height="20px" src="assets/icon/icon-table-elimina.svg">
+        </button>
+    </div>
+</ng-template>

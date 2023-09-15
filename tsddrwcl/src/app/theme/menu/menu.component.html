@@ -1,0 +1,93 @@
+<div class="menu" [ngClass]="{ closed: !menuStatus }">
+    <div class="fixed">
+        <div class="toogle-menu">
+            <div class="menu-icon-open" [ngClass]="{ hidden: menuStatus }">
+                <span class="visually-hidden">{{ 'APP.MENUOPEN' | translate }}</span>
+                <app-icon [name]="'eng-menu-open'" [type]="'eng'" [cssClass]="'cursor-pointer'" [fill]="'#016CB4'"
+                          (click)="openMenu()">
+                </app-icon>
+            </div>
+            <div class="menu-icon-close" [ngClass]="{ hidden: !menuStatus }">
+                <span class="visually-hidden">{{ 'APP.MENUCLOSE' | translate }}</span>
+                <app-icon [name]="'eng-menu-close'" [type]="'eng'" [cssClass]="'cursor-pointer'" [fill]="'#016CB4'"
+                          (click)="closeMenu()">
+                </app-icon>
+            </div>
+        </div>
+        <ul class="link-list" [ngStyle]="{ width: !menuStatus ? '80px' : '240px' }">
+            <ng-container *ngFor="let item of menuItems">
+                <li [ngClass]="{
+            current: item.link.indexOf(currentItem) >= 0,
+            'underline-on-hover': menuStatus
+          }" tabindex="0" (keydown.enter)="navigateTo(item.link)" class="cursor-pointer"
+                    (click)="navigateTo(item.link)" *ngIf="!item.hidden && item.children && item.children.length==0">
+                    <span *ngIf="!menuStatus" class="visually-hidden"> {{ item.title | translate }} </span>
+                    <a class="cursor-pointer">
+                        <div class="row">
+                            <div class="col-2">
+                                <app-icon [name]="item.icon" [fill]="'#016CB4'" title="{{item.title}}"
+                                          [type]="item.icon.substring(0, item.icon.indexOf('-'))"
+                                          *ngIf="item.icon" [size]="'small'" [cssClass]="'icon-menu-size'"
+                                          class="mr-4"></app-icon>
+                            </div>
+                            <div class="col-10" *ngIf="menuStatus">
+
+                                {{ item.title | translate }}
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li [ngClass]="{
+          current: item.link.indexOf(currentItem) >= 0,
+          'underline-on-hover': menuStatus
+        }" tabindex="0" (keydown.enter)="navigateTo(item.link)" class="cursor-pointer"
+                    *ngIf="!item.hidden && item.children && item.children.length>0">
+                    <span *ngIf="!menuStatus" class="visually-hidden"> {{ item.title | translate }} </span>
+                    <a class="cursor-pointer" [attr.data-target]="'#collapse'+item.icon" data-toggle="collapse"
+                       aria-expanded="true" [attr.aria-controls]="'#collapse'+item.icon">
+                        <div class="row">
+                            <div class="col-2">
+                                <app-icon [name]="item.icon" [fill]="'#016CB4'"
+                                          [type]="item.icon.substring(0, item.icon.indexOf('-'))"
+                                          *ngIf="item.icon" [size]="'small'" [cssClass]="'icon-menu-size'"
+                                          class="mr-4"></app-icon>
+                            </div>
+                            <div class="col-10" *ngIf="menuStatus">
+                                {{ item.title | translate }}
+                            </div>
+                        </div>
+                    </a>
+                    <ul *ngIf="item.children && item.children.length>0" class="link-list link-sublist collapse" [ngClass]="item.opened ? 'show' : ''"
+                        [attr.id]="'collapse'+item.icon">
+                        <ng-container *ngFor="let c of item.children">
+                            <li [ngClass]="{
+                current: c.link.indexOf(currentItem) >= 0,
+                'underline-on-hover': menuStatus
+              }" tabindex="0" (keydown.enter)="navigateTo(c.link)"
+                                (click)="navigateTo(c.link)" *ngIf="!c.hidden">
+                                <span *ngIf="!menuStatus" class="visually-hidden"> {{ c.title | translate }} </span>
+                                <a class="cursor-pointer">
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <app-icon [name]="c.icon" [fill]="'#016CB4'"
+                                                      [type]="c.icon.substring(0, c.icon.indexOf('-'))" *ngIf="c.icon"
+                                                      [size]="'small'"
+                                                      [cssClass]="'icon-menu-size'" class="mr-4"></app-icon>
+                                        </div>
+                                        <div class="col-10" *ngIf="menuStatus">
+                                            {{ c.title | translate }}
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ng-container>
+                    </ul>
+                </li>
+
+            </ng-container>
+        </ul>
+    </div>
+</div>
+<div class="background-mobile-menu" [ngClass]="{ open: menuStatus }" (click)="closeMenu()">
+    &nbsp;
+</div>

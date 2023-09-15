@@ -1,0 +1,61 @@
+<ul class="nav nav-tabs nav-tabs-hidescroll hidescroll-ico mt-4" style="background: #F7F7F7;">
+    <li class="nav-item" *ngFor="let tabElement of tabElements">
+        <a [ngClass]="{
+            'nav-link': true,
+            active: tabElement.link == activeElement
+        }"
+        [attr.aria-selected]="tabElement.link == activeElement"
+        [tabindex]="tabElement.disabled == true ? -1 : 0"
+        (click)="onChangeActiveTab(tabElement)"
+        style="background: #F7F7F7; cursor:pointer;">
+        <app-icon *ngIf="tabElement.icon != undefined"
+            [name]="tabElement.icon.name"
+            [type]="tabElement.icon.type"
+            [cssClass]="tabElement.icon.cssClass"
+            [fill]="tabElement.icon.fill"
+            [size]="tabElement.icon.size"
+            [color]="tabElement.icon.color"
+            [padding]="tabElement.icon.padding"
+            [baseHref]="tabElement.icon.baseHref"
+        ></app-icon>
+        {{ tabElement.title|translate}}
+        </a>
+    </li>
+</ul>
+
+<div *ngIf="activeId=='gestore'">
+    <app-edit-gestore *ngIf="gestore" [gestore]="gestore">
+
+    </app-edit-gestore>
+</div>
+
+<div *ngIf="activeId=='impianto'">
+    <app-edit-impianto *ngIf="impianto" [impianto]="impianto">
+
+    </app-edit-impianto>
+</div>
+<div *ngIf="activeId=='rifiuti'">
+    <app-dichiarazione-tab-rifiuti [keyDichiarazione]="keyDichiarazione">
+
+    </app-dichiarazione-tab-rifiuti>
+</div>
+<div *ngIf="activeId=='versamenti'">
+    <app-dichiarazione-tab-versamenti [keyDichiarazione]="keyDichiarazione">
+
+    </app-dichiarazione-tab-versamenti>
+</div>
+<div *ngIf="activeId=='soggetti'">
+    <app-dichiarazione-tab-soggetti [keyDichiarazione]="keyDichiarazione">
+
+    </app-dichiarazione-tab-soggetti>
+</div>
+<div *ngIf="activeId=='annotazioni'">
+    <app-dichiarazione-tab-annotazioni [keyDichiarazione]="keyDichiarazione">
+
+    </app-dichiarazione-tab-annotazioni>
+</div>
+<div *ngIf="activeId=='sededocumenti'">
+    <app-dichiarazione-tab-sede [keyDichiarazione]="keyDichiarazione">
+
+    </app-dichiarazione-tab-sede>
+</div>

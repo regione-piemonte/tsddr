@@ -1,0 +1,137 @@
+<div class="row">
+  <div class="col-12">
+    <app-table *ngIf="dataSource"
+      [createMode]="true"
+      [columns]='columns'
+      [dataSource]='dataSource'
+      [showPager]='true'>
+    </app-table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-2 offset-10">
+    <div class="form-group">
+      <label
+        class="label custom-label mb-0 font-weight-normal"
+        style="text-align: left; position: relative;"
+        for="tot">
+        <strong>{{ totLabel }}</strong>
+      </label>
+      <input
+        class="custom-input shape-rectangle size-large nb-transition input-full-width color-status-basic"
+        type="text"
+        id="tot"
+        [value]="selectedTabObject.totValue | number : '1.0-4'"
+        [disabled]="true">
+    </div>
+  </div>
+</div>
+
+<!-- EER codice -->
+<ng-template let-row='row' #codiceEer>
+  <label class="visually-hidden" for="{{'selectcodiceEer'}}">Codice EER</label>
+ <app-select-input
+    *ngIf="row && isEditMode && row.idPrevConsDett"
+    [control]="getUpdateFormControl(row,'codiceEer')"
+    [id]="'codiceEer' + row.idPrevConsDett"
+  ></app-select-input>
+  <span *ngIf="row && !isEditMode">
+    {{ row.eer.codiceEer }}
+  </span>
+  <app-select-input
+    *ngIf="!row && isEditMode"
+    [control]='createForm.controls["codiceEer"]'
+    [id]="'codiceEer'"
+  ></app-select-input>
+</ng-template>
+<!-- EER descrizione -->
+<ng-template let-row='row' #descrizioneEer>
+  <label class="visually-hidden" for="{{'inputdescrizioneEer'}}">Descrizione</label>
+  <app-textbox-input
+    *ngIf="row && isEditMode && row.idPrevConsDett"
+    [name]="'descrizioneEer' + row.idPrevConsDett"
+    [control]="getUpdateFormControl(row,'descrizioneEer')"
+  ></app-textbox-input>
+  <span *ngIf="row && !isEditMode">
+    {{ row.eer.descrizione }}
+  </span>
+  <app-textbox-input
+    *ngIf="!row && isEditMode"
+    [name]="'descrizioneEer'"
+    [control]="createForm.controls['descrizioneEer']"
+  ></app-textbox-input>
+</ng-template>
+<!-- destinazione -->
+<ng-template let-row='row' #destinazione>
+  <label class="visually-hidden" for="{{'inputdestinazione'}}">Destinazione</label>
+  <app-textbox-input
+    *ngIf="row && isEditMode && row.idPrevConsDett"
+    [name]="'destinazione' + row.idPrevConsDett"
+    [control]="getUpdateFormControl(row,'destinazione')"
+  ></app-textbox-input>
+  <span *ngIf="row && !isEditMode">
+    {{ row.destinazione }}
+  </span>
+  <app-textbox-input
+    *ngIf="!row && isEditMode"
+    [name]="'destinazione'"
+    [control]="createForm.controls['destinazione']"
+  ></app-textbox-input>
+</ng-template>
+<!-- descMatUscita -->
+<ng-template let-row='row' #descMatUscita>
+  <label class="visually-hidden" for="{{'inputdescMatUscita'}}">Descrizione materiali in uscita</label>
+  <app-textbox-input
+  *ngIf="row && isEditMode && row.idPrevConsDett"
+  [name]="'descMatUscita' + row.idPrevConsDett"
+  [control]="getUpdateFormControl(row,'descMatUscita')"
+  ></app-textbox-input>
+  <span *ngIf="row && !isEditMode">
+    {{ row.descMatUscita }}
+  </span>
+  <app-textbox-input
+    *ngIf="!row && isEditMode"
+    [name]="'descMatUscita'"
+    [control]='createForm.controls["descMatUscita"]'
+  ></app-textbox-input>
+</ng-template>
+<!-- quantita -->
+<ng-template let-row='row' #quantita>
+  <label class="visually-hidden" for="{{'inputquantita'}}">Tonnellate</label>
+  <app-textbox-input
+    *ngIf="row && isEditMode && row.idPrevConsDett"
+    [name]="'quantita' + row.idPrevConsDett"
+    [control]="getUpdateFormControl(row,'quantita')"
+    (blurEvent)="onEdit(row.idPrevConsDett)"
+  ></app-textbox-input>
+  <span *ngIf="row && !isEditMode">
+    {{ row.quantita | number : '1.0-4'}}
+  </span>
+  <app-textbox-input
+    *ngIf="!row && isEditMode"
+    [name]="'quantita'"
+    [control]="createForm.controls['quantita']"
+  ></app-textbox-input>
+  <br>
+  <app-validation-input-message
+    [statusMessage]="getUpdateFormControl(row,'quantita')?.statusMessage"
+  ></app-validation-input-message>
+  <app-validation-input-message
+    *ngIf="!row && isEditMode"
+    [statusMessage]='createForm.controls["quantita"]?.statusMessage'
+  ></app-validation-input-message>
+</ng-template>
+
+<!-- ACTIONS -->
+<ng-template let-row='row' #actionsTemplate>
+  <div class="actions ng-star-inserted">
+      <button (click)="onDelete(row)" aria-label="Elimina"  title="Elimina" class="btn btn-action p-0 px-2" *ngIf="row && isEditMode && !row?.quantitaRichiesta">
+          <img alt="Elimina" height="20px" src="assets/icon/icon-table-elimina.svg">
+      </button>
+      <button (click)="onAddPrevConsDett()" aria-label="Inserisci"  title="Inserisci"
+                    class="btn btn-action insert" *ngIf="!row && isEditMode" [disabled]="!createForm?.valid">
+                <img alt="Inserisci" height="24px" src="assets/icon/enable-add.jpg" *ngIf="!createForm?.valid">
+                <img alt="Inserisci" height="24px" src="assets/icon/add.png" *ngIf="createForm?.valid">
+      </button>
+  </div>
+</ng-template>

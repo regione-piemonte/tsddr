@@ -1,0 +1,66 @@
+<button
+  class="btn btn-dropdown dropdown-toggle"
+  type="button"
+  id="dropdownMenuButton"
+  data-toggle="dropdown"
+  aria-haspopup="true"
+  aria-expanded="false"
+>
+  <app-icon
+    [name]="togglerIcon.name"
+    [type]="togglerIcon.type"
+    [cssClass]="togglerIcon.cssClass"
+    [fill]="togglerIcon.fill"
+    [size]="togglerIcon.size"
+    [color]="togglerIcon.color"
+    [padding]="togglerIcon.padding"
+    [baseHref]="togglerIcon.baseHref"
+    *ngIf="!useAvatar"
+  ></app-icon>
+
+  <div class="avatar avatar-dropdown" *ngIf="useAvatar">
+    <p [attr.aria-hidden]="true">{{ avatarContent }}</p>
+    <span class="sr-only">{{ avatarContent }}</span>
+  </div>
+</button>
+<div class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton">
+  <div class="link-list-wrapper">
+    <ul class="link-list">
+      <ng-container
+        *ngFor="let item of items; last as isLast; first as isFirst"
+      >
+        <li *ngIf="!isHidden(item, content)">
+          <a
+            class="list-item px-0 pt-1 cursor-pointer"
+            (click)="item.onClick({ item: item, optContent: content })"
+          >
+            <app-icon
+              *ngIf="item.icon != undefined"
+              [name]="item.icon.name"
+              [type]="item.icon.type"
+              [cssClass]="item.icon.cssClass"
+              [fill]="item.icon.fill"
+              [size]="item.icon.size"
+              [color]="item.icon.color"
+              [padding]="item.icon.padding"
+              [baseHref]="item.icon.baseHref"
+            ></app-icon>
+            {{ item.label }}
+            <ng-container *ngIf="item.detail">
+              <br />
+              {{ item.detail }}</ng-container
+            >
+          </a>
+          <app-divider
+            [marginBottom]="0"
+            [marginTop]="0"
+            [marginX]="0.5"
+            [borderTop]="'white 1px solid'"
+            *ngIf="!isLast"
+          >
+          </app-divider>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+.home {
+    padding-top: 20px;
+    h1 {
+        text-align: left;
+        font: normal normal bold 24px/33px Open Sans, sans-serif;
+        letter-spacing: 0;
+        color: #000000;
+    }
+    .separator {
+        width: 60px;
+        height: 5px;
+        background: #b91818 0% 0% no-repeat padding-box;
+    }
+    .ambito-container {
+        text-align: left;
+        font: normal normal normal 12px/17px Open Sans, sans-serif;
+        letter-spacing: 0;
+        color: #767677;
+        text-transform: capitalize;
+    }
+    .text-container {
+        text-align: left;
+        font: normal normal bold 16px/21px Open Sans, sans-serif;
+        letter-spacing: 0;
+        color: #000000;
+        min-height: 65px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .button-card {
+        background-color: transparent;
+        border: 0;
+        padding: 0;
+        font: normal normal normal 16px/22px Open Sans, sans-serif;
+        letter-spacing: 0;
+        color: #0060c1;
+        text-transform: capitalize;
+    }
+}

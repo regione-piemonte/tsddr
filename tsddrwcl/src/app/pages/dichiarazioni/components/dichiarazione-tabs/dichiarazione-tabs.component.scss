@@ -1,0 +1,14 @@
+/* Fix issue 104
+    Per questioni di accessibilità il font-size negli schermi piccoli
+    deve essere almeno 14px.
+    .75rem equivalgono a 12px, è troppo piccolo.
+*/
+/* @media screen and (max-width: 1366px) {
+    .nav-tabs{
+        .nav-item{
+            a{
+                font-size: .75rem;
+            }
+        }
+    }
+} */

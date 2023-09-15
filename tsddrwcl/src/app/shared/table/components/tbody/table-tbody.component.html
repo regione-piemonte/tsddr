@@ -1,0 +1,106 @@
+<ng-container *ngIf='dataSource.rows$ | async as rows'>
+    <ng-container *ngIf='rows.length || createMode; else noItems'>
+        <ng-container *ngFor='let row of rows; let index = index'>
+            <tr>
+                <!-- TODO: richiamare un metodo sul template non è performante spostare la logica in una direttiva o su un pipe -->
+                <td
+                      *ngFor='let column of columns'
+                      [class]='getClass(row, column)'
+                      [attr.data-toggle]="column.rowDetailIcon ? 'collapse' : null"
+                      [attr.data-target]='
+            column.rowDetailIcon ? getAccordionDataTarget(index) : null
+          '
+                      [attr.aria-expanded]='column.rowDetailIcon ? false : null'
+                      [style.width.%]='column.width'
+                      (click)='!column.rowDetailIcon && onRowClick(row)'
+                >
+                    <app-checkbox-input
+                          *ngIf='column.checkboxable'
+                          name='rowCheckbox{{ index }}'
+                          [checked]='checked(row)'
+                          (click)='$event.stopPropagation()'
+                          (change)='
+              $event.stopPropagation();
+              checkboxToggle.emit({ row: row, event: $event })
+            '
+                    ></app-checkbox-input>
+
+                    <!-- TODO: richiamare un metodo sul template non è performante spostare la logica in una direttiva o su un pipe -->
+                    <span>
+            <ng-container
+                  *ngIf='column.cellTemplate; else valueContent'
+                  [ngTemplateOutlet]='column.cellTemplate'
+                  [ngTemplateOutletContext]='{
+                row: row
+              }'
+            ></ng-container>
+
+            <ng-template #valueContent>{{ getValue(row, column) }}</ng-template>
+          </span>
+                    <app-icon
+                          *ngIf='column.rowDetailIcon'
+                          class='float-right'
+                          color='primary'
+                          size='small'
+                          icon='it-expand'
+                    >
+                    </app-icon>
+                </td>
+            </tr>
+
+            <tr *ngIf='rowDetail'>
+                <td
+                      [attr.colspan]='columns.length + 2'
+                      class='hiddenRow hide-bottom-border'
+                >
+                    <div
+                          [id]='getAccordionId(index)'
+                          class='collapse'
+                          [class.collapse-show-border]='rowDetailBorder'
+                          [attr.data-id]='index'
+                    >
+                        <ng-container
+                              *ngTemplateOutlet='
+                rowDetail;
+                context: {
+                  $implicit: 1,
+                  row: row
+                }
+              '
+                        ></ng-container>
+                    </div>
+                </td>
+            </tr>
+        </ng-container>
+        <tr *ngIf="createMode">
+            <td
+                  *ngFor='let column of columns'
+                  [class]='getClassCreateMode(column)'
+                  [style.width.%]='column.width'
+                  [style.width.%]='column.width'
+            >
+        <span>
+            <ng-container
+                  *ngIf='column.cellTemplate'
+                  [ngTemplateOutlet]='column.cellTemplate'
+            ></ng-container>
+          </span>
+                <app-icon
+                      *ngIf='column.rowDetailIcon'
+                      class='float-right'
+                      color='primary'
+                      size='small'
+                      icon='it-expand'
+                >
+                </app-icon>
+            </td>
+        </tr>
+    </ng-container>
+    <ng-template #noItems>
+        <tr>
+            <td class='text-center' [attr.colspan]='columns?.length'>
+                <span class='font-weight-bold'>{{ emptyMessage | translate }} </span>
+            </td>
+        </tr>
+    </ng-template>
+</ng-container>

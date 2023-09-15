@@ -1,0 +1,95 @@
+.min-w-140 {
+  min-width: 140px;
+}
+
+.min-w-250 {
+  min-width: 250px;
+}
+
+.toRead {
+  height: 80px;
+  background-color: #eeeeee !important;
+  font-weight: bold;
+  align-items: center;
+  display: flex;
+}
+
+.row_table_comunications {
+  vertical-align: middle;
+  height: 80px;
+}
+
+.toRead-light {
+  font-size: regular;
+  font-weight: normal;
+  vertical-align: middle;
+  height: 80px;
+}
+
+.total-rows {
+  font-size: 0.875rem;
+  font-weight: 300;
+}
+
+.text-semi-dark {
+  color: $semi_dark;
+}
+
+.font-size-regular {
+  font-size: 1rem;
+}
+
+.red {
+  background-color: red;
+}
+
+.font-size-18 {
+  font-size: 1.125rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.bold {
+  font-weight: 700 !important;
+}
+
+.fileName {
+  color: $primary_color;
+}
+
+.divider {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.bg-grey {
+  background-color: $background_light;
+}
+
+.box-border-left {
+  border-left: 1px solid $border_color;
+}
+
+.box-border-right {
+  border-right: 1px solid $border_color;
+}
+
+.text-disabled {
+  color: #666666 !important;
+}
+
+a.cal-event-action.ng-star-inserted {
+  color: #000000;
+  text-decoration: none;
+}
+
+.close-icon {
+  font-size: 2.25rem !important;
+}
+
+.icon-menu-size {
+  max-width: 20px;
+  max-height: 18px;
+}

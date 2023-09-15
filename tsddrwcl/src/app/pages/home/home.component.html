@@ -1,0 +1,37 @@
+<main>
+  <div class='home row'>
+    <div class='col-12 '>
+      <h1>
+        {{ 'HOME.TITLE' | translate }} <ng-container *ngIf="userCompleto">{{userCompleto}}</ng-container>
+      </h1>
+    </div>
+    <div class='col-12'>
+      <div class='separator'>&nbsp;</div>
+    </div>
+    <div *ngIf="helperTitle && helperText" class="col-12 mt-4">
+      <app-helper [title]="helperTitle" [text]="helperText"></app-helper>
+    </div>
+    <div class='col-12 col-sm-6 col-md-4' *ngFor='let card of cardsHp'>
+      <app-card *ngIf="card.descCard">
+        <app-card-header>
+          <div class='ambito-container'>
+            {{ card.descFunzione }}
+          </div>
+        </app-card-header>
+        <app-card-body>
+          <div class='text-container'>
+            {{ card.descCard }}
+          </div>
+        </app-card-body>
+        <app-card-footer>
+          <div class='row'>
+            <div class='col-12 text-right'>
+              <button type='button' class='btn button-card text-right'
+                      (click)='onNavigateList(card)'>{{ 'HEADER.LOGIN' | translate }}</button>
+            </div>
+          </div>
+        </app-card-footer>
+      </app-card>
+    </div>
+  </div>
+</main>

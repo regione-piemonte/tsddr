@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+/*
+  Start per scss del tema del sito
+*/
+
+@import './variables';
+@import './internal';
+
+@import '~@ng-select/ng-select/themes/default.theme.css';
+@import '~bootstrap-italia/src/scss/bootstrap-italia';
+
+@import './input';
+@import './ng-select';
+@import './table';
+@import './datatable';
+
+.toast-body {
+  padding: 0 !important;
+}
+
+/* per gli screen reader */
+.visually-hidden{
+  position: absolute!important;
+  width: 1px!important;
+  height: 1px!important;
+  padding: 0!important;
+  margin: -1px!important;
+  overflow: hidden!important;
+  clip: rect(0,0,0,0)!important;
+  white-space: nowrap!important;
+  border: 0!important;
+}
+/* colori utilizzati per motivi di accessibilità */
+.csi-secondary-button {
+  color: #006cb4;
+  background-color: white;
+  border: 1px solid #006cb4;
+}
+
+button[disabled] {
+  color: #fff !important;
+  background-color: #5d7083 !important;
+  border-color: #5d7083 !important
+}
+
+button[disabled] > img, button[disabled]:has(img) {
+  color: #fff !important;
+  background-color: #fff !important;
+  border-color: #fff !important
+}

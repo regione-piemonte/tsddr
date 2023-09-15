@@ -1,0 +1,53 @@
+<div class="it-header-wrapper it-header-sticky fixed-top">
+  <div class="it-nav-wrapper">
+    <div class="it-header-center-wrapper it-small-header custom-header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="it-header-center-content-wrapper">
+              <div class="it-brand-wrapper d-inline-flex pl-0">
+                <div class="menu-icon" (window:resize)="onResize($event)">
+                  <span class="visually-hidden">{{ 'APP.MENUOPEN' | translate }}</span>
+                  <app-icon
+                    [name]="'it-burger'"
+                    [fill]="'#ffffff'"
+                    (click)="openMenu()"
+                  ></app-icon>
+                </div>
+                <div class="it-brand-text pl-3 text-white">
+                  <h3 class="no_toc mb-0 d-none d-sm-block" title="{{ 'APP.NAME' | translate }}">{{ 'APP.NAME' | translate }}</h3>
+                  <h3 class="no_toc mb-0 d-block d-sm-none" title="{{ 'APP.NAME' | translate }}">{{ 'APP.NAMESHORT' | translate }}</h3>
+                </div>
+              </div>
+
+              <div class="it-right-zone">
+                <app-dropdown
+                  *nbIsGranted="['viewUser', 'info']"
+                  [useAvatar]="true"
+                  [avatarContent]="avatarContent"
+                  [items]="dropdownMenu"
+                ></app-dropdown>
+                <span class="descProfilo">{{ descProfilo }}</span>
+                <button
+                  (click)="onLogin()"
+                  *nbIsGranted="['viewUser', 'login']"
+                  class="btn btn-outline-primary custom-button login-button"
+                >
+                  <app-icon
+                    [name]="'eng-scriva-login'"
+                    [fill]="'#ffffff'"
+                    [type]="'eng'"
+                    size="small"
+                  ></app-icon>
+                  <span style="font-size: 18px" class="ml-3">
+                    <strong>{{ 'HEADER.LOGIN' | translate }}</strong></span
+                  >
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

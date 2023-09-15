@@ -1,0 +1,250 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12" *ngIf="periodi">
+            <div class="row intestazioni">
+                <div *ngFor="let periodo of periodi" class="col-2 mx-auto">
+                    <div class="row">
+                        <div class="col-12 descPeriodo text-center">
+                            {{ periodo.descPeriodo}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 quantita">
+                            {{ 'DICHIARAZIONI.TABSCONTENT.QUANTITA' | translate }}
+                        </div>
+                        <div class="col-6 periodo">
+                            {{ 'DICHIARAZIONI.TABSCONTENT.IMPORTO' | translate }}
+                        </div>
+                    </div>
+                </div>
+                <div  class="col-2 mx-auto">
+                    <div class="row">
+                        <div class="col-12 descPeriodo text-center">
+                            {{ 'DICHIARAZIONI.TABSCONTENT.PERIODI.TOTALE.LABEL' | translate }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 quantita">
+                            {{ 'DICHIARAZIONI.TABSCONTENT.QUANTITA' | translate }}
+                        </div>
+                        <div class="col-6 periodo">
+                            {{ 'DICHIARAZIONI.TABSCONTENT.IMPORTO' | translate }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div *ngIf="showRows" class="ngRows">
+                <div *ngFor="let row of dichiarazioneEditingStore.dichiarazione.rifiutiConferiti.rifiutiConferiti; let j = index"  class="row mb-5 update">
+                    <div class="col-12">
+                        <div class="row ml-2 rifiutoTariffa">
+                            <div class="col-1 label">
+                              <app-input-label [field]="getUpdateFormControl(row,'unitaMisura')"
+                              [name]="'_importo' + row.idRifiutoConferito"></app-input-label>
+                            </div>
+                            <div class="col-2">
+                                <app-textbox-input
+                                [control]="getUpdateFormControl(row,'importo')"
+                                [name]="'_importo' + row.idRifiutoConferito"
+                                 ></app-textbox-input>
+                            </div>
+                            <div class="col-6">
+                                <label class="visually-hidden" for="{{'select_rifiutoTariffa' + row.idRifiutoConferito}}">Rifiuto Tariffa</label>
+                                <app-select-input
+                                   [control]="getUpdateFormControl(row,'rifiutoTariffa')"
+                                   [id]="'_rifiutoTariffa' + row.idRifiutoConferito"
+                                ></app-select-input>
+                            </div>
+                            <div class="col-1 label">
+                              <app-input-label [field]="getUpdateFormControl(row,'riduzione')"
+                              [name]="'_riduzione' + row.idRifiutoConferito"></app-input-label>
+                            </div>
+                            <div class="col-1 riduzione">
+                                <app-textbox-input
+                                    [control]="getUpdateFormControl(row,'riduzione')"
+                                    [name]="'_riduzione' + row.idRifiutoConferito"
+                                 ></app-textbox-input>
+                            </div>
+                            <div class="col-1 d-flex flex-row-reverse w-50" *ngIf="acl.content.delete && !isReadonly">
+                                <div class="actions ng-star-inserted">
+                                    <button (click)="onDeleteRifiutoConferito(row)" aria-label="Elimina"  title="Elimina"
+                                            class="btn btn-action btn-action-rifiuto" >
+                                        <img alt="Elimina" height="24px" src="assets/icon/icon-table-elimina.svg" >
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                           <div *ngFor="let periodo of periodi; let i = index" class="col-2 mx-auto">
+                                <div class="row quantita_importo">
+                                    <div class="col-6">
+                                        <label class="visually-hidden" for="{{'input_quantita' + i + '_' + row.idRifiutoConferito}}">Quantita</label>
+                                        <app-textbox-input
+                                            (blurEvent)="blurEvent(getUpdateForm(row))"
+                                            [control]="getUpdateFormControl(row,'quantita',i)"
+                                            [name]="'_quantita' + i + '_' + row.idRifiutoConferito"
+                                        ></app-textbox-input>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="visually-hidden" for="{{'input_importo' + i + '_' + row.idRifiutoConferito}}">Importo</label>
+                                       <app-textbox-input
+                                            [control]="getUpdateFormControl(row,'importo',i)"
+                                            [name]="'_importo' + i + '_'  + row.idRifiutoConferito"
+                                        ></app-textbox-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div  class="col-2 mx-auto">
+                                <div class="row quantita_importo">
+                                    <div class="col-6">
+                                    <label class="visually-hidden" for="{{'input_totale_quantita' + row.idRifiutoConferito}}">Totale quantita</label>
+                                        <app-textbox-input
+                                            [control]="getUpdateFormControl(row,'totale_quantita')"
+                                            [name]="'_totale_quantita' + row.idRifiutoConferito"
+                                        ></app-textbox-input>
+                                    </div>
+                                    <div class="col-6">
+                                    <label class="visually-hidden" for="{{'input_totale_importo' + row.idRifiutoConferito}}">Totale importo</label>
+                                        <app-textbox-input
+                                            [control]="getUpdateFormControl(row,'totale_importo')"
+                                            [name]="'_totale_importo' + row.idRifiutoConferito"
+                                        ></app-textbox-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="createForm" class="row w-100 create">
+                <div class="col-12">
+                    <div class="row ml-2 rifiutoTariffa ">
+                        <div class="col-1 label">
+                        <app-input-label [field]='createForm.controls["unitaMisura"]'
+                        [name]="'_new_importo'"></app-input-label>
+                        </div>
+                        <div class="col-2">
+                            <app-textbox-input
+                            [control]='createForm.controls["importo"]'
+                            [name]="'_new_importo'"
+                             ></app-textbox-input>
+                        </div>
+                        <div class="col-6">
+                        <label class="visually-hidden" for="select_newRifiutoTariffa">Nuovo rifiuto tariffa</label>
+                            <app-select-input
+                                [control]='createForm.controls["rifiutoTariffa"]'
+                                [id]="'_newRifiutoTariffa'"
+                            ></app-select-input>
+                        </div>
+                        <div class="col-1 label">
+                          <app-input-label [field]='createForm.controls["riduzione"]'
+                          [name]="'_newRiduzione'"></app-input-label>
+
+                        </div>
+                        <div class="col-1 riduzionepage">
+                            <app-textbox-input
+                            [control]='createForm.controls["riduzione"]'
+                            [name]="'_newRiduzione'"
+                             ></app-textbox-input>
+                        </div>
+                        <div class="col-1 d-flex flex-row-reverse w-50">
+                            <div class="actions ng-star-inserted">
+                                <button *ngIf="!row" (click)="createRifiutoConferito()" aria-label="Inserisci"  title="Inserisci"
+                                        class="btn btn-action insert btn-action-rifiuto" [disabled]="!createForm.valid">
+                                    <img alt="Inserisci" height="24px" src="assets/icon/enable-add.jpg" *ngIf="!createForm.valid">
+                                    <img alt="Inserisci" height="24px" src="assets/icon/add.png" *ngIf="createForm.valid">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div *ngFor="let periodo of periodi; let i = index" class="col-2 mx-auto">
+                            <div class="row quantita_importo">
+                                <div class="col-6">
+                                <label class="visually-hidden" for="{{'input_new_quantita' + i}}">Quantita</label>
+                                    <app-textbox-input
+                                        (blurEvent)="blurEvent(createForm)"
+                                        [control]='getCreateFormControl("quantita",i)'
+                                        [name]="'_new_quantita' + i"
+                                    ></app-textbox-input>
+                                </div>
+                                <div class="col-6">
+                                <label class="visually-hidden" for="{{'input_importo' + i}}">Importo</label>
+                                    <app-textbox-input
+                                    [control]='getCreateFormControl("importo",i)'
+                                    [name]="'_new_importo' + i"
+                                    ></app-textbox-input>
+                                </div>
+                            </div>
+                        </div>
+                        <div  class="col-2 mx-auto">
+                            <div class="row quantita_importo">
+                                <div class="col-6">
+                                <label class="visually-hidden" for="input_new_totale_quantita">Totale quantita</label>
+                                    <app-textbox-input
+                                    [control]='createForm.controls["totale_quantita"]'
+                                    [name]="'_new_totale_quantita'"
+                                ></app-textbox-input>
+                                </div>
+                                <div class="col-6">
+                                <label class="visually-hidden" for="input_new_totale_importo">Totale importo</label>
+                                    <app-textbox-input
+                                        [control]='createForm.controls["totale_importo"]'
+                                        [name]="'_new_totale_importo'"
+                                    ></app-textbox-input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row totals">
+                <div class="col-12">
+                    <div class="row">
+                        <div *ngFor="let periodo of periodi; let i = index" class="col-2 mx-auto">
+                            <div class="row quantita_importo">
+                                <div class="col-6">
+                                <label class="visually-hidden" for="{{'input_quantita_all' + i}}">Quantita</label>
+                                    <app-textbox-input
+                                        [control]='getTotalFormControl("quantita",i)'
+                                        [name]="'_quantita_all' + i"
+                                    ></app-textbox-input>
+                                </div>
+                                <div class="col-6">
+                                <label class="visually-hidden" for="{{'input_importi_all' + i}}">Importo</label>
+                                    <app-textbox-input
+                                    [control]='getTotalFormControl("importo",i)'
+                                    [name]="'_importi_all' + i"
+                                    ></app-textbox-input>
+                                </div>
+                            </div>
+                        </div>
+                        <div  class="col-2 mx-auto">
+                            <div class="row quantita_importo">
+                            <label class="visually-hidden" for="input_totale_quantita_all">Totale quantita</label>
+                                <div class="col-6">
+                                    <app-textbox-input
+                                    [control]='totalForm.controls["totale_quantita"]'
+                                    [name]="'_totale_quantita_all'"
+                                ></app-textbox-input>
+                                </div>
+                                <div class="col-6">
+                                <label class="visually-hidden" for="input_totale_importo_all">Totale importo</label>
+                                    <app-textbox-input
+                                        [control]='totalForm.controls["totale_importo"]'
+                                        [name]="'_totale_importo_all'"
+                                    ></app-textbox-input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

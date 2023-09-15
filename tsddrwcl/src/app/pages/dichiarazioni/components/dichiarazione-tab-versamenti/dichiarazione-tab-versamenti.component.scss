@@ -1,0 +1,53 @@
+.container-fluid {
+  padding-top: 1.389rem;
+}
+
+.intestazioni {
+  & > div {
+    margin-bottom: 10px;
+  }
+  & > div > div {
+    border: 1px solid #d6dce3;
+    padding: 6px;
+  }
+  .descPeriodo {
+    white-space: nowrap;
+  }
+  padding-bottom: 30px;
+}
+
+.quantita_importo {
+  & > div {
+    padding: 0;
+  }
+}
+app-validation-input-message {
+  ::ng-deep .small {
+    ::ng-deep .strong {
+      color: black !important;
+    }
+  }
+}
+.intestazioni{
+  ::ng-deep app-textbox-input {
+    ::ng-deep input{
+      border: 1px solid #c1bfbf !important;
+    }
+  }
+}
+.riassunto {
+  padding: 10px;
+::ng-deep app-textbox-input{
+  ::ng-deep input{border: 1px solid #c1bfbf !important;}
+}
+  ::ng-deep app-validation-input-message {
+    ::ng-deep small {
+      color: black !important;
+      border-color: black !important;
+      ::ng-deep strong {
+        color: black !important;
+        border-color: black !important;
+      }
+    }
+  }
+}

@@ -1,0 +1,86 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <app-helper [text]="helperTitle"></app-helper>
+        </div>
+        <div class="col-12">
+            <app-form [form]="searchForm"></app-form>
+        </div>
+        <!-- Table -->
+        <div class="col-12">
+            <app-card [containerStyle]="'box-shadow: 1px 2px 8px #c4c4c4 !important; border-radius: 0 !important;'"
+                      *ngIf="dataSource">
+                <app-card-body>
+                    <app-table
+                          [createMode]="true"
+                          [columns]='columns'
+                          [dataSource]='dataSource'
+                          [showPager]='true'
+                    ></app-table>
+                </app-card-body>
+            </app-card>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link pt-4 pl-0">
+                Indietro
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<ng-template let-row='row' #descriptionTemplate>
+    <span *ngIf="row">{{ row.descFunzione }}</span>
+    <!--suppress TypeScriptValidateTypes -->
+    <app-autocomplete-input
+          *ngIf="!row && createEnabled"
+          [control]='createForm.controls["idFunzione"]'
+    ></app-autocomplete-input>
+</ng-template>
+
+<ng-template let-row='row' #switchReadTemplate>
+    <app-toggle *ngIf="row" (checkedChange)="hasUnsavedChange=true" [(checked)]="row.read"
+                [id]="'edit_'+row.idProfilo+'_'+row.idFunzione"></app-toggle>
+    <app-toggle *ngIf="!row && createEnabled" [(checked)]="toCreate.read" [id]="'edit_to_create'"></app-toggle>
+</ng-template>
+
+<ng-template let-row='row' #switchInsertTemplate>
+    <app-toggle *ngIf="row" (checkedChange)="hasUnsavedChange=true" [(checked)]="row.insert"
+                [id]="'insert_'+row.idProfilo+'_'+row.idFunzione"></app-toggle>
+    <app-toggle *ngIf="!row && createEnabled" [(checked)]="toCreate.insert" [id]="'insert_to_create'"></app-toggle>
+</ng-template>
+
+<ng-template let-row='row' #switchUpdateTemplate>
+    <app-toggle *ngIf="row" (checkedChange)="hasUnsavedChange=true" [(checked)]="row.update"
+                [id]="'update_'+row.idProfilo+'_'+row.idFunzione"></app-toggle>
+    <app-toggle *ngIf="!row && createEnabled" [(checked)]="toCreate.update" [id]="'update_to_create'"></app-toggle>
+</ng-template>
+
+<ng-template let-row='row' #switchDeleteTemplate>
+    <app-toggle *ngIf="row" (checkedChange)="hasUnsavedChange=true" [(checked)]="row.delete"
+                [id]="'delete_'+row.idProfilo+'_'+row.idFunzione"></app-toggle>
+    <app-toggle *ngIf="!row && createEnabled" [(checked)]="toCreate.delete" [id]="'delete_to_create'"></app-toggle>
+</ng-template>
+
+
+<ng-template let-row='row' #actionsTemplate>
+    <div class="actions ng-star-inserted">
+        <button *ngIf="row && acl.content.update" (click)="update(row)" aria-label="Modifica" title="Modifica"
+                class="btn btn-action p-0 px-2">
+            <img alt="Modifica" height="24px" src="assets/icon/icon-table-edit.svg">
+        </button>
+
+        <button *ngIf="!row && acl.content.insert" (click)="create()" aria-label="Inserisci"  title="Inserisci"
+                class="btn btn-action p-0 px-2">
+            <img alt="Inserisci" height="24px" src="assets/icon/enable-add.jpg" *ngIf="!createEnabled">
+            <img alt="Inserisci" height="24px" src="assets/icon/add.png" *ngIf="createEnabled">
+        </button>
+
+        <button *ngIf="row && acl.content.delete" (click)="delete(row)" aria-label="Elimina" title="Elimina" class="btn btn-action p-0">
+            <img alt="Elimina" height="20px" src="assets/icon/icon-table-elimina.svg">
+        </button>
+    </div>
+</ng-template>

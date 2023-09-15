@@ -1,0 +1,62 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-9 pl-0">
+            <app-helper [text]="helperTitle"></app-helper>
+        </div>
+        <div class="col-12">
+            <app-card *ngIf="form">
+                <app-card-body>
+                    <app-form [form]="form"></app-form>
+                    <div class="row" *ngIf="acl.content.insert && !onVerificaPresenzaDa">
+                        <div class="col-12">
+                            <button 
+                            [disabled]="form.invalid" 
+                            (click)="onVerificaPresenza()" aria-label="Inserisci nuovo utente" type="button"
+                                class="btn btn-primary float-right">
+                            {{'DICHIARAZIONI.RICERCA.NUOVA_DICHIARAZIONE'|translate}}
+                            </button>
+                        </div>
+                    </div>
+                    <app-dichiarazione-tabs *ngIf="acl.content.insert && 
+                        onVerificaPresenzaDa 
+                        && gestore
+                        && impianto"
+                        [gestore]="gestore"
+                        [impianto]="impianto"
+                        isEditmode="'false'">
+                    </app-dichiarazione-tabs>
+                    <div class="row buttons" *ngIf="acl.content.insert && onVerificaPresenzaDa && !isProfileBo">
+                        <div class="col-6">
+                            <button (click)="onDraft()" 
+                            [disabled]="!draftEnabled" 
+                            aria-label="Inserisci nuova Dichiarazione Annuale"
+                                    type="button"
+                                    class="btn btn-primary float-left">
+                                {{'DICHIARAZIONI.CREATE.FORM.BUTTONDRAFT'|translate}}
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button (click)="onCreate()" 
+                            [disabled]="!sendEnabled" 
+                            aria-label="Inserisci nuova Dichiarazione Annuale"
+                                    type="button"
+                                    class="btn btn-primary float-right">
+                                {{'DICHIARAZIONI.CREATE.FORM.BUTTON'|translate}}
+                            </button>
+                        </div>
+                    </div>
+                </app-card-body>
+                <app-card-footer>
+                    <div class="row">
+                        <div class="col-6">
+                            <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link px-0">
+                                {{'UTILS.BACK'|translate}}
+                            </button>
+                        </div>
+                    </div>
+                </app-card-footer>
+            </app-card>
+        </div>
+    </div>
+</div>

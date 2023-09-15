@@ -1,0 +1,13 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 col-lg-9 pl-0" *ngIf="helperTitle">
+      <app-helper [text]="helperTitle"></app-helper>
+    </div>
+    <div class="col-12" *ngIf="formData && formModalita">
+      <h6 class="primary-color">{{ 'DICHIARAZIONI_MR.TABS.RICHIESTA.FORM.DATA' | translate }}</h6>
+      <app-form [form]="formData"></app-form>
+      <h6 class="primary-color">{{ 'DICHIARAZIONI_MR.TABS.RICHIESTA.FORM.MODALITA' | translate }}</h6>
+      <app-form [form]="formModalita"></app-form>
+    </div>
+  </div>
+</div>

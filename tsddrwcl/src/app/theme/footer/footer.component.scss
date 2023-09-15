@@ -1,0 +1,129 @@
+.cnt-logo {
+  width: 100%;
+  height: 110px;
+  background-color: #006cb4;
+  padding-left: 75px;
+  padding-right: 110px;
+  @media screen and (min-width: 769px) and (max-width: 1280px) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  @media screen and (max-width: 768px) {
+    height: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .logo {
+    .regione {
+      div {
+        width: 190px;
+        display: inline-block;
+        padding-top: 26px;
+        padding-left: 25px;
+        @media screen and (max-width: 768px) {
+          width: auto;
+          padding-top: 24px;
+          padding-bottom: 24px;
+          padding-left: 15px;
+        }
+
+        img {
+          width: 100%;
+          @media screen and (max-width: 768px) {
+            width: auto;
+            max-width: 80%;
+          }
+        }
+      }
+    }
+
+    .euro {
+      text-align: center;
+      @media screen and (max-width: 768px) {
+        text-align: left;
+      }
+      div {
+        width: 215px;
+        display: inline-block;
+        padding-top: 41px;
+        @media screen and (max-width: 768px) {
+          width: auto;
+          padding-top: 26px;
+          padding-bottom: 26px;
+        }
+
+        img {
+          width: 100%;
+          @media screen and (max-width: 768px) {
+            width: auto;
+            max-width: 80%;
+          }
+        }
+      }
+    }
+
+    .ccc {
+      text-align: right;
+
+      @media screen and (max-width: 768px) {
+        text-align: left;
+      }
+
+      div {
+        width: 170px;
+        display: inline-block;
+        padding-top: 37px;
+        @media screen and (max-width: 768px) {
+          width: auto;
+          padding-top: 23px;
+          padding-bottom: 23px;
+        }
+
+        img {
+          width: 100%;
+          @media screen and (max-width: 768px) {
+            width: auto;
+            max-width: 80%;
+          }
+        }
+      }
+    }
+  }
+}
+
+.bottom-footer {
+  height: 70px;
+  background: #213366;
+  color: #ffffff;
+  font: normal normal normal 15px/42px sans-serif;
+  font-family: 'Titillium Web', Geneva, Tahoma, sans-serif;
+  letter-spacing: 0;
+  padding-top: 21px;
+  padding-left: 75px;
+  padding-right: 110px;
+  @media screen and (min-width: 769px) and (max-width: 1280px) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  @media screen and (max-width: 768px) {
+    height: 46px;
+    font: normal normal normal 10px/42px Titillium Web, sans-serif;
+    padding-top: 16px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  a {
+    text-decoration: none;
+    color: #ffffff;
+    padding-left: 25px;
+    @media screen and (max-width: 768px) {
+      padding-left: 15px;
+    }
+  }
+}
+
+.it-footer-main{
+  position: sticky;
+}

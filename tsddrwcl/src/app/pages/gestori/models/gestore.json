@@ -1,0 +1,57 @@
+{
+  "idGestore": 8,
+  "codFiscPartiva": "AAABBB84C05H501R",
+  "email": "aldo.aldi2@gestori.it",
+  "idIscrizioneAlbo": "2",
+  "pec": "aldo.aldi2@pec.it",
+  "ragSociale": "Aldo Aldi srl",
+  "telefono": "3331122334",
+  "sedeLegale": {
+    "idIndirizzo": 18,
+    "originalId": 18,
+    "versione": 1,
+    "indirizzo": "Via Roma, 113",
+    "comune": {
+      "idComune": 999,
+      "cap": "00100",
+      "codCatasto": "100",
+      "comune": "Test",
+      "idComuneIstat": 999,
+      "provincia": {
+        "idProvincia": 999,
+        "descProvincia": "Provincia Test",
+        "idProvinciaIstat": 999,
+        "siglaProv": "TST",
+        "regione": {
+          "idRegione": 999,
+          "descRegione": "Regione Test",
+          "idIstatRegione": 999
+        }
+      }
+    },
+    "sedime": {
+      "idSedime": 1,
+      "descSedime": "BORGATA"
+    },
+    "tipoIndirizzo": {
+      "idTipoIndirizzo": 1,
+      "descTipoIndirizzo": "Sede Legale Gestore"
+    }
+  },
+  "legaleRappresentante": {
+    "idLegaleRapp": 9,
+    "datiSogg": {
+      "idDatiSogg": 37,
+      "codFiscale": "AAABBB84C05H501R",
+      "cognome": "Rossi",
+      "nome": "Mario"
+    },
+    "dataInizioValidita": "2022-10-05T22:00:00.000+00:00"
+  },
+  "naturaGiuridica": {
+    "idNaturaGiuridica": 1,
+    "descNaturaGiuridica": "Persona Giuridica",
+    "dataInizioValidita": "2021-12-31T23:00:00.000+00:00"
+  },
+  "dataInizioValidita": "2021-12-31T23:00:00.000+00:00"
+}

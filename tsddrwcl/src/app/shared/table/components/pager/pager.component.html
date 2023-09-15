@@ -1,0 +1,54 @@
+<div
+  class="container-pagination mt-4"
+  [class.firstPage]="isFirstPage()"
+  [class.lastPage]="isLastPage()"
+>
+  <nav class="pagination-wrapper justify-content-end">
+    <ul class="pagination my-auto">
+      <li *ngIf="pages.length > 1" (click)="prev()">
+        <span class="visually-hidden">
+          {{ 'UTILS.TABLE.PREV' | translate }}
+        </span>
+        <app-icon
+          [name]="'it-chevron-left'"
+          [cssClass]="isFirstPage()?'navs':'cursor-pointer navs'"
+          [fill]="isFirstPage()?'#727272':'#004d99'"
+          [type]="'it'"
+          [size]="'medium'"
+        >
+        </app-icon>
+      </li>
+
+      <span class="rounded pagesSpan" *ngFor="let elPage of pages">
+        <li>
+          <app-pager-item
+            [active]="page == elPage"
+            [page]="elPage"
+            (pageChange)="onChangePage(elPage)"
+          ></app-pager-item>
+        </li>
+      </span>
+
+      <li *ngIf="pages.length > 1" (click)="next()">
+        <span class="visually-hidden">
+          {{ 'UTILS.TABLE.NEXT' | translate }}
+        </span>
+        <app-icon
+          [name]="'it-chevron-right'"
+          [cssClass]="isLastPage()?'navs':'cursor-pointer navs'"
+          [fill]="isLastPage()?'#727272':'#004d99'"
+          [type]="'it'"
+          [size]="'medium'"
+        >
+        </app-icon>
+      </li>
+    </ul>
+
+    <app-pager-size
+      *ngIf="showSize"
+      [size]="perPage"
+      (sizeChange)="onChangeSize($event)"
+    >
+    </app-pager-size>
+  </nav>
+</div>

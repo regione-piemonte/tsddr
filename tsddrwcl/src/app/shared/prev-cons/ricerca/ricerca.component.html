@@ -1,0 +1,46 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-9 pl-0">
+            <app-helper [text]="mr.helperTitle"></app-helper>
+        </div>
+        <div class="col-12">
+            <app-card *ngIf="form">
+                <app-card-body>
+                    <app-form [form]="form"></app-form>
+                </app-card-body>
+                <app-card-footer>
+                    <div class="text-center">
+                        <button
+                              [disabled]="form.invalid"
+                              type="button"
+                              class="btn btn-primary"
+                              (click)="mr.onSearch()">
+                            {{ 'DICHIARAZIONI.RICERCA.FORM.BUTTON' | translate }}
+                        </button>
+                    </div>
+                </app-card-footer>
+            </app-card>
+        </div>
+    </div>
+    <div class="row pt-4">
+        <div class="col-6">
+            <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link px-0">
+                {{'UTILS.BACK'|translate}}
+            </button>
+            <button
+            (click)="mr.onDownloadReport()"
+                aria-label="Esporta elenco"
+                type="button"
+                class="btn btn-light csi-secondary-button ml-4" >
+                {{ 'UTILS.EXPORT' | translate }}
+            </button>
+        </div>
+        <div class="col-6" *ngIf="mr.profiloACL.content.insert && !isProfileBO">
+            <button (click)="mr.onCreate()" [attr.aria-label]="mr.ariaLabelPulsante | translate" type="button"
+                    class="btn btn-primary float-right">
+                {{ mr.btnNuovaMr | translate}}
+            </button>
+        </div>
+    </div>
+</div>

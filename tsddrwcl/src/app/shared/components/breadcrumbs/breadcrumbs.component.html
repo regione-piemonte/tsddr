@@ -1,0 +1,41 @@
+<!--<div class='it-nav-wrapper'>-->
+<!--  <div class='it-header-center-wrapper it-small-header search-header'>-->
+<!--    <div class='container-fluid'>-->
+<!--      <div class='row'>-->
+<!--        <div class='col-xl-4 pl-4' *ngIf='optTemplate == undefined'>-->
+<!--          <b class='title-header'>-->
+<!--            {{ headerLabel | translate }}-->
+<!--          </b>-->
+<!--        </div>-->
+<!--        <div class='col-xl-3 d-none d-xl-block pl-4' *ngIf='optTemplate != undefined'>-->
+<!--          <b class='title-header'>-->
+<!--            {{ headerLabel | translate }}-->
+<!--          </b>-->
+<!--        </div>-->
+<!--        <ng-container [ngTemplateOutlet]='optTemplate'></ng-container>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<div class='header-nav col-12 pt-3'>
+    <a routerLink='/home'>
+        <span class="visually-hidden">
+          {{ 'MENU.HOME' | translate }}
+        </span>
+        <app-icon
+              [name]="'eng-home-solid'"
+              [type]="'eng'"
+              [cssClass]="'cursor-pointer mb-1 mr-2'"
+              [fill]="'#005095'"
+              [size]="'extra-small'"
+        ></app-icon>
+    </a>
+    <span class='no_toc mb-0 align-middle small' *ngFor='let route of routesLabels'>
+    <a class='text-decoration-none' *ngIf='route.href != undefined' [routerLink]='route.href'>
+      / {{ route.label | translate }}
+    </a>
+    <span *ngIf='route.href == undefined'> / {{ route.label | translate }} </span>
+  </span>
+</div>
+<app-divider [marginBottom]='1' [marginTop]='1' [marginX]='0'></app-divider>

@@ -1,0 +1,102 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12" *ngIf="helperTitle">
+            <app-helper [text]="helperTitle"></app-helper>
+        </div>
+        <!-- Table -->
+        <div class="col-12">
+            <app-card [containerStyle]="'box-shadow: 1px 2px 8px #c4c4c4 !important; border-radius: 0 !important;'"
+                      *ngIf="dataSource">
+                <app-card-body>
+                    <app-table
+                          [createMode]="true"
+                          [columns]='columns'
+                          [dataSource]='dataSource'
+                          [showPager]='true'
+                    ></app-table>
+                </app-card-body>
+            </app-card>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link pt-4 pl-0">
+                Indietro
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<ng-template let-row='row' #descriptionTemplate>
+    <app-textbox-input
+    *ngIf="row"
+        [name]="'descProfilo'+row.idProfilo"
+        [control]='this.updateForms[row.idProfilo].controls["descProfilo"]'
+    ></app-textbox-input>
+    <app-textbox-input
+          *ngIf="!row"
+          [name]="'descProfilo'"
+          [control]='createForm.controls["descProfilo"]'
+    ></app-textbox-input>
+</ng-template>
+<ng-template let-row='row' #tipologiaProfiloTemplate>
+    <label class="visually-hidden" for="inputtipologiaProfilo">Tipologia profilo</label>
+    <app-select-input
+    *ngIf="row"
+        [id]="'tipologiaProfilo'+row.idProfilo"
+        [control]='this.updateForms[row.idProfilo].controls["tipologiaProfilo"]'
+    ></app-select-input>
+    <app-select-input
+          *ngIf="!row"
+          [id]="'tipologiaProfilo'"
+          [control]='createForm.controls["tipologiaProfilo"]'
+    ></app-select-input>
+</ng-template>
+<ng-template let-row='row' #dataInizioValiditaTemplate>
+    <app-date-input
+        *ngIf="row"
+        [name]="'dataInizioValidita'+row.idProfilo"
+        [control]='updateForms[row.idProfilo].controls["dataInizioValidita"]'
+    ></app-date-input>
+
+    <app-date-input
+          *ngIf="!row"
+          [name]="'dataInizioValidita'"
+          [control]='createForm.controls["dataInizioValidita"]'
+    ></app-date-input>
+</ng-template>
+<ng-template let-row='row' #dataFineValiditaTemplate>
+    <app-date-input
+        *ngIf="row"
+        [name]="'dataFineValidita'+row.idProfilo"
+        [control]='updateForms[row.idProfilo].controls["dataFineValidita"]'
+    ></app-date-input>
+    <app-date-input
+          *ngIf="!row"
+          [name]="'dataFineValidita'"
+          [control]='createForm.controls["dataFineValidita"]'
+    ></app-date-input>
+</ng-template>
+
+<ng-template let-row='row' #actionsTemplate>
+    <div class="actions ng-star-inserted">
+        <button *ngIf="row && acl.content.update" (click)="update(row)" aria-label="Modifica profilo" title="Modifica profilo"
+        [disabled]="!hasUnsavedChangeRow(row) || !updateForms[row.idProfilo].valid"
+                class="btn btn-action p-0 px-2">
+            <img alt="Modifica profilo" height="24px" src="assets/icon/icon-table-edit.svg">
+        </button>
+
+        <button *ngIf="!row && acl.content.insert" (click)="create()" aria-label="Aggiungi nuovo profilo"  title="Aggiungi nuovo profilo"
+                class="btn btn-action p-0 px-2" [disabled]="!createForm?.valid">
+            <img alt="Aggiungi nuovo profilo" height="24px" src="assets/icon/enable-add.jpg" *ngIf="!createForm.valid">
+            <img alt="Aggiungi nuovo profilo" height="24px" src="assets/icon/add.png" *ngIf="createForm.valid">
+        </button>
+
+        <button *ngIf="row && acl.content.delete" (click)="delete(row)"
+                [disabled]="!row.deletable" aria-label="Elimina profilo" title="Elimina profilo" class="btn btn-action p-0">
+            <img alt="Elimina profilo" height="20px" src="assets/icon/icon-table-elimina.svg">
+        </button>
+    </div>
+</ng-template>

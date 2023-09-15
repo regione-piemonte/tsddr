@@ -1,0 +1,27 @@
+<ng-template #notificationTemplate>
+    <div [ngClass]="classes" class="custom-notification" role="alert" id="{{notification.id}}"
+         [attr.aria-labelledby]="h5Id">
+        <h5 [attr.id]="h5Id">
+            <app-icon btnContent
+                      [name]="notification.icon"
+                      [size]="'small'"
+                      *ngIf="notification.icon"
+            ></app-icon>
+            {{notification.title | translate}}
+        </h5>
+        <p>
+            {{notification.text | translate}}
+        </p>
+        <app-button [type]="'button'"
+                    [icon]="true"
+                    [btnClassName]="'notification-close'"
+                    *ngIf="notification.dismissable"
+        >
+            <app-icon btnContent
+                      [name]="'it-close'"
+                      [size]="'small'"
+            ></app-icon>
+            <span class="sr-only">{{ closeText }}</span>
+        </app-button>
+    </div>
+</ng-template>

@@ -1,0 +1,89 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container-fluid">
+     <div class="row" *ngIf="isPreInserimento">
+        <div class="col-12 col-lg-9 pl-0">
+            <app-helper [text]="mr.helperTitle"></app-helper>
+        </div>
+        <div class="col-12">
+          <app-card *ngIf="form">
+            <app-card-body>
+            <app-form [form]="form"></app-form>
+            </app-card-body>
+            <app-card-footer>
+              <div class="text-center">
+                  <button
+                        [disabled]="form.invalid"
+                        type="button"
+                        class="btn btn-primary"
+                        (click)="mr.searchRmr(form.value)">
+                      {{ 'DICHIARAZIONI.RICERCA.FORM.BUTTON' | translate }}
+                  </button>
+              </div>
+          </app-card-footer>
+            </app-card>
+        </div>
+    </div>
+    <div class="row">
+        <!-- Table -->
+        <div class="col-12">
+            <app-card [containerStyle]="'box-shadow: 1px 2px 8px #c4c4c4 !important; border-radius: 0 !important;'"
+                      *ngIf="mr.dataSource">
+                <app-card-body>
+                    <app-table
+                          [columns]='mr.columns'
+                          [dataSource]='mr.dataSource'
+                          [showPager]='true'
+                    ></app-table>
+                    <div class="row pt-4">
+                        <div class="col-12">
+                            <span class="bold">
+                                {{ 'UTILS.FILTER' | translate }}
+                            </span>
+                            <span class="current-filter">
+                            {{ mr.filtro }}
+                            </span>
+                        </div>
+                    </div>
+                </app-card-body>
+            </app-card>
+        </div>
+    </div>
+    <div class="row pt-4">
+        <div class="col-6">
+            <button (click)="mr.onBack()" aria-label="Indietro" type="button" class="btn btn-link px-0">
+                {{'UTILS.BACK' | translate}}
+            </button>
+            <button *ngIf="!isPreInserimento"
+                [disabled]="mr.dataSource?.rows?.length===0"
+                (click)="mr.onDowloadReport()"
+                aria-label="Esporta elenco"
+                type="button"
+                class="btn btn-light csi-secondary-button ml-4" >
+                {{ 'UTILS.EXPORT' | translate }}
+          </button>
+        </div>
+
+        <div class="col-6" *ngIf="acl.content.insert && !mr.checkSuperAdmn">
+            <button (click)="mr.onCreate()" [attr.aria-label]="mr.btnNuovaMr | translate" type="button"
+                    class="btn btn-primary float-right">
+                {{ mr.btnNuovaMr | translate}}
+            </button>
+        </div>
+    </div>
+</div>
+
+<ng-template let-row='row' #actionsTemplate>
+    <div class="actions ng-star-inserted">
+        <button *ngIf="row && acl.content.read" (click)="mr.detail(row)" [attr.aria-label]="mr.labelShow | translate"
+        [title]="mr.labelShow | translate"
+                class="btn btn-action p-0 px-2">
+            <img [alt]="mr.labelShow | translate" style="max-width:60%" height="24px" src="assets/icon/icon-view.svg">
+        </button>
+        <button *ngIf="row && acl.content.read && row.printable && !isPreInserimento" (click)="downloadPdf(row)" [attr.aria-label]="mr.labelDownload | translate" [title]="mr.labelDownload | translate" class="btn btn-action p-0 px-2">
+            <img [alt]="mr.labelDownload | translate" height="20px" src="assets/icon/pdf.svg">
+        </button>
+        <button *ngIf="row && acl.content.read && acl.content.delete && row.annullable && !isPreInserimento" (click)="mr.delete(row)" [attr.aria-label]="mr.labelDelete | translate"  [title]="mr.labelDelete | translate" class="btn btn-action p-0 px-2">
+            <img [alt]="mr.labelDelete | translate" height="20px" src="assets/icon/icon-table-elimina.svg">
+        </button>
+    </div>
+</ng-template>

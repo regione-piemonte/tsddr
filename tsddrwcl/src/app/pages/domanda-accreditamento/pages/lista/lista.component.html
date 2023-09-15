@@ -1,0 +1,45 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-9 pl-0">
+            <app-helper [text]="helperTitle"></app-helper>
+        </div>
+        <!-- Table -->
+        <div class="col-12">
+            <app-card [containerStyle]="'box-shadow: 1px 2px 8px #c4c4c4 !important; border-radius: 0 !important;'"
+                      *ngIf="dataSource">
+                <app-card-body>
+                    <app-table
+                          [columns]='columns'
+                          [dataSource]='dataSource'
+                          [showPager]='true'
+                    ></app-table>
+                </app-card-body>
+            </app-card>
+        </div>
+    </div>
+    <div class="row pt-4">
+        <div class="col-12">
+            {{ 'ACCREDITAMENTO_BO.LISTA.PARAMETRI' | translate }}:
+            <strong>{{ parametriApplicati }}</strong>
+        </div>
+    </div>
+    <div class="row pt-4">
+        <div class="col-6">
+            <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link px-0">
+                {{'UTILS.BACK'|translate}}
+            </button>
+            <button (click)="onExportExcel()" [disabled]="dataSource?.rows?.length===0" aria-label="Esporta elenco" type="button" class="btn btn-light export ml-4" style="color:#007bff; background-color:white; border: 1px solid #007bff; ">
+                {{'UTILS.EXPORT'|translate}}
+            </button>
+        </div>
+    </div>
+</div>
+<ng-template let-row='row' #actionsTemplate>
+    <div class="actions ng-star-inserted">
+        <button *ngIf="row && acl.content.read" (click)="detail(row)" aria-label="Visualizza" title="Visualizza"
+                class="btn btn-action p-0 px-2">
+            <img alt="Visualizza" style="max-width:60%" height="24px" src="assets/icon/icon-view.svg">
+        </button>
+    </div>
+</ng-template>

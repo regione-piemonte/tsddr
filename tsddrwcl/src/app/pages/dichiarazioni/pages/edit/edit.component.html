@@ -1,0 +1,61 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container-fluid">
+    <div class="row">
+        <div *ngIf="editMode && helperTitle" class="col-12 col-lg-9 pl-0">
+            <app-helper [text]="helperTitle"></app-helper>
+        </div>
+        <div class="col-12">
+            <app-card *ngIf="form">
+                <app-card-body>
+                    <app-form [form]="form"></app-form>
+                    <app-dichiarazione-tabs *ngIf="currentDichiarazione "
+                        [gestore]="currentDichiarazione.impianto.gestore"
+                        [impianto]="currentDichiarazione.impianto"
+                        [keyDichiarazione]="keyDichiarazione"
+                        isEditmode="'false'">
+                    </app-dichiarazione-tabs>
+                    <div class="row buttons">
+                        <div class="col-6">
+                            <button (click)="onDraft()"
+                            *ngIf="acl.content.update && editMode"
+                            [disabled]="!draftEnabled"
+                            aria-label="Inserisci nuova Dichiarazione Annuale"
+                                    type="button"
+                                    class="btn btn-primary float-left">
+                                {{'DICHIARAZIONI.CREATE.FORM.BUTTONDRAFT'|translate}}
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button (click)="onUpdate()"
+                            *ngIf="acl.content.update && editMode"
+                            [disabled]="!sendEnabled"
+                            aria-label="Inserisci nuova Dichiarazione Annuale"
+                                    type="button"
+                                    class="btn btn-primary float-right">
+                                {{'DICHIARAZIONI.CREATE.FORM.BUTTON'|translate}}
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <button (click)="onDuplicate()"
+                            *ngIf="acl.content.insert && duplicateEnabled"
+                            aria-label="Duplica Dichiarazione Annuale"
+                                    type="button"
+                                    class="btn btn-primary float-right">
+                                {{'DICHIARAZIONI.CREATE.FORM.BUTTONNUOVAVERSIONE'|translate}}
+                            </button>
+                        </div>
+                    </div>
+                </app-card-body>
+                <app-card-footer>
+                    <div class="row">
+                        <div class="col-6">
+                            <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link px-0">
+                                {{'UTILS.BACK'|translate}}
+                            </button>
+                        </div>
+                    </div>
+                </app-card-footer>
+            </app-card>
+        </div>
+    </div>
+</div>

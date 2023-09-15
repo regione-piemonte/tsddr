@@ -1,0 +1,64 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-9 pl-0" *ngIf="mr.isEditMode && mr.helperTitle">
+            <app-helper [text]="mr.helperTitle"></app-helper>
+        </div>
+    </div>
+    <!--Row con form inseriento-->
+  <div class="row">
+      <div class="col-12">
+          <app-card *ngIf="form">
+              <app-card-body>
+                  <app-form [form]="form"></app-form>
+                  <div class="row" *ngIf="showNewPrevConsBtn">
+                      <div class="col-12">
+                          <button
+                          [disabled]="disabledForm"
+                          (click)="onVerificaPresenza()" [attr.aria-label]="mr.ariaLabelNuovaMr | translate" type="button"
+                              class="btn btn-primary float-right">
+                          {{ mr.btnNuovaMr |translate}}
+                          </button>
+                      </div>
+                  </div>
+                  <app-prev-cons-tabs *ngIf="showTabs && gestore && impianto"
+                      [gestore]="gestore"
+                      [impianto]="impianto"
+                      [isEditMode]="mr.isEditMode"
+                      [idTipoDoc]="mr.idTipoDoc"
+                      [prevCons]="mr.prevCons">
+                  </app-prev-cons-tabs>
+                  <div class="row buttons" *ngIf="showDraftCreateBtn">
+                      <div class="col-6">
+                          <button (click)="onDraft()"
+                          [disabled]="!draftEnabled"
+                          aria-label="Salva in bozza"
+                                  type="button"
+                                  class="btn btn-primary float-left">
+                              {{'DICHIARAZIONI.CREATE.FORM.BUTTONDRAFT'|translate}}
+                          </button>
+                      </div>
+                      <div class="col-6">
+                          <button (click)="onCreate()"
+                          [disabled]="!mr.sendEnabled()"
+                          [attr.aria-label]="mr.ariaLabelInserisci | translate"
+                                  type="button"
+                                  class="btn btn-primary float-right">
+                              {{ mr.btnInserisciMr |translate}}
+                          </button>
+                      </div>
+                  </div>
+              </app-card-body>
+              <app-card-footer>
+                  <div class="row">
+                      <div class="col-6">
+                          <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link px-0">
+                              {{'UTILS.BACK'|translate}}
+                          </button>
+                      </div>
+                  </div>
+              </app-card-footer>
+          </app-card>
+      </div>
+  </div>
+</div>

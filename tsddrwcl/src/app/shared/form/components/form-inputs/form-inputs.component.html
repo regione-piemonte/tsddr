@@ -1,0 +1,14 @@
+<div class="row">
+  <div
+    *ngFor="let field of $any(controls) | keyvalue: this.keyvaluePipeCompareFn"
+    class="align-self-top"
+    [class]="field.value.size?.toClass() || 'col-12 p-0'"
+  >
+    <app-form-input
+      [field]="field.value"
+      [name]="field.key"
+      [form]="form"
+      [filter]="filter"
+    ></app-form-input>
+  </div>
+</div>

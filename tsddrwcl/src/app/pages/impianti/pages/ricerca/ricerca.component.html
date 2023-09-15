@@ -1,0 +1,47 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-9 pl-0">
+            <app-helper [text]="helperTitle"></app-helper>
+        </div>
+        <div class="col-12">
+            <app-card>
+                <app-card-body>
+                    <app-form [form]="searchForm"></app-form>
+                </app-card-body>
+                <app-card-footer>
+                    <div class="text-center">
+                        <button
+                              [disabled]="searchForm.invalid"
+                              type="button"
+                              class="btn btn-primary"
+                              (click)="onSearch()"
+                        >
+                            {{ 'IMPIANTI.RICERCA.FORM.BUTTON' | translate }}
+                        </button>
+                    </div>
+                </app-card-footer>
+            </app-card>
+        </div>
+    </div>
+    <div class="row pt-4">
+        <div class="col-6">
+            <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link px-0">
+                {{'UTILS.BACK'|translate}}
+            </button>
+            <button
+                (click)="onExportExcelImpiantiRicerca()"
+                aria-label="Esporta elenco"
+                type="button"
+                class="btn btn-light csi-secondary-button ml-4" >
+                {{ 'UTILS.EXPORT' | translate }}
+            </button>
+        </div>
+        <div class="col-6" *ngIf="acl.content.insert">
+            <button (click)="onCreate()" aria-label="Inserisci nuovo utente" type="button"
+                    class="btn btn-primary float-right">
+                {{'IMPIANTI.RICERCA.NUOVO_IMPIANTO'|translate}}
+            </button>
+        </div>
+    </div>
+</div>

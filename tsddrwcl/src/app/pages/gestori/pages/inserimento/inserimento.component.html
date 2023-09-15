@@ -1,0 +1,41 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-9 pl-0">
+            <app-helper [text]="helperTitle"></app-helper>
+        </div>
+        <div class="col-12">
+            <app-card *ngIf="form">
+                <app-card-body>
+                    <app-form [form]="form"></app-form>
+                    <app-form [form]="formValidita"></app-form>
+                    <h6>{{ 'GESTORI.CREATE.FORM.SEDE_LEGALE' | translate }}</h6>
+                    <app-form [form]="formSedeLegale"></app-form>
+                    <h6>{{ 'GESTORI.CREATE.FORM.CONTATTI' | translate }}</h6>
+                    <app-form [form]="formContatti"></app-form>
+                    <h6>{{ 'GESTORI.CREATE.FORM.LEGALE_RAPPRESENTANTE' | translate }}</h6>
+                    <app-form [form]="formLegaleRappresentante"></app-form>
+                   
+                </app-card-body>
+                <app-card-footer>
+                    <div class="row">
+                        <div class="col-6">
+                            <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link px-0">
+                                {{'UTILS.BACK'|translate}}
+                            </button>
+                        </div>
+                        <div class="col-6" *ngIf="acl.content.insert">
+                            <button (click)="onCreate()"
+                                    [disabled]="form.invalid || formSedeLegale.invalid || formContatti.invalid || formLegaleRappresentante.invalid || formValidita.invalid"
+                                    aria-label="Inserisci nuovo gestore"
+                                    type="button"
+                                    class="btn btn-primary float-right">
+                                {{'GESTORI.CREATE.NUOVO_UTENTE'|translate}}
+                            </button>
+                        </div>
+                    </div>
+                </app-card-footer>
+            </app-card>
+        </div>
+    </div>
+</div>

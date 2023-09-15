@@ -1,0 +1,114 @@
+<div class="container-fluid">
+    <div class="row">
+        <div *ngIf="showHelper && helperTitle" class="col-12 col-lg-9 pl-0">
+            <app-helper [text]="helperTitle"></app-helper>
+        </div>
+        <div class="col-12" *ngIf="form">
+            <div class="row intestazioni">
+                <div *ngFor="let periodo of periodi;let i = index" class="col-4">
+                    <div class="row">
+                        <div class="col-12 descPeriodo text-center">
+                            {{ periodo.descPeriodo}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {{ 'DICHIARAZIONI.TABSCONTENT.DATA' | translate }}
+                        </div>
+                        <div class="col-6">
+                            {{ 'DICHIARAZIONI.TABSCONTENT.IMPORTO' | translate }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                        <label class="visually-hidden" for="{{'input_dataVersamento' + i}}">Data</label>
+                            <app-date-input
+                                [control]='getCreateFormControl("dataVersamento",i)'
+                                [name]="'_dataVersamento' + i"
+                            ></app-date-input>
+                        </div>
+                        <div class="col-6">
+                            <label class="visually-hidden" for="{{'input_importoVersato' + i}}">Importo</label>
+                            <app-textbox-input
+                            [control]='getCreateFormControl("importoVersato",i)'
+                            [name]="'_importoVersato' + i"
+                            ></app-textbox-input>
+                        </div>
+                    </div>
+                </div>
+                <div  class="col-2 mx-auto">
+                    {{ 'DICHIARAZIONI.TABSCONTENT.TOTALE' | translate }}
+                    <label class="visually-hidden" for="inputotale">{{ 'DICHIARAZIONI.TABSCONTENT.TOTALE' | translate }}</label>
+                    <app-textbox-input
+                        [name]="'totale'"
+                        [control]='form.controls["totale"]'
+                    ></app-textbox-input>
+                </div>
+            </div> 
+            <div class="row riassunto">
+                <div class="col-6">
+                    {{ 'DICHIARAZIONI.TABVERSAMENTI.TOTALS.IMPOSTA' | translate }}
+                </div>
+                <div class="col-6">
+                    <label class="visually-hidden" for="inputimpostaTotale">{{ 'DICHIARAZIONI.TABVERSAMENTI.TOTALS.IMPOSTA' | translate }}</label>
+                    <app-textbox-input
+                        [name]="'impostaTotale'"
+                        [control]='form.controls["impostaTotale"]'
+                    ></app-textbox-input>
+                </div>
+            </div>
+            <div class="row riassunto">
+                <div class="col-6">
+                    {{ 'DICHIARAZIONI.TABVERSAMENTI.TOTALS.IMPORTOTOTALE' | translate }}
+                </div>
+                <div class="col-6">
+                    <label class="visually-hidden" for="inputimportoTotale">{{ 'DICHIARAZIONI.TABVERSAMENTI.TOTALS.IMPORTOTOTALE' | translate }}</label>
+                    <app-textbox-input
+                        [name]="'importoTotale'"
+                        [control]='form.controls["importoTotale"]'
+                    ></app-textbox-input>
+                </div>
+            </div>
+            <div class="row riassunto">
+                <div class="col-6">
+                    {{ 'DICHIARAZIONI.TABVERSAMENTI.TOTALS.CREDITO' | translate }}
+                </div>
+                <div class="col-6">
+                <label class="visually-hidden" for="inputcredito">{{ 'DICHIARAZIONI.TABVERSAMENTI.TOTALS.CREDITO' | translate }}</label>
+                    <app-textbox-input
+                        [name]="'credito'"
+                        [control]='form.controls["credito"]'
+                    ></app-textbox-input>
+                </div>
+            </div>
+            <div class="row riassunto">
+                <div class="col-6">
+                    {{ 'DICHIARAZIONI.TABVERSAMENTI.TOTALS.IMPORTODEBITO' | translate }}
+                </div>
+                <div class="col-6">
+                    <label class="visually-hidden" for="inputimportoDebito">{{ 'DICHIARAZIONI.TABVERSAMENTI.TOTALS.IMPORTODEBITO' | translate }}</label>
+                    <app-textbox-input
+                        [name]="'importoDebito'"
+                        [control]='form.controls["importoDebito"]'
+                    ></app-textbox-input>
+                    <app-validation-input-message
+                        [statusMessage]='form.controls["importoDebito"].statusMessage'
+                    ></app-validation-input-message>
+                </div>
+            </div>
+            <div class="row riassunto">
+                <div class="col-6">
+                    {{ 'DICHIARAZIONI.TABVERSAMENTI.TOTALS.IMPORTOCREDITO' | translate }}
+                </div>
+                <div class="col-6">
+                <label class="visually-hidden" for="inputimportoCredito">{{ 'DICHIARAZIONI.TABVERSAMENTI.TOTALS.IMPORTOCREDITO' | translate }}</label>
+                    <app-textbox-input
+                        [name]="'importoCredito'"
+                        [control]='form.controls["importoCredito"]'
+                    ></app-textbox-input>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

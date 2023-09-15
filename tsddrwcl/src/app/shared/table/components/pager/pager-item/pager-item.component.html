@@ -1,0 +1,8 @@
+<span (click)="!active && handleItemClick()">
+  <a [class]="getClassName()" [attr.aria-current]="this.active ? 'page' : null">
+        <span class="visually-hidden">
+          {{ 'UTILS.TABLE.PAGE' | translate }} {{ page }}
+        </span>
+        {{ page }}
+  </a>
+</span>

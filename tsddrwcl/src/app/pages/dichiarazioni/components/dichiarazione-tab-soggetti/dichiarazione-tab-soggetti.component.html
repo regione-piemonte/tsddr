@@ -1,0 +1,75 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-9 pl-0">
+            <app-helper [text]="helperTitle"></app-helper>
+        </div>
+        <div class="col-12 x-small">
+            <app-table *ngIf="dataSource"
+                    [createMode]="true"
+                    [columns]='columns'
+                    [dataSource]='dataSource'
+                    [showPager]='true'
+            ></app-table>
+        </div>
+    </div>
+</div>
+
+<ng-template let-row='row' #codFiscPartivaTemplate>
+    <label class="visually-hidden" for="{{'inputcodFiscPartiva'}}">Codice fiscale/partita IVA</label>
+    <app-textbox-input
+        *ngIf="row && updateRow"
+        [name]="'codFiscPartiva'+row.idSoggettiMr"
+        [control]="getUpdateFormControl(row,'codFiscPartiva')"
+    ></app-textbox-input>
+    <span *ngIf="row && !updateRow">
+        {{ row.codFiscPartiva}}
+    </span>
+    <app-textbox-input
+        *ngIf="!row"
+        [name]="'codFiscPartiva'"
+        [control]='createForm.controls["codFiscPartiva"]'
+    ></app-textbox-input>
+</ng-template>
+<ng-template let-row='row' #ragSocialeTemplate>
+    <label class="visually-hidden" for="{{'ragSociale'}}">Denominazione o ragione sociale</label>
+    <app-textbox-input
+        *ngIf="row && updateRow"
+        [name]="'ragSociale'+row.idSoggettiMr"
+        [control]="getUpdateFormControl(row,'ragSociale')"
+    ></app-textbox-input>
+    <span *ngIf="row && !updateRow">
+        {{ row.ragSociale}}
+    </span>
+    <app-textbox-input
+        *ngIf="!row"
+        [name]="'ragSociale'"
+        [control]='createForm.controls["ragSociale"]'
+    ></app-textbox-input>
+</ng-template>
+
+<ng-template let-row='row' #obiettiviTemplate>
+    <span *ngIf="row && !updateRow">
+        <ng-container *ngIf="row.obbRagg && row.obbRagg!='NO'">
+            {{'DICHIARAZIONI.CREATESOGGETTI.FORM.OBIETTIVI.TRUE'|translate}}
+        </ng-container>
+        <ng-container *ngIf="!row.obbRagg || row.obbRagg=='NO'">
+            {{'DICHIARAZIONI.CREATESOGGETTI.FORM.OBIETTIVI.FALSE'|translate}}
+        </ng-container>
+    </span>
+    <app-toggle *ngIf="!row" [isReadonly]="isReadonly" [(checked)]="toCreate.obbRagg" [id]="'edit_to_create'"></app-toggle>
+</ng-template>
+
+<ng-template let-row='row' #actionsSoggettiTemplate>
+    <div class="actions ng-star-inserted">
+        <button *ngIf="!row && acl.content.insert" (click)="createSoggetto()" aria-label="Inserisci"  title="Inserisci"
+                class="btn btn-action p-0 px-2">
+            <img alt="Inserisci" height="24px" src="assets/icon/enable-add.jpg" *ngIf="!createForm.valid">
+            <img alt="Inserisci" height="24px" src="assets/icon/add.png" *ngIf="createForm.valid">
+        </button>
+        
+        <button *ngIf="row && acl.content.delete" (click)="deleteSoggetto(row)" [disabled]="isReadonly"
+                aria-label="Elimina"  title="Elimina"  class="btn btn-action p-0">
+            <img alt="Elimina" height="20px" src="assets/icon/icon-table-elimina.svg">
+        </button>
+    </div>
+</ng-template>

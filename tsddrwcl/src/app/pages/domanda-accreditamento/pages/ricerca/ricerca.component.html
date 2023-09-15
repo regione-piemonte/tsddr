@@ -1,0 +1,37 @@
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-9 pl-0">
+            <app-helper [text]="helperTitle"></app-helper>
+        </div>
+        <div class="col-12">
+            <app-card *ngIf="searchForm">
+                <app-card-body>
+                    <app-form [form]="searchForm"></app-form>
+                </app-card-body>
+                <app-card-footer>
+                    <div class="text-center">
+                        <button
+                              [disabled]="searchForm.invalid"
+                              type="button"
+                              class="btn btn-primary"
+                              (click)="onSearch()"
+                        >
+                            {{ 'ACCREDITAMENTO_BO.RICERCA.FORM.BUTTON' | translate }}
+                        </button>
+                    </div>
+                </app-card-footer>
+            </app-card>
+        </div>
+    </div>
+    <div class="row pt-4">
+        <div class="col-6">
+            <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link px-0">
+                {{'UTILS.BACK'|translate}}
+            </button>
+            <button (click)="onExportExcelAccrRicerca()" aria-label="Esporta elenco" type="button" class="btn btn-light ml-4" style="color:#007bff; background-color:white; border: 1px solid #007bff;">
+                {{'UTILS.EXPORT'|translate}}
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-12">
+        <div class="">
+            <div class="toggles">
+                <label [for]="id">
+                    {{ checked ? ('UTILS.ENABLED' | translate) : ('UTILS.DISABLED' | translate) }}
+                    <input type="checkbox"
+                           [disabled]="isReadonly" 
+                           (click)="onClick($event)"
+                           [checked]="checked ? 'checked' : ''"
+                           [(ngModel)]="checked"
+                           [id]="id">
+                    <span class="lever"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+.container-fluid {
+  padding-top: 1.389rem;
+}
+.insert[disabled]{
+
+     background-color: #fff !important
+
+
+}
+input[type='number'] {
+  appearance: none !important;
+  margin: 0 !important;
+}
+.intestazioni {
+  font-size: 0.7rem;
+  @media screen and (min-width: 1680px) {
+    font-size: 1rem;
+  }
+  & > div > div {
+    border: 1px solid #d6dce3;
+  }
+  .descPeriodo {
+    white-space: nowrap;
+  }
+  .quantita {
+    border-right: 1px solid #d6dce3;
+  }
+  text-align: center;
+  margin-bottom: 1.389rem;
+}
+
+.quantita_importo {
+  & > div {
+    padding: 0;
+  }
+}
+/* classe necessaria per allineare il pulsante aggiungi/elimina alla riga in cui si trova*/
+.btn-action-rifiuto {
+  padding: 0px 24px;
+}
+
+/*
+    il numero delle cifre di quantita' e importo e' di 10 cifre piu' 4 decimali
+    per questo motivo il font-size e i padding devono andare di conseguenza
+*/
+
+:host ::ng-deep .quantita_importo input {
+  font-size: 0.7em !important;
+  padding: 0 0.1em !important;
+}
+
+@media screen and (max-width: 1499px) {
+  :host ::ng-deep .quantita_importo input {
+    font-size: 0.7em !important;
+    padding: 0 !important;
+  }
+}
+
+.rifiutoTariffa {
+  margin-bottom: 0.3rem;
+  margin-right: 0.5em !important;
+}
+
+.create {
+  padding: 2.78rem 0;
+}
+
+.label {
+  ::ng-deep app-input-label {
+    ::ng-deep label {
+      ::ng-deep span{
+        display: none !important
+      }
+      font-size: 13px !important;
+    }
+  }
+}
+.riduzione {
+  ::ng-deep app-textbox-input {
+    ::ng-deep input {
+      font-size: 10px !important;
+    }
+  }
+}
+.riduzionepage {
+  ::ng-deep app-textbox-input {
+
+    ::ng-deep input {
+      font-size: 10px !important;
+      padding: 0px!important;
+     padding-left:2px !important
+    }
+  }
+}

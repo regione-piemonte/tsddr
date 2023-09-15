@@ -1,0 +1,11 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 col-lg-9 pl-0" *ngIf="helperTitle">
+      <app-helper [text]="helperTitle"></app-helper>
+    </div>
+    <div class="col-12" *ngIf="form">
+      <h5 class="primary-color">{{ 'DICHIARAZIONI.SEDEDOCUMENTI.FORM.TITLE' | translate }}</h5>
+      <app-form [form]="form"></app-form>
+    </div>
+  </div>
+</div>

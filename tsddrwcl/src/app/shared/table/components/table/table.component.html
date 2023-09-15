@@ -1,0 +1,38 @@
+<div class="table-container">
+    <table [class]="tableClass">
+        <caption class="d-none"></caption>
+        <thead
+              *ngIf="showHeader"
+              app-table-thead
+              [columns]="columns"
+              [dataSource]="dataSource"
+              [selected]="selected"
+              [rowIdentity]="rowIdentity"
+              (checkboxToggle)="checkboxToggleHeader($event)"
+        ><th scope="col"></th></thead>
+
+        <tbody
+              app-table-tbody
+              [emptyMessage]="emptyMessage"
+              [columns]="columns"
+              [dataSource]="dataSource"
+              [selected]="selected"
+              [rowIdentity]="rowIdentity"
+              [rowDetail]="rowDetail"
+              [rowDetailBorder]="rowDetailBorder"
+              [createMode]="createMode"
+              (rowClick)="rowClick.emit($event)"
+              (checkboxToggle)="checkboxToggleRow($event)"
+        ></tbody>
+    </table>
+
+    <app-pager
+          class="align-self-center"
+          *ngIf="showPager && (dataSource.rows$ | async)?.length"
+          [page]="dataSource.tablePage.pageNumber"
+          [perPage]="dataSource.tablePage.size"
+          [count]="dataSource.tablePage.totalElements"
+          (changePage)="pagerChange($event)"
+          (changeSize)="sizeChange($event)"
+    ></app-pager>
+</div>

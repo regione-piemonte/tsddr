@@ -1,0 +1,49 @@
+<ul class="nav nav-tabs  flex-sm-row mt-4" style="background: #F7F7F7;">
+  <ng-container *ngFor="let tabElement of tabElements">
+    <li class="nav-item" *ngIf="(tabElement.id != 'richiesta' && idTipoDoc == 1) || (tabElement.id != 'sede' && idTipoDoc == 2)">
+      <a [ngClass]="{
+          'nav-link': true,
+          active: tabElement.link == activeElement
+        }"
+        [attr.aria-selected]="tabElement.link == activeElement"
+        [tabindex]="tabElement.disabled == true ? -1 : 0"
+        (click)="onChangeActiveTab(tabElement)"
+        style="background: #F7F7F7; cursor:pointer;">
+        <app-icon *ngIf="tabElement.icon != undefined"
+            [name]="tabElement.icon.name"
+            [type]="tabElement.icon.type"
+            [cssClass]="tabElement.icon.cssClass"
+            [fill]="tabElement.icon.fill"
+            [size]="tabElement.icon.size"
+            [color]="tabElement.icon.color"
+            [padding]="tabElement.icon.padding"
+            [baseHref]="tabElement.icon.baseHref"
+        ></app-icon>
+        {{ tabElement.title|translate}}
+      </a>
+    </li>
+  </ng-container>
+</ul>
+
+<div *ngIf="activeId=='gestore'">
+  <app-edit-gestore *ngIf="gestore" [gestore]="gestore">
+  </app-edit-gestore>
+</div>
+<div *ngIf="activeId=='impianto'">
+  <app-edit-impianto *ngIf="impianto" [impianto]="impianto">
+  </app-edit-impianto>
+</div>
+<!-- tab presente solo in dichiarazione MR-->
+<div *ngIf="activeId=='richiesta'">
+  <app-tab-richiesta [isEditMode]="isEditMode" [prevCons]="prevCons">
+  </app-tab-richiesta>
+</div>
+<div *ngIf="activeId=='processo'">
+  <app-tab-processo [isEditMode]="isEditMode" [idImpianto]="impianto.idImpianto" [prevCons]="prevCons">
+  </app-tab-processo>
+</div>
+<!-- tab presente solo in richiesta MR-->
+<div *ngIf="activeId=='sede'">
+  <app-tab-sede [isEditMode]="isEditMode" [prevCons]="prevCons">
+  </app-tab-sede>
+</div>
