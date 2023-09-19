@@ -70,8 +70,8 @@ Per il versionamento del software si usa la tecnica Semantic Versioning (http://
 
 
 # Copyrights
-© Copyright Regione Piemonte – 2023\
-© Copyright CSI-Piemonte – 2023
+© Copyright Regione Piemonte – 2022\
+© Copyright CSI-Piemonte – 2022
 
 
 # License

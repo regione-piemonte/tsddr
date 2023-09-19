@@ -63,8 +63,8 @@ Git is used for source code management, but there are no constraints on the use 
 
 # Copyrights
 
-© Copyright Regione Piemonte – 2023
-© Copyright CSI-Piemonte – 2023
+© Copyright Regione Piemonte – 2022
+© Copyright CSI-Piemonte – 2022
 
 # License
 
