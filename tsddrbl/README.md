@@ -1,77 +1,52 @@
-# Project Title
-TSDDR
+# Product
+TSDDR components TSDDRWCL and TSDDRBL
 
+# Component Description
+This folder represents an "installation unit" that encapsulates two distinct "logical" components, namely TSDDRWCL and TSDDRBL.
 
+TSDDRBL
+is a web application following the "Single Page Application (SPA)" paradigm, exposing REST services to the TSDDRWCL component (Angular 11), and connecting to the DB (TSDDRDB) for CRUD operations. It integrates with the authentication service (SHIBBOLETH in the context of Regione Piemonte) and other services of the Regional Fiscal Information System (DOQUI-ACTA). External services are accessed via HTTP (secured with a "basic authentication" scheme) or HTTPS. This component connects to the database (PostgreSQL DBMS, see tsddrdb component) using the DataSource defined at the container level (WildFly).
 
-# Notes
-The following documentation, and all the documentation present in the project
-components adhere to the [RFC-2119]( https://tools.ietf.org/html/rfc2119 )
-regarding the requirement level key words.
-
-# Project Description
-This is a multi-module project handling the purchasing cycle for the Public
-Administration.
-
-The modules are as follow:
-- backend services:
-  - [tsddrbl]<< TODO-GITHUB >> REST service implementation
-
-- frontend services:
-  - [tsddrwcl]<< TODO-GITHUB >>: Angular application
-
-# Configurations
-For the configuration of each single module, please refer to the `README.md`
-file which is present in each module.
+# Initial Configurations
+From a general perspective, in the initial phase, you need to adapt the properties files in the buildfiles directory to your own configuration. One of the main things to configure is the datasource with the DB references you intend to use (JNDI name).
 
 # Getting Started
-Please refer to the Prerequisites section to gather the requested configuration
-prior to configure the project.
+Once you have retrieved the component from the repository ("git clone"), proceed with the modification of configuration files based on your deployment environment, and then proceed with the build process.
 
-Please refer to the Installing section for specifications about the
-installation process.
+# System Prerequisites
+Firstly, you need to prepare the DB Schema used by this component and populate it with initial data: therefore, you should have completed the installation and configuration of the comonldb component.
 
-# Prerequisites
-- The Java projects are written in UTF-8 and are compatible with Java 11.0.6
-- Apache Ant 1.8.4 for the building process 
-- A "Spring version 4.3.24.RELEASE" 
-- A "resteasy-jaxrs ver. 3.7.0.Final"
-- All the libraries listed in the BOM.csv must be accessible to compile the
-project. 
+You also need to make the necessary replacements for the external services called.
 
-- The correct version for the DBMS (tested on PostgreSQL 9.6.10)
+For the "build," Apache Ant is used. Before proceeding with the build of the TSDDRBL component, you need to follow the necessary steps defined in the README.md file of the TSDDRWCL component. 
+This is because the two logical components will be encapsulated into a single installation unit. The TSDDRBL build process involves retrieving the compilation output of TSDDRWCL and including it in the project path of the TSDDRBL component (src/web/tsddr/rest/). 
+After copying the files, you can proceed with the build (e.g. ant -Dtarget=dev-rp-01 -lib apache-ivy-2.0.0.jar).
 
-# Installing
-Please refer to the [INSTALLATION.md](./INSTALLATION.md) file for the steps
-required for the installation
+The resulting installation unit from the TSDDRBL build will be a file named tsddrbl-MAJOR.MINOR.PATCH.tar, containing a file tsddrbl.ear structured as follows:
 
-# Contributing
-Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of
-conduct, and the process for submitting pull requests to us.
+-lib
+-META-INF
+-appl-tsddrbl-rest.war
+
+# Installation - Deployment
+
+Install the generated "ear" file on your WildFly environment.
+
+# Running Tests
+
+This component has undergone a vulnerability assessment.
 
 # Versioning
-We partially use Semantic Versioning for versioning. (http://semver.org) \
-A major version increment in SemVer standard corresponds to a non-compatible
-upgrade of the project; yet a non-compatible upgrade to the project not
-necessarily corresponds to a major version increment.
 
-# Authors
-See the list of contributors who participated in this project in file
-[AUTHORS.txt](./AUTHORS.txt).
+Semantic Versioning is used for software versioning (http://semver.org).
 
 # Copyrights
-See the list of copyrighters in this project in file Copyrights.txt\
-"&copy; Copyright CSI Piemonte – 2021".
+
+© Copyright Regione Piemonte – 2022
+© Copyright CSI-Piemonte – 2022
+
+This same list of software holders is also provided in Copyrights.txt.
 
 # License
-The source code is licensed under the European Union Public Licence 1.2 or
-later.\
-SPDX-License-Identifier: EUPL-1.2-or-later\
-See the [**"EUPL v1_2 IT-LICENSE.txt"**](./EUPL%20v1_2%20IT-LICENSE.txt)
-and [**"EUPL v1_2 EN-LICENSE.txt"**](./EUPL%20v1_2%20EN-LICENSE.txt) files for
-details.
-
-The documentation is licensed under the Creative Commons Attribution 4.0
-International.\
-SPDX-License-Identifier: CC-BY-4.0\
-See the [**"CC-BY-4.0 EN-LICENSE.txt"**](./CC-BY-4.0%20EN-LICENSE.txt) file for
-details.
+The software product is subject to the EUPL-1.2 or later license.
+SPDX-License-Identifier: EUPL-1.2-or-later
