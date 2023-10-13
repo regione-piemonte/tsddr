@@ -1,0 +1,102 @@
+# This repository adheres to the publiccode.yml standard by including this 
+# metadata file that makes public software easily discoverable.
+# More info at https://github.com/italia/publiccode.yml
+
+publiccodeYmlVersion: '0.2'
+applicationSuite: TSDDR
+categories:
+  - business-process-management
+  - document-management
+dependsOn:
+  open:
+    - name: PostgreSQL
+      optional: true
+      version: 12.0.0
+      versionMax: ''
+      versionMin: '9'
+    - name: APACHE 2
+      optional: true
+      version: 2.4.54
+      versionMax: ''
+      versionMin: '2'
+    - name: JBOSS
+      optional: true
+      version: WildFly 23
+      versionMax: ''
+      versionMin: WildFly 23
+description:
+  it:
+    features:
+      - |-
+         TRISPE - TRIbuto SPEciale Deposito in Discarica dei Rifiuti
+    genericName: TSDDR
+    localisedName: TSDDR
+    longDescription: |
+    
+     Il sistema TRISPE è composto da due applicativi.
+     
+     **TRISPE-FO** per gli operatori delle società che gestiscono impianti di trattamento e conferimento dei rifiuti e sono tenute ad assolvere agli adempimenti previsti dalla normativa vigente. Comprende le seguenti funzionalità:
+     
+     - **Accreditamento** consente di presentare la richiesta di accesso al sistema.
+     
+     - **Dichiarazione annuale** permette di presentare la dichiarazione annuale sui quantitativi conferiti nell’anno e sui versamenti effettuati. L'applicativo permette di imputare i dati, inviare la dichiarazione con contestuale generazione del PDF e protocollazione. E’ a disposizione, anche, la funzionalità di ricerca delle dichiarazioni in lavorazione e inviate.
+
+     - **Dichiarazioni con obiettivi MR** permette di presentare la dichiarazione annuale di effettivo raggiungimento delle percentuali di recupero o di non superamento delle percentuali di scarto. L'applicativo permette di imputare i dati, inviare la dichiarazione 
+     con contestuale generazione del PDF e protocollazione. Per la compilazione è possibile utilizzare i dati di una richiesta di ammissione al pagamento in misura ridotta presentata con TRISPE.  E’ a disposizione, anche, la funzionalità di ricerca delle dichiarazioni in lavorazione e inviate.
+
+     - **Richieste ammissione MR** permette di presentare la domanda per il pagamento in misura ridotta del tributo. L'applicativo permette di imputare i dati, inviare la richiesta con contestuale generazione del PDF e protocollazione. E’ a disposizione, anche, la funzionalità di ricerca delle domande in lavorazione e inviate.
+     
+     **TRISPE-BO** per gli utenti della P.A. addetti al controllo. Comprende le seguenti funzionalità:
+     
+     - **Gestione accreditamento** permette la consultazione e lavorazione delle domande di accreditamento presentate dagli operatori delle aziende per poter usufruire delle funzionalità rivolte alle imprese.
+     - **Gestione dichiarazione annuale** consente la consultazione delle dichiarazioni presentate.
+     - **Gestione dichiarazione MR** consente la consultazione delle dichiarazioni raggiungimento degli obiettivi presentate.
+     - **Gestione richieste di ammissione a pagamento in misura ridotta** consente la consultazione delle domande presentate per il pagamento ridotto del tributo.
+
+     
+     
+     PNRR
+      - PNRR/Beneficiari/Enti Regionali
+      - PNRR/Misura/1.1
+     
+     
+    shortDescription: TRISPE - TRIbuto SPEciale Deposito in Discarica dei Rifiuti
+developmentStatus: stable
+it:
+  conforme:
+    gdpr: true
+    lineeGuidaDesign: true
+    misureMinimeSicurezza: true
+    modelloInteroperabilita: true
+  countryExtensionVersion: '0.2'
+  piattaforme:
+    anpr: false
+    cie: false
+    pagopa: false
+    spid: true
+  riuso:
+    codiceIPA: r_piemon
+landingURL: 'https://github.com/regione-piemonte/tsddr'
+legal:
+  license: EUPL-1.2
+  mainCopyrightOwner: Regione Piemonte
+  repoOwner: Regione Piemonte
+localisation:
+  availableLanguages:
+    - it
+  localisationReady: false
+maintenance:
+  contacts:
+    - email: giovanna.bertinetti@csi.it
+      name: GIOVANNA BERTINETTI
+  type: internal
+name: TSDDR
+platforms:
+  - web
+  - linux
+  - windows
+  - mac
+releaseDate: '2023-02-14'
+softwareType: standalone/web
+softwareVersion: 1.1.0
+url: 'https://github.com/regione-piemonte/tsddr.git'
