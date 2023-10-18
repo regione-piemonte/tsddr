@@ -177,8 +177,10 @@
 		<dependency org="doqui" name="dosign" rev="6.2.0" >
 			<artifact name="dosign-client-service-6.2.0-jdk160-38" type="jar"/>
 		</dependency>
+		
 		<dependency org="csipiemonte" name="csi" rev="1.4.6">
-			<artifact name="csi-stadapter-1.4.6" type="jar"/>
+    		<artifact name="csi-stadapter-1.4.6" type="jar"/>
+    		<exclude org="csipiemonte" module="weblogic-client" />
 		</dependency>
 		
 		<dependency org="postgresql" name="postgresql-jdbc" rev="42.2.6">
@@ -302,4 +304,6 @@
 		<dependency org="apache" name="commons-collections" rev="4.4.1"/>
 		
 	</dependencies>
+	
+	
 </ivy-module>
