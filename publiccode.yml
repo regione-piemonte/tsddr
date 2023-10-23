@@ -19,7 +19,7 @@ dependsOn:
       version: 2.4.54
       versionMax: ''
       versionMin: '2'
-    - name: JBOSS
+    - name: WildFly
       optional: true
       version: WildFly 23
       versionMax: ''
@@ -96,7 +96,7 @@ platforms:
   - linux
   - windows
   - mac
-releaseDate: '2023-10-20'
+releaseDate: '2023-10-02'
 softwareType: standalone/web
 softwareVersion: 1.1.0
 url: 'https://github.com/regione-piemonte/tsddr.git'
