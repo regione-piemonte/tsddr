@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UtilityService } from '@app/core';
 import { IMessage } from '@app/core/models/shared.model';
 import { DichiarazioniACL } from '@app/pages/dichiarazioni/models/acl.model';
-import { AutocompleteInput, Form, TextInput } from '@app/shared/form';
+import { AutocompleteInput, SelectInput, Form, TextInput } from '@app/shared/form';
 import { ModalService } from '@app/shared/modal/modal.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map, switchMap, toArray } from 'rxjs/operators';
@@ -34,7 +34,7 @@ export type TypeMessages = Record<string, IMessage>;
   templateUrl: './tab-processo.component.html',
   styleUrls: ['./tab-processo.component.scss']
 })
-export class TabProcessoComponent implements OnInit {
+export class TabProcessoComponent implements OnInit, AfterViewInit {
   @Input() isEditMode: boolean = false;
   @Input() idImpianto: string | number;
   @Input() prevCons: PrevConsClass;
@@ -43,7 +43,10 @@ export class TabProcessoComponent implements OnInit {
   form: Form;
 
   checkPercRecuperoVisible = false;
-  checkPercScartoVisible = false
+  checkPercScartoVisible = false;
+
+  lineeFiltered: any;
+  found: any;
 
   tabElements: ITabElem[] = [
     {
@@ -104,7 +107,7 @@ export class TabProcessoComponent implements OnInit {
   ngOnInit(): void {
     this._initHelper();
     this._initACL();
-    
+
     forkJoin([
       this.utility.getMessage('A021'),
       this.utility.getMessage('A013'),
@@ -159,7 +162,26 @@ export class TabProcessoComponent implements OnInit {
     this._setPopulatedLines();
     this.isLegameRmr = !!this.prevCons.idPrevConsRMr;
     this._checkStatus();
+
   }
+
+
+
+	ngAfterViewInit():void{
+
+		//console.log(this.found);
+ 		//this.form.get('linee')?.setValue(this.found?.idImpiantoLinea)
+	 setTimeout(()=>{
+
+
+	    this.form.get('linee')?.setValue(this.found?.id);
+	    console.log('found ' , this.found);
+
+	},500
+
+)
+
+	}
 
   /**
    * @description al cambiamento del tab, aggiorno la proprietà da mandare in input al figlio
@@ -338,7 +360,7 @@ export class TabProcessoComponent implements OnInit {
    */
 	private _setPercentuali() {
 		this.mrService
-			.getPercRecuperoVisible(this.selectedPrevConsLinea.codLinea, this.prevCons.annoTributo)
+			.getPercRecuperoVisible(this.selectedPrevConsLinea.codLinea?this.selectedPrevConsLinea.codLinea:this.selectedPrevConsLinea.codSottoLinea, this.prevCons.annoTributo)
 			.subscribe((response: any) => {
 				this.checkPercRecuperoVisible = response.content;
 				if (this.checkPercRecuperoVisible) {
@@ -356,7 +378,7 @@ export class TabProcessoComponent implements OnInit {
 
 
 		this.mrService
-			.getPercScartoVisible(this.selectedPrevConsLinea.codLinea, this.prevCons.annoTributo)
+			.getPercScartoVisible(this.selectedPrevConsLinea.codLinea?this.selectedPrevConsLinea.codLinea:this.selectedPrevConsLinea.codSottoLinea, this.prevCons.annoTributo)
 			.subscribe((response: any) => {
 				this.checkPercScartoVisible = response.content;
 				if (this.checkPercScartoVisible) {
@@ -371,7 +393,7 @@ export class TabProcessoComponent implements OnInit {
 				this.percScarto = this.selectedPrevConsLinea.percScarto;
 			});
 
-    
+
   }
 
   /**
@@ -393,12 +415,13 @@ export class TabProcessoComponent implements OnInit {
       header: { show: false },
       filter: false,
       controls: {
-        linee: new AutocompleteInput({
+        linee: new SelectInput({
           label: 'DICHIARAZIONI_MR.TABS.PROCESSO.FORM.LINEE',
           placeholder: 'DICHIARAZIONI_MR.TABS.PROCESSO.FORM.LINEE',
           options: this._getLineeOptions() as any,
           value: this.selectedPrevConsLinea?.idImpiantoLinea,
           size,
+       
           required: false,
           clearable: false,
           readonly: false,
@@ -427,6 +450,9 @@ export class TabProcessoComponent implements OnInit {
         })
       }
     });
+
+
+
   }
 
   private _initHelper(): void {
@@ -469,11 +495,21 @@ export class TabProcessoComponent implements OnInit {
         untilDestroyed(this),
         map((res) => {
           //elimino gli undefined
+          //console.log(res);
+		  let newArray = [];
           res.forEach((line: any, index) => {
-            if (line.value === undefined) {
-              res.splice(index, 1);
-            }
+			  //console.log('line=', line);
+			  if (!(line.value === undefined)) {
+				newArray.push(line);
+			  }
           });
+          res = newArray;
+          this.lineeFiltered = newArray;
+          console.log(newArray);
+
+          this.found = this.lineeFiltered[0];
+
+          console.log('1 ',this.found);
           return {
             content: res
           };

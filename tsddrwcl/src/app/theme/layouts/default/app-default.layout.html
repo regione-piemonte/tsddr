@@ -1,10 +1,10 @@
 <div class='min-vh-100 d-flex flex-column'>
     <div role="listbox" aria-label="Navigazione nascosta per screen reader">
-        <a href="#main-content" role="listitem" class="skip-link keyFocus">Vai al contenuto principale</a>
+        <a href="{{locationStrategy.path()}}#main-content" role="listitem" class="skip-link keyFocus">Vai al contenuto principale</a>
         <!-- <a href="#footer" role="listitem" class="skip-link">Vai al footer</a> -->
       </div>
     <app-header></app-header>
-    <div id="main-content" class='background-container container-fluid px-0 pt-60 flex-grow-1 d-flex'>
+    <div class='background-container container-fluid px-0 pt-60 flex-grow-1 d-flex'>
         <app-notification-container></app-notification-container>
         <div class='overlay w-100 loader' *ngIf='loadingService.spinner$ | async'>
             <div class='progress-spinner progress-spinner-active m-auto'>
@@ -14,8 +14,8 @@
         <div class='menu-container'>
             <ng-content select='app-menu'></ng-content>
         </div>
-        <div class='body-container float-left' [ngClass]='{full: !menuStatus}'>
-            <ng-content select='router-outlet'></ng-content>
+        <div   id="main-content" class='body-container float-left' [ngClass]='{full: !menuStatus}'>
+            <ng-content  select='router-outlet'></ng-content>
         </div>
     </div>
     <!-- <div id="footer"> -->

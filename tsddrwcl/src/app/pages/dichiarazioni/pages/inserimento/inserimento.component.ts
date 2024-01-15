@@ -147,6 +147,7 @@ export class InserimentoComponent implements OnInit {
   }
 
   checkValidity(dichiarazione, rifiutiConfIsEmpty, versamentiIsEmpty) {
+    
     if (
       dichiarazione?.dichiarazione?.rifiutiConferiti?.rifiutiConferiti ===
         null ||
@@ -173,6 +174,7 @@ export class InserimentoComponent implements OnInit {
     } else {
       versamentiIsEmpty = true;
     }
+
   }
   _changeStatus(s: statusFormEditingStore) {
     this.status = { ...s };
@@ -181,19 +183,47 @@ export class InserimentoComponent implements OnInit {
     // }else{
     //   this.draftEnabled = false;
     // }
+
     let rifiutiConfIsEmpty = false;
     let versamentiIsEmpty = false;
 
     this.editingStoreService
       .getStoredDichiarazione(this.keyDichiarazione)
       .subscribe((dichiarazione) => {
-      this.checkValidity(dichiarazione, rifiutiConfIsEmpty, versamentiIsEmpty);
-      });
-      console.log(!versamentiIsEmpty,
-        !rifiutiConfIsEmpty,
-        this.status.rifiutiValid,
-        this.status.versamentiValid,
-        this.status.sedeValid)
+   ///   this.checkValidity(dichiarazione, rifiutiConfIsEmpty, versamentiIsEmpty);
+/////
+if (
+  dichiarazione?.dichiarazione?.rifiutiConferiti?.rifiutiConferiti ===
+    null ||
+  dichiarazione?.dichiarazione?.rifiutiConferiti?.rifiutiConferiti
+    ?.length == 0
+) {
+  rifiutiConfIsEmpty = true;
+}
+if (dichiarazione?.dichiarazione?.versamenti?.versamenti) {
+}
+
+if (dichiarazione?.dichiarazione?.versamenti?.versamenti) {
+  for (const element of dichiarazione?.dichiarazione?.versamenti
+    ?.versamenti) {
+    if (element.importoVersato != 0) {
+
+
+      return versamentiIsEmpty = false;
+    } else {
+      versamentiIsEmpty = true;
+    }
+   // return;
+  }
+} else {
+  versamentiIsEmpty = true;
+}
+
+/////
+
+
+    });
+
     if (
       !versamentiIsEmpty &&
       !rifiutiConfIsEmpty &&
@@ -381,7 +411,7 @@ export class InserimentoComponent implements OnInit {
       delete item.isRam;
     });
     //delete dich.rifiutiConferiti?.totali;
-    //let obj = dich.rifiutiConferiti?.totali;  
+    //let obj = dich.rifiutiConferiti?.totali;
     //let obj = (_c = dich.rifiutiConferiti) === null || _c === void 0 ? void 0 : _c.totali;
     if (!(dich.rifiutiConferiti === null || dich.rifiutiConferiti === void 0))
     	delete dich.rifiutiConferiti.totali;

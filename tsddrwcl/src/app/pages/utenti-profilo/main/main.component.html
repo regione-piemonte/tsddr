@@ -1,55 +1,92 @@
 <app-breadcrumbs></app-breadcrumbs>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <app-helper [text]="helperTitle"></app-helper>
-        </div>
-        <div class="col-12">
-            <app-form [form]="searchForm"></app-form>
-        </div>
-        <!-- Table -->
-        <div class="col-12">
-            <app-card [containerStyle]="'box-shadow: 1px 2px 8px #c4c4c4 !important; border-radius: 0 !important;'"
-                      *ngIf="dataSource">
-                <app-card-body>
-                    <app-table
-                          [createMode]="true"
-                          [columns]='columns'
-                          [dataSource]='dataSource'
-                          [showPager]='true'
-                    ></app-table>
-                </app-card-body>
-            </app-card>
-        </div>
+  <div class="row">
+    <div class="col-12">
+      <app-helper [text]="helperTitle"></app-helper>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link pt-4 pl-0">
-                Indietro
-            </button>
-        </div>
+    <div class="col-12">
+      <app-form [form]="searchForm"></app-form>
     </div>
+    <!-- Table -->
+    <div class="col-12">
+      <app-card
+        [containerStyle]="
+          'box-shadow: 1px 2px 8px #c4c4c4 !important; border-radius: 0 !important;'
+        "
+        *ngIf="dataSource"
+      >
+        <app-card-body>
+          <app-table
+            [createMode]="true"
+            [columns]="columns"
+            [dataSource]="dataSource"
+            [showPager]="true"
+          ></app-table>
+        </app-card-body>
+      </app-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <button
+        (click)="onBack()"
+        aria-label="Indietro"
+        type="button"
+        class="btn btn-link pt-4 pl-0"
+      >
+        Indietro
+      </button>
+    </div>
+  </div>
 </div>
 
-<ng-template let-row='row' #codiceFiscaleTemplate>
-    <span
-    *ngIf="row"
-    >{{row.codiceFiscale}}</span>
-    <app-select-input
-          *ngIf="!row && createEnabled"
-          [control]='createForm.controls["nuovoUtente"]'
-    ></app-select-input>
+<ng-template let-row="row" #codiceFiscaleTemplate>
+  <span *ngIf="row">{{ row.codiceFiscale }}</span>
+  <label
+    *ngIf="!row && createEnabled"
+    class="visually-hidden"
+    for="{{ 'inpututente' }}"
+    >nuovo utente</label
+  >
+  <app-select-input
+    *ngIf="!row && createEnabled"
+    [control]="createForm.controls['nuovoUtente']"
+    [name]="'utente'"
+  ></app-select-input>
 </ng-template>
-<ng-template let-row='row' #actionsTemplate>
-    <div class="actions ng-star-inserted">
-        <button *ngIf="!row && acl.content.insert" (click)="create()" aria-label="inserisci"
-                class="btn btn-action p-0 px-2">
-            <img alt="abilita inserimento" height="24px" src="assets/icon/enable-add.jpg" *ngIf="!createEnabled || !createForm.valid">
-            <img alt="inserisci" height="24px" src="assets/icon/add.png" *ngIf="createEnabled && createForm.valid">
-        </button>
+<ng-template let-row="row" #actionsTemplate>
+  <div class="actions ng-star-inserted">
+    <button
+      *ngIf="!row && acl.content.insert"
+      (click)="create()"
+      aria-label="inserisci"
+      class="btn btn-action p-0 px-2"
+    >
+      <img
+        alt="abilita inserimento"
+        height="24px"
+        src="assets/icon/enable-add.jpg"
+        *ngIf="!createEnabled || !createForm.valid"
+      />
+      <img
+        alt="inserisci"
+        height="24px"
+        src="assets/icon/add.png"
+        *ngIf="createEnabled && createForm.valid"
+      />
+    </button>
 
-        <button *ngIf="row && acl.content.delete" (click)="delete(row)" aria-label="elimina" class="btn btn-action p-0">
-            <img alt="Elimina" height="20px" src="assets/icon/icon-table-elimina.svg">
-        </button>
-    </div>
+    <button
+      *ngIf="row && acl.content.delete"
+      (click)="delete(row)"
+      aria-label="elimina"
+      class="btn btn-action p-0"
+    >
+      <img
+        alt="Elimina"
+        height="20px"
+        src="assets/icon/icon-table-elimina.svg"
+      />
+    </button>
+  </div>
 </ng-template>

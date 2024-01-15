@@ -39,7 +39,7 @@ export class TabDescrizioneComponent implements OnInit, OnChanges {
       filter: false,
       controls: {
         descrizione: new TextareaInput({
-          label: 'DICHIARAZIONI_MR.TABS.PROCESSO.DESCRIZIONE.NOTA',
+          label: 'DICHIARAZIONI_MR.TABS.PROCESSO.DESCRIZIONE.TITLE',
           placeholder: this.isEditMode ? 'DICHIARAZIONI_MR.TABS.PROCESSO.DESCRIZIONE.TITLE' : ' ',
           size,
           clearable: true,

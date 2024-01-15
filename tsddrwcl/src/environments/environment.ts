@@ -14,8 +14,8 @@ export const environment = {
       key: 'Shib-Iride-IdentitaDigitale',
       value:
    // 'AAAAAA00B77B000F/Roberto/Pinna/Engineering/20201203143417/16/72Fm0h3s08aROqA0Up6IMg=='
-   'KKNDNG98D28E960U/Simone/Coletti/Engineering/20201203143417/16/72Fm0h3s08aROqA0Up6IMg=='     //'CDFSC97/Simone/Coletti/Engineering/20201203143417/16/72Fm0h3s08aROqA0Up6IMg=='
- // 'CDFSC97/Simone/Coletti/Engineering/20201203143417/16/72Fm0h3s08aROqA0Up6IMg=='
+   'PNNRRT78L04E281F/Roberto/Pinna/Engineering/20201203143417/16/72Fm0h3s08aROqA0Up6IMg=='
+   // 'CDFSC97/Simone/Coletti/Engineering/20201203143417/16/72Fm0h3s08aROqA0Up6IMg=='
   }
   },
   backend: {

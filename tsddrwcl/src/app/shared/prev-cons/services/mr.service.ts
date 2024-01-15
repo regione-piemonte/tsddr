@@ -262,12 +262,13 @@ export class MrService {
   }
 
   //eliminazione prevConsDett sotto tab processo-impiantistico
-  deleteDichiarazioneMrPrevConsDett(idPrevConsDett: number) {
+  deleteDichiarazioneMrPrevConsDett(idPrevCons: number, idPrevConsDett: number) {
     return this.apiClient.request(
       'deleteDichiarazioneMrPrevConsDett',
       null,
       null,
-      { idPrevConsDett: idPrevConsDett }
+      { idPrevConsDett: idPrevConsDett,
+        idPrevCons: idPrevCons }
     );
   }
 
@@ -418,7 +419,9 @@ export class MrService {
     return (formgroup: FormGroup): { [key: string]: boolean } | null => {
       const dataInvioDoc = formgroup.controls['_richiesta_dataInvioDoc'] as any;
       const modalita = formgroup.controls['_richiesta_modalita'] as any;
-      // const numProtocollo = formgroup.controls['numProtocollo'] as any;
+     const numProtocollo = formgroup.controls['_richiesta_numProtDoc'] as any;
+     console.log(dataInvioDoc.value, modalita.value, numProtocollo.value)
+
       if (
         (dataInvioDoc?.value?.toString() &&
           modalita?.value?.toString() == '') ||
@@ -426,16 +429,21 @@ export class MrService {
       ) {
         return { notBothValued: true };
       }
+else if(
+    ( numProtocollo?.value?.toString() != null  && (dataInvioDoc?.value?.toString() == null
+    || modalita?.value?.toString() === '') && (modalita?.value?.toString() == undefined ||
+    modalita?.value?.toString() == null ||
+    modalita?.value?.toString() == '')
 
-      /*else if(modalita?.value?.toString() && dataInvioDoc?.value?.toString() &&
-     // numProtocollo?.value?.toString() == ''
+    )
       ){
         return { notBothValued: true };
-      }*/
+      }
       // il form è valido, settaggi per eliminare i messaggi di errore
       this._removeErrorsFromControl(dataInvioDoc);
       this._removeErrorsFromControl(modalita);
       //this._removeErrorsFromControl(numProtocollo);
+
       return null;
     };
   }
@@ -499,7 +507,7 @@ export class MrService {
       this._searchToHttpParams(search)
     );
   }
-  downloadReportPrevCons(idTipoDoc: number, filter: any) {  
+  downloadReportPrevCons(idTipoDoc: number, filter: any) {
     let param;
     if (filter === null) {
       param = { idTipoDoc };

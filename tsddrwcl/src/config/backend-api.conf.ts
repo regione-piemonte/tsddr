@@ -708,7 +708,7 @@ export const backendApi: ApiConfig[] = [
   {
     name: 'deleteDichiarazioneMrPrevConsDett',
     method: 'DELETE',
-    url: '/prev-cons-dett/{idPrevConsDett}'
+    url: '/prev-cons-dett/{idPrevCons}/{idPrevConsDett}'
   },
   {
     name: 'getDichiarazioneMrById',

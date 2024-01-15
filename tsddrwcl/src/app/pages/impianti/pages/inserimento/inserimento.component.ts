@@ -319,7 +319,7 @@ export class InserimentoComponent implements OnInit {
       ],
       controls: {
         idGestore: new AutocompleteInput({
-          label: 'IMPIANTI.FORMDATIIMPIANTO.IDGESTORE.LABEL',
+          label: 'IMPIANTI.FORMDATIIMPIANTO.IDGESTORE.LABEL_',
           placeholder: 'IMPIANTI.FORMDATIIMPIANTO.IDGESTORE.PLACEHOLDER',
           options: this.service.getComboGestori() as any,
           size,

@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { I18nService } from '@eng-ds/translate';
 
@@ -28,6 +28,8 @@ export class BreadcrumbsComponent {
 
     this.routesLabels = routeData.breadcrumbs;
     this.headerLabel = routeData.headerLabel;
+   
+
   }
 
 }

@@ -64,7 +64,7 @@ export class DichiarazioneTabAnnotazioniComponent implements OnInit {
       filter: false,
       controls: {
         annotazioni: new TextareaInput({
-          label: 'DICHIARAZIONI.ANNOTAZIONI.FORM.ANNOTAZIONI.MSG',
+          label: 'DICHIARAZIONI.ANNOTAZIONI.FORM.ANNOTAZIONI.LABEL',
           placeholder: 'DICHIARAZIONI.ANNOTAZIONI.FORM.ANNOTAZIONI.PLACEHOLDER',
           size,
           clearable: true,

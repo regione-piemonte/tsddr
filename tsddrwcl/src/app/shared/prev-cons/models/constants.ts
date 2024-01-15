@@ -6,10 +6,10 @@ export const SEZIONE = {
 }
 
 export const TOT_LABEL = {
-    RII: 'TOT r.i.i.(Tonnellate)',
-    MAT: 'TOT mat(Tonnellate)',
-    RRU: 'TOT r.r.u.(Tonnellate)',
-    RU: 'TOT r.u.(Tonnellate)'
+    RII: 'TOT r.i.i. \n(Tonnellate)',
+    MAT: 'TOT mat \n(Tonnellate)',
+    RRU: 'TOT r.r.u.\n(Tonnellate)',
+    RU: 'TOT r.u. \n(Tonnellate)'
 }
 
 export const STATO_PREV_CONS = {

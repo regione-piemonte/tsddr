@@ -35,9 +35,13 @@
 <ng-template let-row='row' #descriptionTemplate>
     <span *ngIf="row">{{ row.descFunzione }}</span>
     <!--suppress TypeScriptValidateTypes -->
+    <label   *ngIf="!row && createEnabled" class="visually-hidden" for="{{ 'inputfunzione'}}"
+    >funzione</label
+  >
     <app-autocomplete-input
           *ngIf="!row && createEnabled"
           [control]='createForm.controls["idFunzione"]'
+          [name]="'funzione'"
     ></app-autocomplete-input>
 </ng-template>
 

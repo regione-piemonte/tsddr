@@ -2,7 +2,8 @@
   <div>
     <div class='px-3 py-2 mx-auto'>
       <app-form *ngIf="formTop"  [form]='formTop'></app-form>
-      <h3 class="primary-color">{{ 'DIALOG.AREAPERSONALE.DATA.TITLE' | translate }}</h3>
+      <p style="font-size: 1.777rem;
+      line-height: 1.25; font-weight: 300;" class="primary-color">{{ 'DIALOG.AREAPERSONALE.DATA.TITLE' | translate }}</p>
       <div *ngIf="utenteCorrente">
         <div>
           {{ 'DIALOG.AREAPERSONALE.DATA.FIELDS.CODICEFISCALE.LABEL' | translate }} <strong>{{ utenteCorrente.codiceFiscale}}</strong>
@@ -14,7 +15,8 @@
           {{ 'DIALOG.AREAPERSONALE.DATA.FIELDS.NOME.LABEL' | translate }} <strong>{{ utenteCorrente.nome}}</strong>
         </div>
       </div>
-      <h3 class="primary-color">{{ 'DIALOG.AREAPERSONALE.FORMBOTTOM.TITLE' | translate }}</h3>
+      <p style="font-size: 1.777rem;
+      line-height: 1.25; font-weight: 300" class="primary-color">{{ 'DIALOG.AREAPERSONALE.FORMBOTTOM.TITLE' | translate }}</p>
       <app-form *ngIf="formBottom && isEditEnabledPersonalArea"  [form]='formBottom'></app-form>
       <div *ngIf="utenteCorrente && !isEditEnabledPersonalArea">
         <div>
@@ -31,7 +33,7 @@
 <div #footer class='row justify-content-center py-2'>
   <button *ngIf="formBottom" class='btn btn-primary btn-sm m-2 p-2'
           type='button' (click)='onSave()'
-          [disabled]="!formBottom.valid || isNotChangedFormBottom || readOnly" 
+          [disabled]="!formBottom.valid || isNotChangedFormBottom || readOnly"
           style='background-color: #005095; width: 126px; height: 48px; line-height: 15px;'>
     {{ 'DIALOG.AREAPERSONALE.FOOTER.CONFIRM' | translate }}
   </button>

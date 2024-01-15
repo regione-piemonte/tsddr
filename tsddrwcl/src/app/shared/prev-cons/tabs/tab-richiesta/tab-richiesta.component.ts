@@ -53,14 +53,14 @@ export class TabRichiestaComponent implements OnInit {
   ngOnInit(): void {
     this._initHelper();
     this.modalitaReadonly = !this.isEditMode;
-    
+
     forkJoin([
       this.utilityService.getMessage('E010').pipe(untilDestroyed(this)),
       this.utilityService.getMessage('A019').pipe(untilDestroyed(this))
     ]).subscribe(([messageE010, messageA019]) => {
       this.mandatoryMessage = messageE010.content;
       this.validationMessage = messageA019.content;
-      
+
       // verifico se è presente una richiesta RMR associata per valorizzare il giusto form
       if (this.prevCons.prevConsRichiesta) {
         this.richiestaRMR = this.prevCons.prevConsRichiesta;
@@ -181,6 +181,7 @@ export class TabRichiestaComponent implements OnInit {
     });
 
     this.formModalita.valueChanges.subscribe((field) => {
+
       if (this.isEditMode) {
         this.prevCons.modalita = field['_richiesta_modalita'];
         this.prevCons.dataInvioDoc = field['_richiesta_dataInvioDoc'];
@@ -194,6 +195,7 @@ export class TabRichiestaComponent implements OnInit {
           this.prevCons.richiestaAmmissioneHasBeenUpdated = true;
         }
       }
+
     });
   }
 

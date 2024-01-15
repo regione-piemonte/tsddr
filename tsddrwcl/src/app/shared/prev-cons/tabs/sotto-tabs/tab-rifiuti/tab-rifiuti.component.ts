@@ -370,7 +370,7 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
       this.prevConsDett = this.selectedTabObject.prevConsDett;
       this._updateTotalValue();
       this._updateDatasource();
-      
+
       // in base alla quantità di elementi nell'array calcolo se devo cambiare pagina nella tabella
       const totalCount = this.prevConsDett.length;
       const currentPage = Math.ceil(totalCount / this.itemsPerPage);
@@ -594,21 +594,21 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
       {
         prop: 'eer.codiceEer',
         name: this.i18n.translate(this.labelCodiceEer),
-        cellClass: 'align-middle',
+        cellClass: 'align-middle w-25',
         cellTemplate: this.codiceEer,
         sortable: false
       },
       {
         prop: 'eer.descrizione',
         name: this.i18n.translate('COMMONS.DESCRIZIONE'),
-        cellClass: 'align-middle',
+        cellClass: 'align-middle w-25',
         cellTemplate: this.descrizioneEer,
         sortable: false
       },
       {
         prop: 'destinazione',
         name: this.i18n.translate('COMMONS.DESTINAZIONE'),
-        cellClass: 'align-middle w-40',
+        cellClass: 'align-middle w-50',
         cellTemplate: this.destinazione,
         sortable: false
       },
@@ -616,6 +616,7 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
         prop: 'descMatUscita',
         name: this.i18n
           .translate('DICHIARAZIONI_MR.TABS.PROCESSO.TABLE.MAT_USCITA')
+
       ,
         cellClass: 'align-middle',
         cellTemplate: this.descMatUscita,

@@ -987,7 +987,7 @@ export const IT = {
     FORMDATIIMPIANTO: {
       TITLE:'Dati Impianto',
       IDGESTORE: {
-        LABEL: 'Gestore dell\'impianto',
+        LABEL_: 'Gestore dell\'impianto',
         PLACEHOLDER: 'Seleziona il gestore'
       },
       DENOMINAZIONE: {
@@ -1670,11 +1670,11 @@ export const IT = {
           LINEE_COMPILATE: 'Linee compilate nella dichiarazione',
         },
         TABLE: {
-          RII: 'Rifiuti in ingresso (r.i.i.) E.E.R.',
-          MAT_USCITA: 'Materiali ottenuti in uscita dalla linea impiantistica (descrizione)',
-          RECUPERABILI: 'Rifiuti recuperabili (r.r.u.) E.E.R.',
-          RIF_USCITA: 'Rifiuti in uscita (r.u.) E.E.R.',
-          TONNELLATE_RICHIESTA: 'Tonnellate Richiesta',
+          RII: 'Rifiuti in ingresso \n (r.i.i.) E.E.R.',
+          MAT_USCITA: 'Materiali ottenuti in uscita dalla linea impiantistica \n(descrizione)',
+          RECUPERABILI: 'Rifiuti recuperabili \n (r.r.u.) E.E.R.',
+          RIF_USCITA: 'Rifiuti in uscita\n(r.u.) E.E.R.',
+          TONNELLATE_RICHIESTA: 'Tonnellate \nRichiesta',
           TONNELLATE_DICHIARAZIONE: 'Tonnellate Dichiarazione'
         },
         PERCENTUALI: {

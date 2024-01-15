@@ -34,7 +34,7 @@ export class PrevConsDettDeleteComponent extends ModalComponent implements OnIni
   onDelete() {
       if(this.idPrevCons){
       this.mrService
-        .deleteDichiarazioneMrPrevConsDett(this.idPrevConsDett)
+        .deleteDichiarazioneMrPrevConsDett(this.idPrevCons, this.idPrevConsDett)
         .pipe(csiCatchError(), untilDestroyed(this))
         .subscribe((response: IPrevConsResponse) => {
           if (response.message) {

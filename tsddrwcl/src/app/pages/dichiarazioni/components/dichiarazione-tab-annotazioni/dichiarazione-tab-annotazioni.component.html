@@ -4,7 +4,9 @@
             <app-helper [text]="helperTitle"></app-helper>
         </div>
         <div class="col-12" *ngIf="form">
-          <h6>{{ 'DICHIARAZIONI.ANNOTAZIONI.FORM.ANNOTAZIONI.LABEL' | translate }}</h6>
+          <p style="font-weight: 400;    line-height: 1.5;
+          letter-spacing: normal; font-size:18px">{{ 'DICHIARAZIONI.ANNOTAZIONI.FORM.ANNOTAZIONI.LABEL' | translate }}</p>
+          <p class=" mb-0 font-weight-normal" style="font-size: 14px; text-align: left; position: relative;">{{'DICHIARAZIONI.ANNOTAZIONI.FORM.ANNOTAZIONI.MSG' | translate}}</p>
           <app-form [form]="form"></app-form>
         </div>
     </div>

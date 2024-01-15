@@ -1,244 +1,454 @@
 <app-breadcrumbs *ngIf="!isEmbed"></app-breadcrumbs>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-12 col-lg-9 pl-0" *ngIf="!isEmbed">
-            <app-helper [text]="helperTitle"></app-helper>
-        </div>
-        <div class="col-12">
-            <app-card *ngIf="formDatiImpianto && formDatiSito">
-                <app-card-body>
-                    <h5 class="primary-color">{{ 'IMPIANTI.FORMDATIIMPIANTO.TITLE' | translate }}</h5>
-                    <app-form [form]="formDatiImpianto"></app-form>
-                    <h5 class="primary-color">{{ 'IMPIANTI.FORMDATISITO.TITLE' | translate }}</h5>
-                    <app-form [form]="formDatiSito"></app-form>
-                    <div class="row">
-                        <div class="col-12" *ngIf="acl && acl.content && acl.content.update">
-                            <button (click)="onEdit()"
-                            [disabled]="isReadonly || formDatiImpianto.invalid || formDatiSito.invalid || rows.length==0"
-                            aria-label="Inserisci nuovo impianto"
-                                    type="button"
-                                    class="btn btn-primary float-right">
-                                {{'IMPIANTI.EDIT.BTN'|translate}}
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12" style="position: relative;">
-                            <ul class="nav nav-tabs flex-sm-row  mt-4" style="background: #F7F7F7;">
-                                <li class="nav-item" *ngFor="let tabElement of tabElements">
-                                    <a [ngClass]="{
-                                        'nav-link': true,
-                                        active: tabElement.link == activeElement
-                                    }"
-                                    [attr.aria-selected]="tabElement.link == activeElement"
-                                    [tabindex]="tabElement.disabled == true ? -1 : 0"
-                                    (click)="onChangeActiveTab(tabElement)"
-                                    style="background: #F7F7F7; cursor:pointer;">
-                                    <app-icon *ngIf="tabElement.icon != undefined"
-                                        [name]="tabElement.icon.name"
-                                        [type]="tabElement.icon.type"
-                                        [cssClass]="tabElement.icon.cssClass"
-                                        [fill]="tabElement.icon.fill"
-                                        [size]="tabElement.icon.size"
-                                        [color]="tabElement.icon.color"
-                                        [padding]="tabElement.icon.padding"
-                                        [baseHref]="tabElement.icon.baseHref"
-                                    ></app-icon>
-                                    {{ tabElement.title|translate}}
-                                    </a>
-                                </li>
-                            </ul>
-                            <app-table *ngIf="!isAtti && dataSource"
-                                    [createMode]="true"
-                                    [columns]='columns'
-                                    [dataSource]='dataSource'
-                                    [showPager]='true'
-                            ></app-table>
-                            <app-table *ngIf="isAtti && dataSourceAtti"
-                                [createMode]="true"
-                                [columns]='columnsAtti'
-                                [dataSource]='dataSourceAtti'
-                                [showPager]='true'
-                            ></app-table>
-                        </div>
-                    </div>
-                </app-card-body>
-                <app-card-footer>
-                    <div class="row" *ngIf="!isEmbed">
-                        <div class="col-6">
-                            <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link px-0">
-                                {{'UTILS.BACK'|translate}}
-                            </button>
-                        </div>
-                    </div>
-                </app-card-footer>
-            </app-card>
-        </div>
+  <div class="row">
+    <div class="col-12 col-lg-9 pl-0" *ngIf="!isEmbed">
+      <app-helper [text]="helperTitle"></app-helper>
     </div>
+    <div class="col-12">
+      <app-card *ngIf="formDatiImpianto && formDatiSito">
+        <app-card-body>
+          <p
+            class="primary-color"
+            style="font-weight: 500; font-size: 20px; letter-spacing: normal"
+          >
+            {{ 'IMPIANTI.FORMDATIIMPIANTO.TITLE' | translate }}
+          </p>
+          <app-form [form]="formDatiImpianto"></app-form>
+          <p
+            class="primary-color"
+            style="font-weight: 500;     font-size: 20px; letter-spacing: normal"
+          >
+            {{ 'IMPIANTI.FORMDATISITO.TITLE' | translate }}
+          </p>
+          <app-form [form]="formDatiSito"></app-form>
+          <div class="row">
+            <div
+              class="col-12"
+              *ngIf="acl && acl.content && acl.content.update"
+            >
+              <button
+                (click)="onEdit()"
+                [disabled]="
+                  isReadonly ||
+                  formDatiImpianto.invalid ||
+                  formDatiSito.invalid ||
+                  rows.length == 0
+                "
+                aria-label="Inserisci nuovo impianto"
+                type="button"
+                class="btn btn-primary float-right"
+              >
+                {{ 'IMPIANTI.EDIT.BTN' | translate }}
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12" style="position: relative">
+              <ul
+                class="nav nav-tabs flex-sm-row mt-4"
+                style="background: #f7f7f7"
+              >
+                <li class="nav-item" *ngFor="let tabElement of tabElements">
+                  <a
+                    [ngClass]="{
+                      'nav-link': true,
+                      active: tabElement.link == activeElement
+                    }"
+                    [attr.aria-selected]="tabElement.link == activeElement"
+                    [tabindex]="tabElement.disabled == true ? -1 : 0"
+                    (click)="onChangeActiveTab(tabElement)"
+                    style="background: #f7f7f7; cursor: pointer"
+                  >
+                    <app-icon
+                      *ngIf="tabElement.icon != undefined"
+                      [name]="tabElement.icon.name"
+                      [type]="tabElement.icon.type"
+                      [cssClass]="tabElement.icon.cssClass"
+                      [fill]="tabElement.icon.fill"
+                      [size]="tabElement.icon.size"
+                      [color]="tabElement.icon.color"
+                      [padding]="tabElement.icon.padding"
+                      [baseHref]="tabElement.icon.baseHref"
+                    ></app-icon>
+                    {{ tabElement.title | translate }}
+                  </a>
+                </li>
+              </ul>
+              <app-table
+                *ngIf="!isAtti && dataSource"
+                [createMode]="true"
+                [columns]="columns"
+                [dataSource]="dataSource"
+                [showPager]="true"
+              ></app-table>
+              <app-table
+                *ngIf="isAtti && dataSourceAtti"
+                [createMode]="true"
+                [columns]="columnsAtti"
+                [dataSource]="dataSourceAtti"
+                [showPager]="true"
+              ></app-table>
+            </div>
+          </div>
+        </app-card-body>
+        <app-card-footer>
+          <div class="row" *ngIf="!isEmbed">
+            <div class="col-6">
+              <button
+                (click)="onBack()"
+                aria-label="Indietro"
+                type="button"
+                class="btn btn-link px-0"
+              >
+                {{ 'UTILS.BACK' | translate }}
+              </button>
+            </div>
+          </div>
+        </app-card-footer>
+      </app-card>
+    </div>
+  </div>
 </div>
 
-<ng-template let-row='row' #lineaTemplate>
-    <label class="visually-hidden" for="selectidLinea">Linea dell'impianto</label>
-    <span *ngIf="row && row.descLinea">{{ row.descLinea }}</span>
-    <span *ngIf="row && row.descSottoLinea">{{ row.descSottoLinea }}</span>
-    <app-select-input
-          *ngIf="!row && !isReadonly"
-          [control]='createForm.controls["idLinea"]'
-          [id]="'selectidLinea'"
-    ></app-select-input>
+<ng-template let-row="row" #lineaTemplate>
+  <label *ngIf="!row && !isReadonly" class="visually-hidden" for="inputselectidLinea">Linea dell'impianto</label>
+  <span *ngIf="row && row.descLinea">{{ row.descLinea }}</span>
+  <span *ngIf="row && row.descSottoLinea">{{ row.descSottoLinea }}</span>
+  <app-select-input
+    *ngIf="!row && !isReadonly"
+    [control]="createForm.controls['idLinea']"
+    [name]="'selectidLinea'"
+  ></app-select-input>
 </ng-template>
-<ng-template let-row='row' #dataInizioValiditaTemplate>
-    <label class="visually-hidden" for="inputdataInizioValiditaImpianto">Data inizio validita</label>
-    <app-date-input
-        *ngIf="row"
-        [control]="getUpdateFormControl(row,'dataInizioValidita')"
-        [name]="'dataInizioValiditaImpianto_' + row.idFormUpdate"
-    ></app-date-input>
-    <app-date-input
-          *ngIf="!row && !isReadonly"
-          [control]='createForm.controls["dataInizioValidita"]'
-          [name]="'dataInizioValiditaImpianto'"
-    ></app-date-input>
+<ng-template let-row="row" #dataInizioValiditaTemplate>
+  <label
+  *ngIf="row && row?.idFormUpdate"
+    class="visually-hidden"
+    [for]="'inputdataInizioValiditaImpianto_' + row.idFormUpdate"
+    >Data inizio validita</label
+  >
+  <label
+    *ngIf="!row && !isReadonly"
+    class="visually-hidden"
+    for="inputdataInizioValiditaImpianto"
+    >Data inizio validita</label
+  >
+
+  <!-- <label class="visually-hidden" for="inputdataInizioValiditaImpianto">Data inizio validita</label> -->
+  <app-date-input
+    *ngIf="row"
+    [control]="getUpdateFormControl(row, 'dataInizioValidita')"
+    [name]="'dataInizioValiditaImpianto_' + row.idFormUpdate"
+  ></app-date-input>
+  <app-date-input
+    *ngIf="!row && !isReadonly"
+    [control]="createForm.controls['dataInizioValidita']"
+    [name]="'dataInizioValiditaImpianto'"
+  ></app-date-input>
 </ng-template>
-<ng-template let-row='row' #dataFineValiditaTemplate>
-    <label *ngIf="row" class="visually-hidden" for="'inputdataFineValiditaImpianto' + row.idFormUpdate">Data fine validita</label>    
-    <label *ngIf="!row && !isReadonly" class="visually-hidden" for="inputdataFineValiditaImpianto">Data fine validita</label>
-    <app-date-input
-        *ngIf="row"
-        [control]="getUpdateFormControl(row,'dataFineValidita')"
-        [name]="'dataFineValiditaImpianto_' + row.idFormUpdate"
-    ></app-date-input>
-    <app-date-input
-          *ngIf="!row && !isReadonly"
-          [control]='createForm.controls["dataFineValidita"]'
-          [name]="'dataFineValiditaImpianto'"
-    ></app-date-input>
-    <span class="errorDate" *ngIf='row && getUpdateFormControl(row,"dataFineValidita").statusMessage'>
-        <app-validation-input-message
-            [statusMessage]='getUpdateFormControl(row,"dataFineValidita").statusMessage'
-        ></app-validation-input-message>
-    </span>
-    <span class="errorDate" *ngIf='!row && createForm.controls["dataFineValidita"].statusMessage'>
-        <app-validation-input-message
-            [statusMessage]='createForm.controls["dataFineValidita"].statusMessage'
-        ></app-validation-input-message>
-    </span>
+<ng-template let-row="row" #dataFineValiditaTemplate>
+  <label
+    *ngIf="row && row?.idFormUpdate"
+    class="visually-hidden"
+    [for]="'inputdataFineValiditaImpianto_' + row.idFormUpdate"
+    >Data fine validita</label
+  >
+  <label
+    *ngIf="!row && !isReadonly"
+    class="visually-hidden"
+    for="inputdataFineValiditaImpianto"
+    >Data fine validita</label
+  >
+  <app-date-input
+    *ngIf="row"
+    [control]="getUpdateFormControl(row, 'dataFineValidita')"
+    [name]="'dataFineValiditaImpianto_' + row.idFormUpdate"
+  ></app-date-input>
+  <app-date-input
+    *ngIf="!row && !isReadonly"
+    [control]="createForm.controls['dataFineValidita']"
+    [name]="'dataFineValiditaImpianto'"
+  ></app-date-input>
+  <span
+    class="errorDate"
+    *ngIf="row && getUpdateFormControl(row, 'dataFineValidita').statusMessage"
+  >
+    <app-validation-input-message
+      [statusMessage]="
+        getUpdateFormControl(row, 'dataFineValidita').statusMessage
+      "
+    ></app-validation-input-message>
+  </span>
+  <span
+    class="errorDate"
+    *ngIf="!row && createForm.controls['dataFineValidita'].statusMessage"
+  >
+    <app-validation-input-message
+      [statusMessage]="createForm.controls['dataFineValidita'].statusMessage"
+    ></app-validation-input-message>
+  </span>
 </ng-template>
 
-<ng-template let-row='row' #actionsTemplate>
-    <div class="actions ng-star-inserted">
-        <button  *ngIf="!isReadonly && !row && acl.content.insert" (click)="createLinea()" aria-label="Inserisci"  title="Inserisci"
-                class="btn btn-action p-0 px-2 img" [disabled]="!createForm?.valid">
-            <img class='img' alt="Inserisci" height="24px" src="assets/icon/enable-add.jpg" *ngIf="!createForm.valid">
-            <img  class='img' alt="Inserisci" height="24px" src="assets/icon/add.png" *ngIf="createForm.valid">
-        </button>
+<ng-template let-row="row" #actionsTemplate>
+  <div class="actions ng-star-inserted">
+    <button
+      *ngIf="!isReadonly && !row && acl.content.insert"
+      (click)="createLinea()"
+      aria-label="Inserisci"
+      title="Inserisci"
+      class="btn btn-action p-0 px-2 img"
+      [disabled]="!createForm?.valid"
+    >
+      <img
+        class="img"
+        alt="Inserisci"
+        height="24px"
+        src="assets/icon/enable-add.jpg"
+        *ngIf="!createForm.valid"
+      />
+      <img
+        class="img"
+        alt="Inserisci"
+        height="24px"
+        src="assets/icon/add.png"
+        *ngIf="createForm.valid"
+      />
+    </button>
 
-        <button  *ngIf="!isReadonly && row && acl.content.update" (click)="editLinea(row)" aria-label="Modifica"  title="Modifica"
-        [disabled]="!hasUnsavedChangeRow(row) || !getUpdateForm(row).valid"
-                class="btn btn-action p-0 px-2 img">
-            <img class='img' alt="Modifica" height="24px" src="assets/icon/icon-table-edit.svg">
-        </button>
+    <button
+      *ngIf="!isReadonly && row && acl.content.update"
+      (click)="editLinea(row)"
+      aria-label="Modifica"
+      title="Modifica"
+      [disabled]="!hasUnsavedChangeRow(row) || !getUpdateForm(row).valid"
+      class="btn btn-action p-0 px-2 img"
+    >
+      <img
+        class="img"
+        alt="Modifica"
+        height="24px"
+        src="assets/icon/icon-table-edit.svg"
+      />
+    </button>
 
-        <button   *ngIf="!isReadonly && row && acl.content.delete" (click)="deleteLinea(row)"
-                [disabled]="rows && rows.length<2" aria-label="Elimina"  title="Elimina"  class="btn btn-action p-0 img">
-            <img class='img' alt="Elimina" height="20px" src="assets/icon/icon-table-elimina.svg">
-        </button>
-    </div>
+    <button
+      *ngIf="!isReadonly && row && acl.content.delete"
+      (click)="deleteLinea(row)"
+      [disabled]="rows && rows.length < 2"
+      aria-label="Elimina"
+      title="Elimina"
+      class="btn btn-action p-0 img"
+    >
+      <img
+        class="img"
+        alt="Elimina"
+        height="20px"
+        src="assets/icon/icon-table-elimina.svg"
+      />
+    </button>
+  </div>
 </ng-template>
 
-<ng-template let-row='row' #tipoProvvedimentoTemplateAtto>
-<label class="visually-hidden" for="selecttipoProvvedimento">Tipo provvedimento</label>
-   <app-select-input
-        *ngIf="row"
-        [control]="getUpdateFormControlAtto(row,'tipoProvvedimento')"
-        [id]="'selecttipoProvvedimento' + row.idAtto"
-    ></app-select-input>
-    <app-select-input
-          *ngIf="!row && !isReadonly"
-          [control]='createFormAtto.controls["tipoProvvedimento"]'
-          [id]="'selecttipoProvvedimento'"
-    ></app-select-input>
+<ng-template let-row="row" #tipoProvvedimentoTemplateAtto>
+  <label
+  *ngIf="row && row?.idAtto"
+    class="visually-hidden"
+    for="{{ 'input_tipoProvvedimento' + row?.idAtto }}"
+    >Tipo provvedimento</label
+  >
+  <!-- <app-input-label [field]="getUpdateFormControlAtto(row, 'tipoProvvedimento')"
+  [name]="'_tipoProvvedimento' + row?.idAtto" class="visually-hidden"></app-input-label> -->
+
+  <app-select-input
+    *ngIf="row"
+    [control]="getUpdateFormControlAtto(row, 'tipoProvvedimento')"
+    [name]="'_tipoProvvedimento' + row?.idAtto"
+    [id]="'_tipoProvvedimento' + row?.idAtto"
+  ></app-select-input>
+
+  <label
+    *ngIf="!row && !isReadonly"
+    class="visually-hidden"
+    for="{{ 'input_tipoProvvedimento' }}"
+    >Tipo provvedimento</label
+  >
+  <app-select-input
+    *ngIf="!row && !isReadonly"
+    [control]="createFormAtto.controls['tipoProvvedimento']"
+    [name]="'_tipoProvvedimento'"
+  ></app-select-input>
 </ng-template>
-<ng-template let-row='row' #numProvvedimentoTemplateAtto>
-<label class="visually-hidden" for="inputnumProvvedimento">Numero provvedimento</label>
-    <app-textbox-input
-        *ngIf="row"
-        [control]="getUpdateFormControlAtto(row,'numProvvedimento')"
-        [name]="'numProvvedimento' + row.idAtto"
-    ></app-textbox-input>
-    <app-textbox-input
-        *ngIf="!row && !isReadonly"
-        [control]='createFormAtto.controls["numProvvedimento"]'
-        [name]="'numProvvedimento'"
-    ></app-textbox-input>
+<ng-template let-row="row" #numProvvedimentoTemplateAtto>
+  <label
+  *ngIf="row && row?.idAtto"
+    class="visually-hidden"
+    for="{{ 'inputnumProvvedimento' + row?.idAtto }}"
+    >Numero provvedimento</label
+  >
+  <label
+  *ngIf="!row && !isReadonly"
+    class="visually-hidden"
+    for="{{ 'inputnumProvvedimento'}}"
+    >Numero provvedimento</label
+  >
+  <app-textbox-input
+    *ngIf="row"
+    [control]="getUpdateFormControlAtto(row, 'numProvvedimento')"
+    [name]="'numProvvedimento' + row?.idAtto"
+  ></app-textbox-input>
+  <app-textbox-input
+    *ngIf="!row && !isReadonly"
+    [control]="createFormAtto.controls['numProvvedimento']"
+    [name]="'numProvvedimento'"
+  ></app-textbox-input>
 </ng-template>
-<ng-template let-row='row' #dataProvvedimentoTemplateAtto>
-<label class="visually-hidden" for="inputdataProvvedimento">Data provvedimento</label>
-    <app-date-input
-        *ngIf="row"
-        [control]="getUpdateFormControlAtto(row,'dataProvvedimento')"
-        [name]="'dataProvvedimento' + row.idAtto"
-    ></app-date-input>
-    <app-date-input
-          *ngIf="!row && !isReadonly"
-          [control]='createFormAtto.controls["dataProvvedimento"]'
-          [name]="'dataProvvedimento'"
-    ></app-date-input>
+<ng-template let-row="row" #dataProvvedimentoTemplateAtto>
+  <label
+  *ngIf="row && row?.idAtto"
+    class="visually-hidden"
+    for="{{ 'inputdataProvvedimento' + row?.idAtto }}"
+    >Data provvedimento</label
+  >
+  <label
+  *ngIf="!row && !isReadonly"
+    class="visually-hidden"
+    for="{{ 'inputdataProvvedimento' }}"
+    >Data provvedimento</label
+  >
+  <app-date-input
+    *ngIf="row"
+    [control]="getUpdateFormControlAtto(row, 'dataProvvedimento')"
+    [name]="'dataProvvedimento' + row?.idAtto"
+  ></app-date-input>
+  <app-date-input
+    *ngIf="!row && !isReadonly"
+    [control]="createFormAtto.controls['dataProvvedimento']"
+    [name]="'dataProvvedimento'"
+  ></app-date-input>
 </ng-template>
-<ng-template let-row='row' #dataInizioAutorizzazioneTemplateAtto>
-    <label class="visually-hidden" for="inputdataInizioAutorizzazione">Data decorrenza</label>
-    <app-date-input
-        *ngIf="row"
-        [control]="getUpdateFormControlAtto(row,'dataInizioAutorizzazione')"
-        [name]="'dataInizioAutorizzazione' + row.idAtto"
-    ></app-date-input>
-    <app-date-input
-          *ngIf="!row && !isReadonly"
-          [control]='createFormAtto.controls["dataInizioAutorizzazione"]'
-          [name]="'dataInizioAutorizzazione'"
-    ></app-date-input>
+<ng-template let-row="row" #dataInizioAutorizzazioneTemplateAtto>
+  <label
+  *ngIf="row && row?.idAtto"
+    class="visually-hidden"
+    for="{{ 'inputdataInizioAutorizzazione' + row?.idAtto }}"
+    >Data decorrenza</label
+  >
+  <label
+  *ngIf="!row && !isReadonly"
+  class="visually-hidden"
+  for="{{ 'inputdataInizioAutorizzazione'}}"
+  >Data decorrenza</label
+>
+  <app-date-input
+    *ngIf="row"
+    [control]="getUpdateFormControlAtto(row, 'dataInizioAutorizzazione')"
+    [name]="'dataInizioAutorizzazione' + row?.idAtto"
+  ></app-date-input>
+  <app-date-input
+    *ngIf="!row && !isReadonly"
+    [control]="createFormAtto.controls['dataInizioAutorizzazione']"
+    [name]="'dataInizioAutorizzazione'"
+  ></app-date-input>
 </ng-template>
-<ng-template let-row='row' #dataFineAutorizzazioneTemplateAtto>
-    <label class="visually-hidden" for="inputdataFineAutorizzazione">Data scadenza</label>
-    <app-date-input
-        *ngIf="row"
-        [control]="getUpdateFormControlAtto(row,'dataFineAutorizzazione')"
-        [name]="'dataFineAutorizzazione' + row.idAtto"
-    ></app-date-input>
-    <app-date-input
-          *ngIf="!row && !isReadonly"
-          [control]='createFormAtto.controls["dataFineAutorizzazione"]'
-          [name]="'dataFineAutorizzazione'"
-    ></app-date-input>
-    <span class="errorDate" *ngIf='row && getUpdateFormControlAtto(row,"dataFineAutorizzazione").statusMessage'>
-        <app-validation-input-message
-            [statusMessage]='getUpdateFormControlAtto(row,"dataFineAutorizzazione").statusMessage'
-        ></app-validation-input-message>
-    </span>
-    <span class="errorDate" *ngIf='!row && createFormAtto.controls["dataFineAutorizzazione"].statusMessage'>
-        <app-validation-input-message
-            [statusMessage]='createFormAtto.controls["dataFineAutorizzazione"].statusMessage'
-        ></app-validation-input-message>
-    </span>
+<ng-template let-row="row" #dataFineAutorizzazioneTemplateAtto>
+  <label
+  *ngIf="row && row?.idAtto"
+    class="visually-hidden"
+    for="{{ 'inputdataFineAutorizzazione' + row?.idAtto }}"
+    >Data scadenza</label
+  >
+  <label
+  *ngIf="!row && !isReadonly"
+    class="visually-hidden"
+    for="{{ 'inputdataFineAutorizzazione'}}"
+    >Data scadenza</label
+  >
+  <app-date-input
+    *ngIf="row"
+    [control]="getUpdateFormControlAtto(row, 'dataFineAutorizzazione')"
+    [name]="'dataFineAutorizzazione' + row?.idAtto"
+  ></app-date-input>
+  <app-date-input
+    *ngIf="!row && !isReadonly"
+    [control]="createFormAtto.controls['dataFineAutorizzazione']"
+    [name]="'dataFineAutorizzazione'"
+  ></app-date-input>
+  <span
+    class="errorDate"
+    *ngIf="
+      row &&
+      getUpdateFormControlAtto(row, 'dataFineAutorizzazione').statusMessage
+    "
+  >
+    <app-validation-input-message
+      [statusMessage]="
+        getUpdateFormControlAtto(row, 'dataFineAutorizzazione').statusMessage
+      "
+    ></app-validation-input-message>
+  </span>
+  <span
+    class="errorDate"
+    *ngIf="
+      !row && createFormAtto.controls['dataFineAutorizzazione'].statusMessage
+    "
+  >
+    <app-validation-input-message
+      [statusMessage]="
+        createFormAtto.controls['dataFineAutorizzazione'].statusMessage
+      "
+    ></app-validation-input-message>
+  </span>
 </ng-template>
 
-<ng-template let-row='row' #actionsTemplateAtto>
-    <div class="actions ng-star-inserted">
-        <button  *ngIf="!isReadonly && !row && acl.content.insert" (click)="createAtto()" aria-label="Inserisci"  title="Inserisci"
-                class="btn btn-action p-0 px-2 img">
-            <img alt="Inserisci" height="24px" src="assets/icon/enable-add.jpg" *ngIf="!createFormAtto.valid">
-            <img alt="Inserisci" height="24px" src="assets/icon/add.png" *ngIf="createFormAtto.valid">
-        </button>
+<ng-template let-row="row" #actionsTemplateAtto>
+  <div class="actions ng-star-inserted">
+    <button
+      *ngIf="!isReadonly && !row && acl.content.insert"
+      (click)="createAtto()"
+      aria-label="Inserisci"
+      title="Inserisci"
+      class="btn btn-action p-0 px-2 img"
+    >
+      <img
+        alt="Inserisci"
+        height="24px"
+        src="assets/icon/enable-add.jpg"
+        *ngIf="!createFormAtto.valid"
+      />
+      <img
+        alt="Inserisci"
+        height="24px"
+        src="assets/icon/add.png"
+        *ngIf="createFormAtto.valid"
+      />
+    </button>
 
-        <button *ngIf="!isReadonly && row && acl.content.update" (click)="editAtto(row)" aria-label="Modifica"  title="Modifica"
-        [disabled]="!hasUnsavedChangeRowAtto(row) || !getUpdateFormAtto(row).valid"
-                class="btn btn-action p-0 px-2 img ">
-            <img alt="Modifica" height="24px" src="assets/icon/icon-table-edit.svg">
-        </button>
+    <button
+      *ngIf="!isReadonly && row && acl.content.update"
+      (click)="editAtto(row)"
+      aria-label="Modifica"
+      title="Modifica"
+      [disabled]="
+        !hasUnsavedChangeRowAtto(row) || !getUpdateFormAtto(row).valid
+      "
+      class="btn btn-action p-0 px-2 img"
+    >
+      <img alt="Modifica" height="24px" src="assets/icon/icon-table-edit.svg" />
+    </button>
 
-        <button  *ngIf="!isReadonly && row && acl.content.delete" (click)="deleteAtto(row)"
-                [disabled]="rowsAtti && rowsAtti.length<2" aria-label="Elimina"  title="Elimina" class="btn btn-action p-0 img">
-            <img alt="Elimina" height="20px" src="assets/icon/icon-table-elimina.svg">
-        </button>
-    </div>
+    <button
+      *ngIf="!isReadonly && row && acl.content.delete"
+      (click)="deleteAtto(row)"
+      [disabled]="rowsAtti && rowsAtti.length < 2"
+      aria-label="Elimina"
+      title="Elimina"
+      class="btn btn-action p-0 img"
+    >
+      <img
+        alt="Elimina"
+        height="20px"
+        src="assets/icon/icon-table-elimina.svg"
+      />
+    </button>
+  </div>
 </ng-template>

@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs  flex-sm-row mt-4" style="background: #F7F7F7;">
   <ng-container *ngFor="let tabElement of tabElements">
-    <li class="nav-item" *ngIf="(tabElement.id != 'richiesta' && idTipoDoc == 1) || (tabElement.id != 'sede' && idTipoDoc == 2)">
+    <li class="nav-item " *ngIf="(tabElement.id != 'richiesta' && idTipoDoc == 1) || (tabElement.id != 'sede' && idTipoDoc == 2)">
       <a [ngClass]="{
           'nav-link': true,
           active: tabElement.link == activeElement

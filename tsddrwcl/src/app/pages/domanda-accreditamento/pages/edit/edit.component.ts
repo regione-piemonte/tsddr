@@ -165,7 +165,13 @@ export class EditComponent implements OnInit {
       )) as any;
     }
 
-    let showPlac;
+    let showPlac = true;
+    if(currentValue.notaLavorazione!=undefined){
+      showPlac=true
+    }else{
+      showPlac=false
+    }
+    /*
     if(currentValue.notaLavorazione!=undefined){
       showPlac=false
     }else if(currentValue.stato.id===4 && currentValue.notaLavorazione==undefined ){
@@ -175,7 +181,7 @@ export class EditComponent implements OnInit {
     else{
       showPlac=true
     }
-
+*/
     const size = '12|6|6|6|6';
     this.form = new Form({
       header: { show: false },

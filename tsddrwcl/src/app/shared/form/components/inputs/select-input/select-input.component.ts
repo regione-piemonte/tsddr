@@ -5,7 +5,7 @@ import { BaseInputComponent } from '../base-input/base-input.component';
 @Component({
   selector: 'app-select-input',
   template: `
-    <select [formControl]="control" class="custom-input shape-rectangle size-large nb-transition input-full-width">
+    <select id="{{'input' + name}}" [formControl]="control" class="custom-input shape-rectangle size-large nb-transition input-full-width">
      <option
         *ngFor="let option of (control.options | async)?.content"
         [value]="option.id"
@@ -16,6 +16,8 @@ import { BaseInputComponent } from '../base-input/base-input.component';
 })
 export class SelectInputComponent extends BaseInputComponent {
   @Input() control: SelectInput;
+  @Input() id?: string;
+  @Input() name: string;
 }
 
 // <nb-select

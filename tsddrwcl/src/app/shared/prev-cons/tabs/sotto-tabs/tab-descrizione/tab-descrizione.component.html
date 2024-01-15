@@ -1,8 +1,17 @@
 <div class="container-fluid">
   <div class="row">
-      <div class="col-12" *ngIf="form">
-        <h6>{{ 'DICHIARAZIONI_MR.TABS.PROCESSO.DESCRIZIONE.TITLE' | translate }}</h6>
-        <app-form [form]="form"></app-form>
-      </div>
+    <div class="col-12" *ngIf="form">
+      <p style="font-weight: 400; font-size: 20px">
+        {{ 'DICHIARAZIONI_MR.TABS.PROCESSO.DESCRIZIONE.TITLE' | translate }}
+      </p>
+      <p
+        class="mb-0 font-weight-normal"
+        style="font-size: 14px; text-align: left; position: relative"
+      >
+        {{ 'DICHIARAZIONI_MR.TABS.PROCESSO.DESCRIZIONE.NOTA' | translate }}
+      </p>
+
+      <app-form [form]="form"></app-form>
+    </div>
   </div>
 </div>

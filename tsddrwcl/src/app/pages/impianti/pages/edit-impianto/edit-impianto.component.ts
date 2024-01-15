@@ -387,6 +387,7 @@ export class EditImpiantoComponent implements OnInit {
   private _initForm(currentValue:Impianto) {
     const size = '12|6|6|6|6';
     this.formDatiImpianto = new Form({
+   
       header: { show: false },
       validatorOrOpts: [
         this.service.dateValidator(),
@@ -394,7 +395,7 @@ export class EditImpiantoComponent implements OnInit {
       filter: false,
       controls: {
         idGestore: new AutocompleteInput({
-          label: 'IMPIANTI.FORMDATIIMPIANTO.IDGESTORE.LABEL',
+          label: 'IMPIANTI.FORMDATIIMPIANTO.IDGESTORE.LABEL_',
           placeholder: !this.isReadonly ? 'IMPIANTI.FORMDATIIMPIANTO.IDGESTORE.PLACEHOLDER' : ' ',
           options: this.service.getComboGestori() as any,
           size,

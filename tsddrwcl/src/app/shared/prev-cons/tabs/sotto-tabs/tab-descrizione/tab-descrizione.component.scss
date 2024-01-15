@@ -5,3 +5,23 @@
 h6 {
   font-weight: 400;
 }
+
+.row {
+  ::ng-deep .col-12 {
+    ::ng-deep app-form {
+      ::ng-deep app-form-inputs {
+        ::ng-deep .row {
+          ::ng-deep app-form-input {
+            ::ng-deep .form-group {
+              ::ng-deep app-input-label {
+                ::ng-deep .label {
+                  visibility: hidden !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

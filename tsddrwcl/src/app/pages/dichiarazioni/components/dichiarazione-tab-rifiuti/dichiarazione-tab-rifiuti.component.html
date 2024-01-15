@@ -49,10 +49,13 @@
                                  ></app-textbox-input>
                             </div>
                             <div class="col-6">
-                                <label class="visually-hidden" for="{{'select_rifiutoTariffa' + row.idRifiutoConferito}}">Rifiuto Tariffa</label>
+                              <app-input-label [field]="getUpdateFormControl(row,'rifiutoTariffa')"
+                              [name]="'_rifiutoTariffa' + row.idRifiutoConferito" class="visually-hidden"></app-input-label>
+
+                                <!-- <label class="visually-hidden" for="{{'select_rifiutoTariffa' + row.idRifiutoConferito}}">Rifiuto Tariffa</label> -->
                                 <app-select-input
                                    [control]="getUpdateFormControl(row,'rifiutoTariffa')"
-                                   [id]="'_rifiutoTariffa' + row.idRifiutoConferito"
+                                   [name]="'_rifiutoTariffa' + row.idRifiutoConferito"
                                 ></app-select-input>
                             </div>
                             <div class="col-1 label">
@@ -131,10 +134,11 @@
                              ></app-textbox-input>
                         </div>
                         <div class="col-6">
-                        <label class="visually-hidden" for="select_newRifiutoTariffa">Nuovo rifiuto tariffa</label>
-                            <app-select-input
+                          <app-input-label [field]='createForm.controls["rifiutoTariffa"]'
+                          [name]="'_newRifiutoTariffa'" class="visually-hidden"></app-input-label>
+                        <app-select-input
                                 [control]='createForm.controls["rifiutoTariffa"]'
-                                [id]="'_newRifiutoTariffa'"
+                                [name]="'_newRifiutoTariffa'"
                             ></app-select-input>
                         </div>
                         <div class="col-1 label">
@@ -170,7 +174,7 @@
                                     ></app-textbox-input>
                                 </div>
                                 <div class="col-6">
-                                <label class="visually-hidden" for="{{'input_importo' + i}}">Importo</label>
+                                <label class="visually-hidden" for="{{'input_new_importo' + i}}">Importo</label>
                                     <app-textbox-input
                                     [control]='getCreateFormControl("importo",i)'
                                     [name]="'_new_importo' + i"

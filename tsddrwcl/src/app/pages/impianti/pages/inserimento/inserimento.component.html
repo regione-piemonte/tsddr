@@ -7,9 +7,15 @@
         <div class="col-12">
             <app-card *ngIf="formDatiImpianto && formDatiSito">
                 <app-card-body>
-                    <h5 class="primary-color">{{ 'IMPIANTI.FORMDATIIMPIANTO.TITLE' | translate }}</h5>
+                    <p
+                    class="primary-color"
+                    style="font-weight: 500; font-size: 20px; letter-spacing: normal"
+                 class="primary-color">{{ 'IMPIANTI.FORMDATIIMPIANTO.TITLE' | translate }}</p>
                     <app-form [form]="formDatiImpianto"></app-form>
-                    <h5 class="primary-color">{{ 'IMPIANTI.FORMDATISITO.TITLE' | translate }}</h5>
+                    <p
+                    class="primary-color"
+                    style="font-weight: 500; font-size: 20px; letter-spacing: normal"
+                 class="primary-color">{{ 'IMPIANTI.FORMDATISITO.TITLE' | translate }}</p>
                     <app-form [form]="formDatiSito"></app-form>
                     <div class="row">
                         <div class="col-12" *ngIf="acl.content.insert">
@@ -77,16 +83,18 @@
     </div>
 </div>
 <ng-template let-row='row' #lineaTemplate>
-    <label class="visually-hidden" for="selectidLinea">Linea dell'impianto</label>
+    <label *ngIf="!row" class="visually-hidden" for="inputselectidLinea">Linea dell'impianto</label>
+
     <span *ngIf="row">{{ row.descrizione }}</span>
     <app-select-input
           *ngIf="!row"
           [control]='createForm.controls["idLinea"]'
-          [id]="'selectidLinea'"
+          [name]="'selectidLinea'"
     ></app-select-input>
 </ng-template>
 <ng-template let-row='row' #dataInizioValiditaTemplate>
-    <label class="visually-hidden" for="inputdataInizioValiditaImpianto">Data inizio validita</label>
+    <label *ngIf="!row" class="visually-hidden" for="inputdataInizioValiditaImpianto">Data inizio validita</label>
+
     <span *ngIf="row">{{ row.dataInizioValidita | date:'dd/MM/yyyy'}}</span>
     <app-date-input
           *ngIf="!row"
@@ -95,7 +103,10 @@
     ></app-date-input>
 </ng-template>
 <ng-template let-row='row' #dataFineValiditaTemplate>
-    <label class="visually-hidden" for="inputdataFineValiditaImpianto">Data fine validita</label>
+    <label *ngIf="!row" class="visually-hidden" for="inputdataFineValiditaImpianto">Data fine validita</label>
+
+
+
     <span *ngIf="row">{{ row.dataFineValidita | date:'dd/MM/yyyy' }}</span>
     <app-date-input
         *ngIf="!row"
@@ -126,15 +137,19 @@
 
 
 <ng-template let-row='row' #tipoProvvedimentoTemplateAtto>
-    <label class="visually-hidden" for="selecttipoProvvedimento">Tipo provvedimento</label>
+    <label *ngIf="!row" class="visually-hidden" for="inputselecttipoProvvedimento">Tipo provvedimento</label>
+
+
     <span *ngIf="row">{{ row.tipoProvvedimento.descTipoProvvedimento }}</span>
     <app-select-input
           *ngIf="!row"
           [control]='createFormAtto.controls["tipoProvvedimento"]'
-          [id]="'selecttipoProvvedimento'"
+          [name]="'selecttipoProvvedimento'"
     ></app-select-input>
 </ng-template>
 <ng-template let-row='row' #numProvvedimentoTemplateAtto>
+  <label *ngIf="!row" class="visually-hidden" for="inputnumProvvedimento">Tipo provvedimento</label>
+
     <span *ngIf="row">{{ row.numProvvedimento }}</span>
     <app-textbox-input
     *ngIf="!row"
@@ -143,7 +158,8 @@
 ></app-textbox-input>
 </ng-template>
 <ng-template let-row='row' #dataProvvedimentoTemplateAtto>
-    <label class="visually-hidden" for="inputdataProvvedimento">Data provvedimento</label>
+    <label *ngIf="!row" class="visually-hidden" for="inputdataProvvedimento">Data provvedimento</label>
+
     <span *ngIf="row">{{ row.dataProvvedimento  | date:'dd/MM/yyyy' }}</span>
     <app-date-input
           *ngIf="!row"
@@ -152,7 +168,9 @@
     ></app-date-input>
 </ng-template>
 <ng-template let-row='row' #dataInizioAutorizzazioneTemplateAtto>
-    <label class="visually-hidden" for="inputdataInizioAutorizzazione">Data decorrenza</label>
+    <label *ngIf="!row" class="visually-hidden" for="inputdataInizioAutorizzazione">Data decorrenza</label>
+
+
     <span *ngIf="row">{{ row.dataInizioAutorizzazione | date:'dd/MM/yyyy' }}</span>
     <app-date-input
           *ngIf="!row"
@@ -161,7 +179,10 @@
     ></app-date-input>
 </ng-template>
 <ng-template let-row='row' #dataFineAutorizzazioneTemplateAtto>
-    <label class="visually-hidden" for="inputdataFineAutorizzazione">Data scadenza</label>
+    <label *ngIf="!row"class="visually-hidden" for="inputdataFineAutorizzazione">Data scadenza</label>
+   
+
+
     <span *ngIf="row">{{ row.dataFineAutorizzazione | date:'dd/MM/yyyy' }}</span>
     <app-date-input
           *ngIf="!row"

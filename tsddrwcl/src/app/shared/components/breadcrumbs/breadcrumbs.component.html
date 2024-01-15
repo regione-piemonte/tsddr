@@ -39,3 +39,16 @@
   </span>
 </div>
 <app-divider [marginBottom]='1' [marginTop]='1' [marginX]='0'></app-divider>
+
+
+<!----Gestione h1 delle pagine -->
+<div class="row" style="padding-top: 5px; margin-bottom: 20px;">
+  <div class="col-12">
+    <h1>
+      {{ routesLabels[routesLabels.length-1]?.label | translate }}
+    </h1>
+  </div>
+  <div class="col-12">
+    <div class="separator">&nbsp;</div>
+  </div>
+</div>

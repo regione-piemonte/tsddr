@@ -1,11 +1,12 @@
-# TRISPE - TRIbuto SPEciale Deposito in Discarica dei Rifiuti
+# SCRIVA Pubblicazione e Osservazioni
 
-Progetto contenente i sorgenti dell'applicativo di FE TSDDR.
+Progetto contenente i sorgenti dell'applicativo di FE SCRIVA consultazione pratiche e gestione osservazioni.
 Basato su template Angular 11 per CSI Regione Piemonte. Basata su Bootstrap-Italia.
 
 ## Conventional commit
 
-Per effettuare il commit eseguire il comando tramite terminale o cmd.
+Per effettuare il commit eseguire il comando tramite terminale o cmd (vedi nota
+per windows)
 
 `git commit`
 
@@ -13,12 +14,8 @@ Per effettuare il commit eseguire il comando tramite terminale o cmd.
 
 `npm install`
 
-## build environnement dependent
-`npm run build_dev`
-
-`npm run build_tst-rp-01`
-
-`npm run build_prod-rp-01`
+Per installare le dipendenze @eng-ds bisogna configurare il proprio npm con il
+nexus aziendale.
 
 ## Development server
 

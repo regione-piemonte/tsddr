@@ -95,11 +95,11 @@ export class TabsComponent implements OnInit, OnChanges {
    * @description controlla subito la validità delle sezioni di ogni tab e valorizza lo status
    */
   checkStatus(){
-    
+
     let checkProcesso : boolean = this.prevCons.prevConsLinee.some(linea =>!!linea.totMat || !!linea.totRii || !!linea.totRru || !!linea.totRu);
     let checkRichiesta : boolean = (this.prevCons.modalita && this.prevCons.dataInvioDoc) ? true : false;
     let checkSede : boolean = (this.prevCons.indirizzo?.indirizzo && this.prevCons.indirizzo?.comune && this.prevCons.indirizzo?.comune.idComune && this.prevCons.indirizzo?.sedime && this.prevCons.indirizzo.cap && this.prevCons.indirizzo.comune.provincia) ? true : false;
-
+console.log(checkProcesso, checkRichiesta, checkSede)
     this.mrStoreService.setPropsStatus('processoValid', checkProcesso);
     this.mrStoreService.setPropsStatus('richiestaValid', checkRichiesta);
     this.mrStoreService.setPropsStatus('sedeValid', checkSede);

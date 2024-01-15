@@ -18,8 +18,8 @@
           </div>
           <div class="row">
             <div class="col-12" style="position: relative;">
-              <ul class="nav nav-tabs flex-sm-row  mt-4" style="background: #F7F7F7;">
-                <li class="nav-item" *ngFor="let tabElement of tabElements">
+              <ul class="nav nav-tabs flex-sm-row  mt-4 mb-1" style="background: #F7F7F7;">
+                <li class="nav-item mt-1 mb-1" *ngFor="let tabElement of tabElements">
                   <a [ngClass]="{
                         'nav-link': true,
                         active: tabElement.link == activeElement
@@ -55,7 +55,7 @@
           <!-- TABS END -->
           <!-- RIEPILOGO -->
           <div class="row  percentuali">
-            <div class="col-8">
+            <div class="col-lg-8">
               <strong *ngIf="prevCons.tipoDoc.idTipoDoc == 2"> {{'DICHIARAZIONI_MR.TABS.PROCESSO.PERCENTUALI.TITLE'|translate}} </strong>
               <strong *ngIf="prevCons.tipoDoc.idTipoDoc == 1"> {{'RICHIESTA_MR.TABS.PROCESSO.PERCENTUALI.TITLE'|translate}} </strong>
               <div class="col-12 mt-2">
@@ -72,30 +72,30 @@
               </div>
             </div>
 
-            <div class="col-4 ">
+            <div class="col-lg-4 ">
               <strong> {{'DICHIARAZIONI_MR.TABS.PROCESSO.RIEPILOGO.TITLE'|translate}} </strong>
               <div class="col-12 mt-2">
                 <div class="row">
-                  <div class="col-6"> {{'DICHIARAZIONI_MR.TABS.PROCESSO.RIEPILOGO.TOTrii'|translate}} </div>
-                  <div class="col-6 text-right tot"> {{ totRii | number : '1.0-4'}} </div>
+                  <div class="col-3"> {{'DICHIARAZIONI_MR.TABS.PROCESSO.RIEPILOGO.TOTrii'|translate}} </div>
+                  <div class="col-9 text-right tot"> {{ totRii | number : '1.0-4'}} </div>
                 </div>
               </div>
               <div class="col-12">
                 <div class="row">
-                  <div class="col-6"> {{'DICHIARAZIONI_MR.TABS.PROCESSO.RIEPILOGO.TOTmat'|translate}} </div>
-                  <div class="col-6 text-right tot"> {{ totMat | number : '1.0-4'}} </div>
+                  <div class="col-3"> {{'DICHIARAZIONI_MR.TABS.PROCESSO.RIEPILOGO.TOTmat'|translate}} </div>
+                  <div class="col-9 text-right tot"> {{ totMat | number : '1.0-4'}} </div>
                 </div>
               </div>
               <div class="col-12">
                 <div class="row">
-                  <div class="col-6"> {{'DICHIARAZIONI_MR.TABS.PROCESSO.RIEPILOGO.TOTrru'|translate}} </div>
-                  <div class="col-6 text-right tot"> {{ totRru | number : '1.0-4'}} </div>
+                  <div class="col-3"> {{'DICHIARAZIONI_MR.TABS.PROCESSO.RIEPILOGO.TOTrru'|translate}} </div>
+                  <div class="col-9 text-right tot"> {{ totRru | number : '1.0-4'}} </div>
                 </div>
               </div>
               <div class="col-12">
                 <div class="row">
-                  <div class="col-6"> {{'DICHIARAZIONI_MR.TABS.PROCESSO.RIEPILOGO.TOTru'|translate}} </div>
-                  <div class="col-6 text-right tot"> {{ totRu | number : '1.0-4'}} </div>
+                  <div class="col-3"> {{'DICHIARAZIONI_MR.TABS.PROCESSO.RIEPILOGO.TOTru'|translate}} </div>
+                  <div class="col-9 text-right tot"> {{ totRu | number : '1.0-4'}} </div>
                 </div>
               </div>
             </div>

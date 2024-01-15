@@ -139,9 +139,7 @@ export class DichiarazioneTabVersamentiComponent implements OnInit {
     let importoVersato_3: string = '0';
     let importoVersato_4: string = '0';
     let impostaTotale: string = '0';
-    if (
-      this.dichiarazioneEditingStore.dichiarazione
-    ) {
+    if (this.dichiarazioneEditingStore.dichiarazione) {
       this.dichiarazioneEditingStore.dichiarazione.versamenti?.versamenti?.forEach(
         (versamento) => {
           const idPeriodo: number = versamento.periodo.idPeriodo;
@@ -197,7 +195,8 @@ export class DichiarazioneTabVersamentiComponent implements OnInit {
       filter: true,
       validatorOrOpts: [
         this.service.versamentiValidator(),
-        this.service.conguaglioValidator()
+        this.service.conguaglioValidator(),
+
       ],
       controls: {
         totale: new TextInput({
@@ -211,6 +210,7 @@ export class DichiarazioneTabVersamentiComponent implements OnInit {
           clearable: true,
           validatorOrOpts: { updateOn: 'blur' },
           valueChange: (v: string) => {
+            console.log(dataVersamento_0);
             this._saveVersamenti();
           },
           value: dataVersamento_0,
@@ -330,8 +330,8 @@ export class DichiarazioneTabVersamentiComponent implements OnInit {
           type: 'number',
 
           value: importoVersato_4,
-         // validatorOrOpts: [Validators.pattern('^-?[0-9]+(.[0-9]+)?$')],
-        validatorOrOpts: { updateOn: 'blur' },
+          // validatorOrOpts: [Validators.pattern('^-?[0-9]+(.[0-9]+)?$')],
+          validatorOrOpts: { updateOn: 'blur' },
           valueChange: (v: string) => {
             /* this.form
               .get('importoVersato_4')
@@ -404,7 +404,10 @@ export class DichiarazioneTabVersamentiComponent implements OnInit {
         'versamentiValid',
         !this.form.hasError('nessunVersamento')
       );
+////
 
+
+//
       this.editingStoreService.setStatus('versamentiChanged', true);
     });
   }
@@ -429,12 +432,12 @@ export class DichiarazioneTabVersamentiComponent implements OnInit {
       .setValue(parseFloat(importoTotale.toFixed(2)));
 
     let importoDebito: number = impostaTotale - credito - importoTotale;
-    if (importoDebito > -1) {
+    if (importoDebito > -(1 / 100)) {
       this.form
         .get('importoDebito')
         .setValue(parseFloat(importoDebito.toFixed(2)));
       this.form.get('importoCredito').setValue(0);
-    } else if (importoDebito <= -1) {
+    } else if (importoDebito <= -(1 / 100)) {
       this.form.get('importoDebito').setValue(0);
       this.form
         .get('importoCredito')
@@ -471,7 +474,20 @@ export class DichiarazioneTabVersamentiComponent implements OnInit {
         dataVersamento: dataVersamento,
         importoVersato: importoVersato
       };
+      if (
+        (versamento.dataVersamento === '' ||
+          versamento.dataVersamento === null) &&
+        versamento.importoVersato != 0
+      ) {
+
+        versamento.dataVersamento = null;
+        versamento.importoVersato = 0;
+
+
+      }
+
       versamenti.versamenti.push(versamento);
+
     });
 
     this.editingStoreService.setVersamenti(versamenti, this.keyDichiarazione);

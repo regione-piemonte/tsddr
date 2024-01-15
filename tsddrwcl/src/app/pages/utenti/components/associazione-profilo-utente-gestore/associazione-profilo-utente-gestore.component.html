@@ -1,70 +1,125 @@
 <div class="row pt-4">
-    <div class="col-12 col-md-3">
-        <app-form [form]="searchForm"></app-form>
-    </div>
-    <div class="col-12 col-md-9">
-        <app-card *ngIf="dataSource">
-            <app-card-body>
-                <app-table
-                      [createMode]="true"
-                      [columns]='columns'
-                      [dataSource]='dataSource'
-                      [showPager]='true'
-                ></app-table>
-            </app-card-body>
-        </app-card>
-    </div>
+  <div class="col-12 col-md-3">
+    <app-form [form]="searchForm"></app-form>
+  </div>
+  <div class="col-12 col-md-9">
+    <app-card *ngIf="dataSource">
+      <app-card-body>
+        <app-table
+          [createMode]="true"
+          [columns]="columns"
+          [dataSource]="dataSource"
+          [showPager]="true"
+        ></app-table>
+      </app-card-body>
+    </app-card>
+  </div>
 </div>
 
 <ng-template let-row='row' #idGestoreTemplate>
-    <span *ngIf="row">{{ row.idGestore }}</span>
+  <span *ngIf='row'>{{ row?.idGestore }}</span>
 </ng-template>
 
 <ng-template let-row='row' #gestoreTemplate>
-    <span *ngIf="row">{{ row.gestore.ragSociale }}</span>
-    <app-autocomplete-input
-          *ngIf="!row && createEnabled"
-          [control]='createForm.controls["idGestore"]'
-    ></app-autocomplete-input>
+  <span *ngIf='row'>{{ row.gestore.ragSociale }}</span>
+
+<label *ngIf="!row && createEnabled" class="visually-hidden" for="{{ 'inputgestore' }}"
+  >Gestore</label
+>
+  <app-autocomplete-input
+    *ngIf="!row && createEnabled"
+    [control]="createForm.controls['idGestore']"
+    [name]="'gestore'"
+  ></app-autocomplete-input>
 </ng-template>
 
 <ng-template let-row='row' #inizoTemplate>
-    <app-date-input
-          *ngIf="row"
-          [control]='updateForms[row.idGestore].controls["dataInizioValidita"]'
-    ></app-date-input>
-    <app-date-input
-          *ngIf="!row && createEnabled"
-          [control]='createForm.controls["dataInizioValidita"]'
-    ></app-date-input>
+  <label *ngIf='row' class="visually-hidden" for="{{ 'inputdataInizio' + row?.idGestore }}"
+    >Data inizio</label
+  >
+  <app-date-input
+    *ngIf='row'
+    [control]="updateForms[row?.idGestore].controls['dataInizioValidita']"
+    [name]="'dataInizio' + row?.idGestore"
+  ></app-date-input>
+
+  <label
+    *ngIf="!row && createEnabled"
+    class="visually-hidden"
+    for="{{ 'inputdataInizio' }}"
+    >Data inizio</label
+  >
+  <app-date-input
+    *ngIf="!row && createEnabled"
+    [name]="'dataInizio'"
+    [control]="createForm.controls['dataInizioValidita']"
+  ></app-date-input>
 </ng-template>
 
 <ng-template let-row='row' #fineTemplate>
-    <app-date-input
-          *ngIf="row"
-          [control]='updateForms[row.idGestore].controls["dataFineValidita"]'
-    ></app-date-input>
-    <app-date-input
-          *ngIf="!row && createEnabled"
-          [control]='createForm.controls["dataFineValidita"]'
-    ></app-date-input>
+  <label *ngIf='row' class="visually-hidden" for="{{ 'inputdataFine' + row?.idGestore }}"
+    >Data fine</label
+  >
+  <app-date-input
+    *ngIf='row'
+    [name]="'dataFine' + row?.idGestore"
+    [control]="updateForms[row?.idGestore].controls['dataFineValidita']"
+  ></app-date-input>
+  <label
+    *ngIf="!row && createEnabled"
+    class="visually-hidden"
+    for="{{ 'inputdataFine' }}"
+    >Data Fine</label
+  >
+  <app-date-input
+    *ngIf="!row && createEnabled"
+    [name]="'dataFine'"
+    [control]="createForm.controls['dataFineValidita']"
+  ></app-date-input>
 </ng-template>
 
 <ng-template let-row='row' #actionsTemplate>
-    <div class="actions ng-star-inserted">
-        <button *ngIf="row && acl.content.update" (click)="update(row)" aria-label="modifica"
-                class="btn btn-action p-0 px-2">
-            <img alt="Modifica" height="24px" src="assets/icon/icon-table-edit.svg">
-        </button>
+  <div class="actions ng-star-inserted">
+    <button
+      *ngIf="row && acl.content.update"
+      (click)="update(row)"
+      aria-label="modifica"
+      class="btn btn-action p-0 px-2"
+    >
+      <img alt="Modifica" height="24px" src="assets/icon/icon-table-edit.svg" />
+    </button>
 
-        <button *ngIf="!row && acl.content.insert" (click)="create()" aria-label="inserisci"
-                class="btn btn-action p-0 px-2">
-            <img alt="abilita inserimento" height="24px" src="assets/icon/enable-add.jpg" *ngIf="!createEnabled">
-            <img alt="inserisci" height="24px" src="assets/icon/add.png" *ngIf="createEnabled">
-        </button>
+    <button
+      *ngIf="!row && acl.content.insert"
+      (click)="create()"
+      aria-label="inserisci"
+      class="btn btn-action p-0 px-2"
+    >
+      <img
+        alt="abilita inserimento"
+        height="24px"
+        src="assets/icon/enable-add.jpg"
+        *ngIf="!createEnabled"
+      />
+      <img
+        alt="inserisci"
+        height="24px"
+        src="assets/icon/add.png"
+        *ngIf="createEnabled"
+      />
+    </button>
 
-        <button *ngIf="row && acl.content.delete" (click)="delete(row)" aria-label="elimina" class="btn btn-action p-0">
-            <img alt="Elimina" height="20px" src="assets/icon/icon-table-elimina.svg">
-        </button>
-    </div>
+    <button
+      *ngIf="row && acl.content.delete"
+      (click)="delete(row)"
+      aria-label="elimina"
+      class="btn btn-action p-0"
+    >
+      <img
+        alt="Elimina"
+        height="20px"
+        src="assets/icon/icon-table-elimina.svg"
+      />
+    </button>
+  </div>
 </ng-template>

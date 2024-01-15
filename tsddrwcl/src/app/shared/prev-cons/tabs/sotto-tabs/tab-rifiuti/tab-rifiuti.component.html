@@ -29,11 +29,13 @@
 
 <!-- EER codice -->
 <ng-template let-row='row' #codiceEer>
-  <label class="visually-hidden" for="{{'selectcodiceEer'}}">Codice EER</label>
- <app-select-input
+  <label *ngIf="row && isEditMode && row.idPrevConsDett" class="visually-hidden" for="{{'inputcodiceEer' + row?.idPrevConsDett}}">Codice EER</label>
+  <label *ngIf="!row && isEditMode" class="visually-hidden" for="{{'inputcodiceEer'}}">Codice EER</label>
+
+  <app-select-input
     *ngIf="row && isEditMode && row.idPrevConsDett"
     [control]="getUpdateFormControl(row,'codiceEer')"
-    [id]="'codiceEer' + row.idPrevConsDett"
+    [name]="'codiceEer' + row.idPrevConsDett"
   ></app-select-input>
   <span *ngIf="row && !isEditMode">
     {{ row.eer.codiceEer }}
@@ -41,12 +43,14 @@
   <app-select-input
     *ngIf="!row && isEditMode"
     [control]='createForm.controls["codiceEer"]'
-    [id]="'codiceEer'"
+    [name]="'codiceEer'"
   ></app-select-input>
 </ng-template>
 <!-- EER descrizione -->
 <ng-template let-row='row' #descrizioneEer>
-  <label class="visually-hidden" for="{{'inputdescrizioneEer'}}">Descrizione</label>
+  <label *ngIf="row && isEditMode && row.idPrevConsDett" class="visually-hidden" for="{{'inputdescrizioneEer' + row?.idPrevConsDett }}">Descrizione</label>
+  <label *ngIf="!row && isEditMode" class="visually-hidden" for="{{'inputdescrizioneEer'}}">Descrizione</label>
+
   <app-textbox-input
     *ngIf="row && isEditMode && row.idPrevConsDett"
     [name]="'descrizioneEer' + row.idPrevConsDett"
@@ -63,7 +67,9 @@
 </ng-template>
 <!-- destinazione -->
 <ng-template let-row='row' #destinazione>
-  <label class="visually-hidden" for="{{'inputdestinazione'}}">Destinazione</label>
+  <label *ngIf="row && isEditMode && row.idPrevConsDett" class="visually-hidden" for="{{'inputdestinazione' + row?.idPrevConsDett }}">Destinazione</label>
+  <label *ngIf="!row && isEditMode" class="visually-hidden" for="{{'inputdestinazione'}}">Destinazione</label>
+
   <app-textbox-input
     *ngIf="row && isEditMode && row.idPrevConsDett"
     [name]="'destinazione' + row.idPrevConsDett"
@@ -80,7 +86,9 @@
 </ng-template>
 <!-- descMatUscita -->
 <ng-template let-row='row' #descMatUscita>
-  <label class="visually-hidden" for="{{'inputdescMatUscita'}}">Descrizione materiali in uscita</label>
+  <label *ngIf="row && isEditMode && row.idPrevConsDett" class="visually-hidden" for="{{'inputdescMatUscita' + row?.idPrevConsDett }}">Descrizione materiali in uscita</label>
+  <label *ngIf="!row && isEditMode" class="visually-hidden" for="{{'inputdescMatUscita'}}">Descrizione materiali in uscita</label>
+
   <app-textbox-input
   *ngIf="row && isEditMode && row.idPrevConsDett"
   [name]="'descMatUscita' + row.idPrevConsDett"
@@ -97,7 +105,10 @@
 </ng-template>
 <!-- quantita -->
 <ng-template let-row='row' #quantita>
-  <label class="visually-hidden" for="{{'inputquantita'}}">Tonnellate</label>
+  <label *ngIf="row && isEditMode && row.idPrevConsDett" class="visually-hidden" for="{{'inputquantita' + row?.idPrevConsDett}}">Tonnellate</label>
+  <label *ngIf="!row && isEditMode" class="visually-hidden" for="{{'inputquantita'}}">Tonnellate</label>
+
+
   <app-textbox-input
     *ngIf="row && isEditMode && row.idPrevConsDett"
     [name]="'quantita' + row.idPrevConsDett"

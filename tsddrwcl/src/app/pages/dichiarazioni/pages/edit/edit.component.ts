@@ -206,6 +206,15 @@ export class EditComponent implements OnInit, OnDestroy {
                 this.checkStatus(versamentiIsEmpty, rifiutiConfIsEmpty)
 
               ) {
+
+                console.log(
+                  !versamentiIsEmpty,
+                  !rifiutiConfIsEmpty,
+                  this.status.rifiutiValid,
+                  this.status.versamentiValid,
+                  this.status.sedeValid
+                );
+
                 this.sendEnabled = true;
               } else {
                 this.sendEnabled = false;
@@ -291,11 +300,11 @@ export class EditComponent implements OnInit, OnDestroy {
       delete item.isRam;
     });
     //delete dich.rifiutiConferiti?.totali;
-    //let obj = dich.rifiutiConferiti?.totali; 
+    //let obj = dich.rifiutiConferiti?.totali;
     //let obj = (_c = dich.rifiutiConferiti) === null || _c === void 0 ? void 0 : _c.totali;
     if (!(dich.rifiutiConferiti === null || dich.rifiutiConferiti === void 0))
     	delete dich.rifiutiConferiti.totali;
-    	 
+
     dich.soggettiMr?.forEach((item) => {
       if (typeof item.obbRagg == 'boolean') {
         item.obbRagg = item.obbRagg ? 'SI' : 'NO';
@@ -379,7 +388,7 @@ export class EditComponent implements OnInit, OnDestroy {
       header: { show: false },
       filter: false,
       controls: {
-        idGestore: new AutocompleteInput({
+        idGestoreDich: new AutocompleteInput({
           label: 'DICHIARAZIONI.CREATE.FORM.GESTORE.LABEL',
           placeholder: 'DICHIARAZIONI.CREATE.FORM.GESTORE.PLACEHOLDER',
           options: of(this.comboGestori),

@@ -1,6 +1,18 @@
-.insert[disabled]{
+.insert[disabled] {
+  background-color: #fff !important;
+}
 
-  background-color: #fff !important
-
-
+.row {
+  ::ng-deep .table-container {
+    ::ng-deep .table {
+      ::ng-deep thead {
+        ::ng-deep th {
+          white-space: pre-line !important;
+        }
+      }
+    }
+  }
+}
+th {
+  white-space: pre-line !important;
 }
