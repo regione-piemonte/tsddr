@@ -11,7 +11,7 @@ import it.csi.tsddr.tsddrbl.vo.indirizzo.IndirizzoVO;
 public class DichAnnualeVO extends DichAnnualeBasicVO {
 
 	private String annotazioni;
-	private Long creditoImposta;
+	private Double creditoImposta;
 	private Long saldoImposta;
 	private IndirizzoVO indirizzo;
 	private RifiutiConferitiVO rifiutiConferiti;
@@ -41,7 +41,7 @@ public class DichAnnualeVO extends DichAnnualeBasicVO {
 	 *
 	 * @return the credito imposta
 	 */
-	public Long getCreditoImposta() {
+	public Double getCreditoImposta() {
 		return creditoImposta;
 	}
 
@@ -50,7 +50,7 @@ public class DichAnnualeVO extends DichAnnualeBasicVO {
 	 *
 	 * @param creditoImposta the new credito imposta
 	 */
-	public void setCreditoImposta(Long creditoImposta) {
+	public void setCreditoImposta(Double creditoImposta) {
 		this.creditoImposta = creditoImposta;
 	}
 

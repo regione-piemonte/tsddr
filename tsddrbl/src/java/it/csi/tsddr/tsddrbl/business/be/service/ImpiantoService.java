@@ -115,7 +115,7 @@ public interface ImpiantoService {
 	 * @param idImpianto the id impianto
 	 * @return the linee impianto
 	 */
-	GenericResponse<List<GenericLineaVO>> getLineeImpianto(Long idImpianto);
+	GenericResponse<List<GenericLineaVO>> getLineeImpianto(Long idImpianto, String idPrevCons);
 
 	/**
 	 * Adds the linea impianto.

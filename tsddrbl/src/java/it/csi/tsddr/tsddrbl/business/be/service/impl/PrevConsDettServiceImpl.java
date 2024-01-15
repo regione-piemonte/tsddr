@@ -32,12 +32,12 @@ public class PrevConsDettServiceImpl implements PrevConsDettService {
     private TsddrTPrevConsDettRepository prevConsDettRepository;
     
     @Override
-    public GenericResponse<MessaggioVO> deletePrevConsDett(HttpSession session, Long idPrevConsDett) {
+    public GenericResponse<MessaggioVO> deletePrevConsDett(HttpSession session, Long idPrevCons, Long idPrevConsDett) {
         LoggerUtil.debug(logger, "[PrevConsDettServiceImpl::deletePrevConsDett] BEGIN");
-        if (prevConsDettRepository.findByIdPrevConsDett(idPrevConsDett).isEmpty()){
-        	throw new RecordNotFoundException(String.format("TsddrTPrevConsDett non trovato con id = [%d]", idPrevConsDett));
+        if (!prevConsDettRepository.findByIdPrevConsDett(idPrevCons, idPrevConsDett).isEmpty()){
+        	//throw new RecordNotFoundException(String.format("TsddrTPrevConsDett non trovato con id = [%d]", idPrevConsDett));
+			prevConsDettRepository.deleteById(idPrevConsDett);
         }
-        prevConsDettRepository.deleteById(idPrevConsDett);
         GenericResponse<MessaggioVO> response = GenericResponse.build(messaggioService.getMessaggioByCodMsg(CodiceMessaggio.P007.name()));
         LoggerUtil.debug(logger, "[PrevConsDettServiceImpl::deletePrevConsDett] END");
         return response;

@@ -22,6 +22,7 @@ import it.csi.tsddr.tsddrbl.business.be.mapper.entity.DichAnnualeEntityMapper;
 import it.csi.tsddr.tsddrbl.business.be.mapper.entity.GestoreEntityMapper;
 import it.csi.tsddr.tsddrbl.business.be.repository.TsddrTDichAnnualeRepository;
 import it.csi.tsddr.tsddrbl.business.be.repository.TsddrTReportRepository;
+import it.csi.tsddr.tsddrbl.util.enums.StatoDichiarazione;
 import it.csi.tsddr.tsddrbl.vo.dichiarazione.ConferimentoVO;
 import it.csi.tsddr.tsddrbl.vo.dichiarazione.DichAnnualeVO;
 import it.csi.tsddr.tsddrbl.vo.dichiarazione.RifiutiConferitiVO;
@@ -66,7 +67,7 @@ public class DichiarazioneReport implements TsddrReport {
 	
 	public void setJasperParam(TsddrTDichAnnuale dichiarazione, Map<String, Object> jasperParam) throws IOException {
 		
-	    Optional<TsddrTDichAnnuale> dichAnnualeAnnoPrecedenteOpt = dichAnnualeRepository.findByIdImpiantoAndAnno(dichiarazione.getImpianto().getIdImpianto(), (dichiarazione.getAnno() - 1));
+	    Optional<TsddrTDichAnnuale> dichAnnualeAnnoPrecedenteOpt = dichAnnualeRepository.findByIdImpiantoAndAnnoAndStato(dichiarazione.getImpianto().getIdImpianto(), (dichiarazione.getAnno() - 1), StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
         BigDecimal creditoImposta = dichAnnualeAnnoPrecedenteOpt.map(TsddrTDichAnnuale::getCreditoImposta).orElse(null);
         
 		DichAnnualeVO dichAnnualeVO = dichAnnualeEntityMapper.mapEntityToVO(dichiarazione, creditoImposta != null ? creditoImposta.doubleValue() : null);

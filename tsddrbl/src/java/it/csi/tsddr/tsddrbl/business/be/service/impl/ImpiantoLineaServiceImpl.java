@@ -39,7 +39,7 @@ public class ImpiantoLineaServiceImpl implements ImpiantoLineaService {
         if(idPrevCons != null) {
             impiantiLinee = impiantoLineaRepository.findByIdImpiantoAndIdPrevCons(idImpianto, idPrevCons);
         } else {
-            impiantiLinee = impiantoLineaRepository.findByIdImpianto(idImpianto);
+            impiantiLinee = impiantoLineaRepository.findByIdImpiantoAll(idImpianto);
         }
         
         GenericResponse<List<ImpiantoLineeVO>> response = GenericResponse.build(impiantoLineeEntityMapper.mapListEntityToListVO(impiantiLinee));

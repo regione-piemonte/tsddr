@@ -816,14 +816,55 @@ public class ImpiantoServiceImpl implements ImpiantoService {
 	}
 	
 	@Override
-	public GenericResponse<List<GenericLineaVO>> getLineeImpianto(Long idImpianto) {
+	public GenericResponse<List<GenericLineaVO>> getLineeImpianto(Long idImpianto, String idPrevCons) {
 		LoggerUtil.debug(logger, "[ImpiantoServiceImpl::getLineeImpianto] BEGIN");
 		List<TsddrRImpiantoLinea> impiantoLinee = impiantoLineaRepository.findByIdImpianto(idImpianto);
 		List<GenericLineaVO> genericLineeVO = impiantoUtil.getGenericLineeVOfromLinee(impiantoLinee);
+		if(idPrevCons != null && !idPrevCons.equalsIgnoreCase("null")) {
+			// filtro per le sole linee salvate sulla dichiarazione 
+			List<TsddrRImpiantoLinea> impiantiLinee = new ArrayList<>();
+	        impiantiLinee = impiantoLineaRepository.findByIdImpiantoAndIdPrevCons(idImpianto, Long.parseLong(idPrevCons));
+	        genericLineeVO = getImpiantiLineePrevCons(genericLineeVO, impiantiLinee);
+		}
+		
 		GenericResponse<List<GenericLineaVO>> response = GenericResponse.build(genericLineeVO);
 		LoggerUtil.debug(logger, "[ImpiantoServiceImpl::getLineeImpianto] END");
 		return response;
 	}
+
+	private List<GenericLineaVO> getImpiantiLineePrevCons(List<GenericLineaVO> genericLineeVOList,
+			List<TsddrRImpiantoLinea> impiantiLinee) {
+		List<GenericLineaVO> genericLineeVOFiltered = new ArrayList<GenericLineaVO>();
+		for(TsddrRImpiantoLinea tsddrRImpiantoLinea : impiantiLinee) {
+			for(GenericLineaVO genericLineeVO :genericLineeVOList) {
+				if(genericLineeVO.getCodLinea()!=null) {
+					if(tsddrRImpiantoLinea.getLinea()!=null) {
+						if(tsddrRImpiantoLinea.getLinea().getCodLinea().equalsIgnoreCase(genericLineeVO.getCodLinea())) {
+							genericLineeVOFiltered.add(genericLineeVO);
+						}
+					}else {
+						if(tsddrRImpiantoLinea.getSottoLinea().getCodSottoLinea().equalsIgnoreCase(genericLineeVO.getCodLinea())) {
+							genericLineeVOFiltered.add(genericLineeVO);
+						}
+					}
+				}
+				else {
+					if(tsddrRImpiantoLinea.getLinea()!=null) {
+						if(tsddrRImpiantoLinea.getLinea().getCodLinea().equalsIgnoreCase(genericLineeVO.getCodSottoLinea())) {
+							genericLineeVOFiltered.add(genericLineeVO);
+						}
+					}else {
+						if(tsddrRImpiantoLinea.getSottoLinea().getCodSottoLinea().equalsIgnoreCase(genericLineeVO.getCodSottoLinea())) {
+							genericLineeVOFiltered.add(genericLineeVO);
+						}						
+					}
+				}
+				
+			}
+		}
+		return genericLineeVOFiltered;
+	}
+
 
 	@Override
 	public GenericResponse<SottoLineaVO> addSottoLineaImpianto(HttpSession httpSession, Long idImpianto, Long idSottoLinea, SottoLineaVO sottoLineaVO) {

@@ -50,7 +50,7 @@ public class TemplateHelper {
 		
 		TsddrTDatiSogg datiSogg = domanda.getDatiSogg();
 		
-		Map<String, String> params = Map.of("NOME", datiSogg.getNome(), COGNOME, datiSogg.getCognome(),
+		Map<String, String> params = Map.of("NOME", datiSogg.getNome(), "COGNOME", datiSogg.getCognome(),
 				"CF_UTENTE_FO", datiSogg.getCodFiscale(), ID_DOMANDA, String.valueOf(domanda.getIdDomanda()),
 				"RAG_SOCIALE", domanda.getGestore().getRagSociale(), "link", parametro.get().getValoreParametroS());
 		

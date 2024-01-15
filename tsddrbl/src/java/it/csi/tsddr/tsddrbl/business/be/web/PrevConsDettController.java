@@ -28,7 +28,7 @@ import it.csi.tsddr.tsddrbl.vo.response.GenericResponse;
 public interface PrevConsDettController {
     
     @DELETE
-    @Path("/{idPrevConsDett}")
-    GenericResponse<MessaggioVO> deletePrevConsDett(@Context SecurityContext securityContext, @Context HttpHeaders httpHeaders, @Context HttpServletRequest httpRequest, @PathParam("idPrevConsDett") @NotNull Long idPrevConsDett);
+    @Path("/{idPrevCons}/{idPrevConsDett}")
+    GenericResponse<MessaggioVO> deletePrevConsDett(@Context SecurityContext securityContext, @Context HttpHeaders httpHeaders, @Context HttpServletRequest httpRequest, @PathParam("idPrevCons") @NotNull Long idPrevCons, @PathParam("idPrevConsDett") @NotNull Long idPrevConsDett);
 
 }

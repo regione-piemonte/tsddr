@@ -28,9 +28,9 @@ public class PrevConsDettControllerImpl implements PrevConsDettController {
 
     @Override
     public GenericResponse<MessaggioVO> deletePrevConsDett(SecurityContext securityContext, HttpHeaders httpHeaders,
-            HttpServletRequest httpRequest, Long idPrevConsDett) {
+            HttpServletRequest httpRequest, Long idPrevCons, Long idPrevConsDett) {
         LoggerUtil.debug(logger, "[PrevConsDettControllerImpl::deletePrevConsDett] BEGIN");
-        GenericResponse<MessaggioVO> response = prevConsDettService.deletePrevConsDett(httpRequest.getSession(), idPrevConsDett);
+        GenericResponse<MessaggioVO> response = prevConsDettService.deletePrevConsDett(httpRequest.getSession(), idPrevCons, idPrevConsDett);
         LoggerUtil.debug(logger, "[PrevConsDettControllerImpl::deletePrevConsDett] END");
         return response;
     }

@@ -440,7 +440,7 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 	public GenericResponse<Boolean> existsDichiarazione(HttpSession httpSession,
 			ExistsDichiarazioneVO existsDichiarazioneVO) {
 		LoggerUtil.debug(logger, "[DichiarazioneServiceImpl::existsDichiarazione] BEGIN");
-		List<TsddrTDichAnnuale> dichAnnuali = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestore(existsDichiarazioneVO.getIdImpianto(), existsDichiarazioneVO.getAnno(), existsDichiarazioneVO.getIdGestore());
+		Optional<List<TsddrTDichAnnuale>> dichAnnuali = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazione(existsDichiarazioneVO.getIdImpianto(), existsDichiarazioneVO.getAnno(), existsDichiarazioneVO.getIdGestore(), StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
 		GenericResponse<Boolean> response = GenericResponse.build(!dichAnnuali.isEmpty());
 		LoggerUtil.debug(logger, "[DichiarazioneServiceImpl::existsDichiarazione] END");
 		return response;
@@ -475,7 +475,7 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 			throw new FunctionalException(messaggiVO);
 		}
 		
-		Optional<TsddrTDichAnnuale> dichAnnualeOpt = this.findDichAnnualiByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichiarazione(dichAnnualeVO.getImpianto().getIdImpianto(), dichAnnualeVO.getAnno(), dichAnnualeVO.getImpianto().getGestore().getIdGestore(), StatoDichiarazione.BOZZA.getId());
+		Optional<List<TsddrTDichAnnuale>> dichAnnualeOpt = this.findDichAnnualiByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichiarazione(dichAnnualeVO.getImpianto().getIdImpianto(), dichAnnualeVO.getAnno(), dichAnnualeVO.getImpianto().getGestore().getIdGestore(), StatoDichiarazione.BOZZA.getId());
 		
 		TsddrTDichAnnuale dichAnnuale = null;
 		boolean newBozza = true;
@@ -486,7 +486,7 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 		} else {
 			// UPDATE BOZZA
 			newBozza = false;
-			dichAnnuale = updateBozza(httpSession, dichAnnualeOpt.get(), dichAnnualeVO, idUtente);
+			dichAnnuale = updateBozza(httpSession, dichAnnualeOpt.get().get(0), dichAnnualeVO, idUtente);
 			this.logSalvaBozzaDichAnnuale(httpSession, idDatiSogg, dichAnnuale.getIdDichAnnuale());
 		}
 
@@ -508,7 +508,7 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 		if(!CollectionUtils.isEmpty(messaggiVO)) {
 			throw new FunctionalException(messaggiVO);
 		}
-		Optional<TsddrTDichAnnuale> dichAnnualeOpt = this.findDichAnnualiByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichiarazione(dichAnnualeVO.getImpianto().getIdImpianto(), dichAnnualeVO.getAnno(), dichAnnualeVO.getImpianto().getGestore().getIdGestore(), StatoDichiarazione.BOZZA.getId());
+		Optional<List<TsddrTDichAnnuale>> dichAnnualeOpt = this.findDichAnnualiByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichiarazione(dichAnnualeVO.getImpianto().getIdImpianto(), dichAnnualeVO.getAnno(), dichAnnualeVO.getImpianto().getGestore().getIdGestore(), StatoDichiarazione.BOZZA.getId());
 		TsddrTDichAnnuale dichAnnuale = null;
 		boolean newBozza = false;
 		
@@ -518,7 +518,7 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 			dichAnnuale = createBozza(dichAnnualeVO, 1L, idUtente);
 			this.logSalvaBozzaDichAnnuale(httpSession, idDatiSogg, dichAnnuale.getIdDichAnnuale());
 		} else {
-			dichAnnuale = dichAnnualeOpt.get();
+			dichAnnuale = dichAnnualeOpt.get().get(0);
 		}
 		
 		// UPDATE BOZZA
@@ -915,7 +915,7 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 		return messaggiVO;
 	}
 	
-	private Optional<TsddrTDichAnnuale> findDichAnnualiByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichiarazione(Long idImpianto, Long anno, Long idGestore, long idStatoDichiarazione) {
+	private Optional<List<TsddrTDichAnnuale>> findDichAnnualiByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichiarazione(Long idImpianto, Long anno, Long idGestore, long idStatoDichiarazione) {
 		return dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazione(idImpianto, anno, idGestore, idStatoDichiarazione);
 	}
 	
@@ -976,7 +976,7 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 		List<TsddrTAtto> atti = attoRepository.findAttiByIdImpianto(dichAnnuale.getImpianto().getIdImpianto(), new Date());
 		List<AttoVO> attiVO = attoEntityMapper.mapListEntityToListVO(atti);
 				
-		Optional<TsddrTDichAnnuale> dichAnnualeAnnoPrecedenteOpt = dichAnnualeRepository.findByIdImpiantoAndAnno(dichAnnuale.getImpianto().getIdImpianto(), (dichAnnuale.getAnno() - 1));
+		Optional<TsddrTDichAnnuale> dichAnnualeAnnoPrecedenteOpt = dichAnnualeRepository.findByIdImpiantoAndAnnoAndStato(dichAnnuale.getImpianto().getIdImpianto(), (dichAnnuale.getAnno() - 1), StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
 		BigDecimal creditoImposta = dichAnnualeAnnoPrecedenteOpt.map(TsddrTDichAnnuale::getCreditoImposta).orElse(null);
 		
 		DichAnnualeVO dichAnnualeVO = dichAnnualeEntityMapper.mapEntityToVO(dichAnnuale, creditoImposta != null ? creditoImposta.doubleValue() : null);
@@ -1041,18 +1041,18 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 		Date currentDate = new Date();
 		
 		Optional<TsddrTDichAnnuale> dichAnnualeAnnoPrecedenteOpt = dichAnnualeRepository
-				.findByIdImpiantoAndAnno(dichAnnuale.getImpianto().getIdImpianto(), (dichAnnuale.getAnno() - 1));
+				.findByIdImpiantoAndAnnoAndStato(dichAnnuale.getImpianto().getIdImpianto(), (dichAnnuale.getAnno() - 1), StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
 		
 		BigDecimal creditoImposta = dichAnnualeAnnoPrecedenteOpt.map(TsddrTDichAnnuale::getCreditoImposta).orElse(null);
 
 		DichAnnualeVO dichAnnualeVO = dichAnnualeEntityMapper.mapEntityToVO(dichAnnuale,
 				creditoImposta != null ? creditoImposta.doubleValue() : null);
 
-		// TODO issue 147 - calcolare la versione verificando per lo stesso anno-gestore-impianto il valore maggiore e non partendo dalla dichiarazione visualizzata
-		Optional<TsddrTDichAnnuale> dichAnnualeMaxVersione = dichAnnualeRepository
+		// issue 147 - calcolare la versione verificando per lo stesso anno-gestore-impianto il valore maggiore e non partendo dalla dichiarazione visualizzata
+		Optional<List<TsddrTDichAnnuale>> dichAnnualeMaxVersione = dichAnnualeRepository
 				.findByIdImpiantoAndAnno(dichAnnuale.getImpianto().getIdImpianto(), dichAnnuale.getAnno());
 		
-		TsddrTDichAnnuale newDichAnnuale = this.createBozza(dichAnnualeVO, (dichAnnualeMaxVersione.get().getVersione() + 1), idUtente);
+		TsddrTDichAnnuale newDichAnnuale = this.createBozza(dichAnnualeVO, dichAnnualeMaxVersione.isPresent()?(dichAnnualeMaxVersione.get().get(0).getVersione() + 1):1, idUtente);
 		newDichAnnuale.setIdUserInsert(idUtente);
 		newDichAnnuale.setDataInsert(currentDate);
 		
@@ -1070,7 +1070,7 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 	}
 	
 	private DichAnnualeVO getDichiarazioneAnnualeVO(TsddrTDichAnnuale dichAnnuale) {
-		Optional<TsddrTDichAnnuale> dichAnnualeAnnoPrecedenteOpt = dichAnnualeRepository.findByIdImpiantoAndAnno(dichAnnuale.getImpianto().getIdImpianto(), (dichAnnuale.getAnno() - 1));
+		Optional<TsddrTDichAnnuale> dichAnnualeAnnoPrecedenteOpt = dichAnnualeRepository.findByIdImpiantoAndAnnoAndStato(dichAnnuale.getImpianto().getIdImpianto(), (dichAnnuale.getAnno() - 1),StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
 		BigDecimal creditoImposta = dichAnnualeAnnoPrecedenteOpt.map(TsddrTDichAnnuale::getCreditoImposta).orElse(null);
 		return dichAnnualeEntityMapper.mapEntityToVO(dichAnnuale, creditoImposta != null ? creditoImposta.doubleValue() : null);
 	}
@@ -1110,7 +1110,7 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
             Long idGestore, Long idImpianto, Long anno) {
         LoggerUtil.debug(logger, "[DichiarazioneServiceImpl::getDichiarazioneByIdGestoreIdImpiantoAnno] BEGIN");
         
-        Optional<TsddrTDichAnnuale> dichAnnualeOpt = dichAnnualeRepository.findByIdImpiantoAndAnno(idImpianto, anno);
+        Optional<TsddrTDichAnnuale> dichAnnualeOpt = dichAnnualeRepository.findByIdImpiantoAndAnnoAndStato(idImpianto, anno,StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
         if(!dichAnnualeOpt.isPresent()) {
             LoggerUtil.warn(logger, String.format("TsddrTDichAnnuale non trovato con idImpianto = [%d], anno = [%d]", idImpianto, anno));
             MessaggioVO messaggioVO = messaggioService.getMessaggioByCodMsg(CodiceMessaggio.A002.name());
@@ -1142,7 +1142,9 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
     private boolean isDuplicaAllowed(Long idImpianto, Long anno, Long idGestore, Long versione) {
         LoggerUtil.debug(logger, "[DichiarazioneServiceImpl::isDuplicaAllowed] BEGIN");
         boolean isDuplicaAllowed;
-        Optional<TsddrTDichAnnuale> dichAnnuale = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndVersione(idImpianto, anno, idGestore, versione, StatoDichiarazione.BOZZA.getId());
+//        Optional<TsddrTDichAnnuale> dichAnnuale = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndVersione(idImpianto, anno, idGestore, versione, StatoDichiarazione.BOZZA.getId());
+//        Optional<TsddrTDichAnnuale> dichAnnuale = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndVersione(idImpianto, anno, idGestore, versione, StatoDichiarazione.BOZZA.getId());
+        Optional<List<TsddrTDichAnnuale>> dichAnnuale = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazione(idImpianto, anno, idGestore, StatoDichiarazione.BOZZA.getId());
         if(dichAnnuale.isPresent()) {
             isDuplicaAllowed = false;
         } else {

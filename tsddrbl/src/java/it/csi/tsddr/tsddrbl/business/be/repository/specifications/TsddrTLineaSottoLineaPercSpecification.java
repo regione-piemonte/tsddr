@@ -9,6 +9,7 @@ import java.util.Date;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -32,10 +33,11 @@ public class TsddrTLineaSottoLineaPercSpecification extends BaseSpecification {
                 Predicate predicate = builder.and(
                         hasValidDate(root, builder, anno),
                         builder.equal(linea.get("idLinea"), idLinea));
-                
-                if(idSottoLinea != null) {
-                    Join<TsddrTLineaSottoLineaPerc, TsddrTSottoLinea> sottoLinee = root.join("sottoLinee");
+                Join<TsddrTLineaSottoLineaPerc, TsddrTSottoLinea> sottoLinee = root.join("sottoLinee", JoinType.LEFT);
+                if(idSottoLinea != null) {                    
                 	predicate = builder.and(predicate, builder.equal(sottoLinee.get("idSottoLinea"), idSottoLinea));
+                }else {
+                	predicate = builder.and(predicate, builder.isNull(sottoLinee.get("idSottoLinea")));
                 }
                 
                 if(checkPercScartoVisible)

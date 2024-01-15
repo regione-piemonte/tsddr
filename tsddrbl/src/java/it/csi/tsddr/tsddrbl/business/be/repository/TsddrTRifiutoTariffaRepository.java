@@ -51,7 +51,7 @@ public interface TsddrTRifiutoTariffaRepository extends BaseRepository<TsddrTRif
 			+ 	RepositoryUtil.TTDA_DICH_ANNUALE_DELETE_VALIDITY_CHECK
 			+ 	") AND "
 			+ RepositoryUtil.TTRT_RIFIUTO_TARIFFA_VALIDITY_CHECK
-			+ "ORDER BY ttrt.descrizione")
+			+ "ORDER BY ttrt.idRifiutoTariffa")
 	List<TsddrTRifiutoTariffa> findRifiutiTariffeByIdDichAnnuale(@Param("idDichAnnuale") Long idDichAnnuale, @Param("currentDate") Date currentDate);
 	
 	/**

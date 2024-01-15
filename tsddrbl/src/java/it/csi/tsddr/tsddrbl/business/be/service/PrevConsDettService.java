@@ -21,6 +21,6 @@ public interface PrevConsDettService {
      * @param idPrevConsDett the id prev cons dett
      * @return the generic response
      */
-    GenericResponse<MessaggioVO> deletePrevConsDett(HttpSession session, Long idPrevConsDett);
+    GenericResponse<MessaggioVO> deletePrevConsDett(HttpSession session, Long idPrevCons, Long idPrevConsDett);
 
 }

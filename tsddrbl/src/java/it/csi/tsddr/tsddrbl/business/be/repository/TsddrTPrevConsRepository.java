@@ -55,9 +55,22 @@ public interface TsddrTPrevConsRepository extends JpaRepository<TsddrTPrevCons, 
             + "FROM TsddrTPrevCons ttpc "
             + "WHERE ttpc.idPrevCons = :idPrevCons")
     Optional<TsddrTPrevCons> findByIdPrevCons(@Param("idPrevCons")Long idPrevCons);
-    
-    long countByIdPrevConsRMr(Long idPrevConsRMr);
-    
+
+    // CR OB 258-259-260
+    @Query("SELECT COUNT (ttpc.idPrevCons) "
+            + "FROM TsddrTPrevCons ttpc "
+            + "INNER JOIN ttpc.tipoDoc tdtd "
+            + "INNER JOIN ttpc.statoDichiarazione tdsd "
+            + "WHERE tdtd.idTipoDoc = :idTipoDoc AND "
+            + "tdsd.idStatoDichiarazione = :idStatoDichiarazione AND "
+            + "ttpc.idPrevConsRMr = :idPrevConsRMr"
+    )
+    long countByIdTipoDocAndIdStatoDichiarazioneAndIdPrevConsRMr(
+            @Param("idTipoDoc")Long idTipoDoc,
+            @Param("idStatoDichiarazione")Long idStatoDichiarazione,
+            @Param("idPrevConsRMr")Long idPrevConsRMr
+    );
+
     @Query("SELECT ttpc "
     		+ "FROM TsddrTPrevCons ttpc "
     		+ "INNER JOIN ttpc.statoDichiarazione tdsdich "

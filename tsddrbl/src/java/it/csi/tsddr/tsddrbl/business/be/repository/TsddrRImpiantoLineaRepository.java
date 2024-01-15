@@ -34,6 +34,20 @@ public interface TsddrRImpiantoLineaRepository extends JpaRepository<TsddrRImpia
 			+ "ORDER BY tril.linea.idLinea ASC, tril.sottoLinea.idSottoLinea")
 	List<TsddrRImpiantoLinea> findByIdImpianto(@Param("idImpianto") Long idImpianto);
 	
+
+	/**
+	 * Find by id impianto.
+	 *
+	 * @param idImpianto the id impianto
+	 * @return the list
+	 */
+	@Query("SELECT tril "
+			+ "FROM TsddrRImpiantoLinea tril "
+			+ "INNER JOIN tril.impianto tti "
+			+ "WHERE tti.idImpianto = :idImpianto "
+			+ "ORDER BY tril.linea.idLinea ASC, tril.sottoLinea.idSottoLinea")
+	List<TsddrRImpiantoLinea> findByIdImpiantoAll(@Param("idImpianto") Long idImpianto);
+	
 	/**
 	 * Find by id impianto and id prev cons rmr.
 	 *

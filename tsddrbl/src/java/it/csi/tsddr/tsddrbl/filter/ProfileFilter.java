@@ -16,6 +16,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -121,41 +122,10 @@ public class ProfileFilter extends GenericFilterBean {
 			
 			String httpMethod = request.getMethod();
 			
-			// check acl su funzione
-			Entry<CodiceFunzione, List<EndpointFunzione>> functionPath = functionPaths.entrySet().stream()
-					.filter(e -> e.getValue().stream().anyMatch(ef -> path.equalsIgnoreCase(ef.getEndpoint())))
-					.map(e -> Map.entry(e.getKey(), e.getValue().stream().filter(ef -> ef.getMethod().matches(httpMethod)).collect(Collectors.toList())))
-					.findFirst().orElse(null);
 			
-			if (functionPath != null) {
-				FunzionalitaProfiloVO funzProf = aclUtil.getACLPerProfilo(currentProfileId, functionPath.getKey());
-				
-				boolean authorized = true;
-				
-				switch (HttpMethod.valueOf(httpMethod)) {
-				case GET:
-					authorized = funzProf.getRead();
-					break;
-				case POST:
-					authorized = funzProf.getInsert();
-					break;
-				case PUT:
-					authorized = funzProf.getUpdate();
-					break;
-				case DELETE:
-					authorized = funzProf.getDelete();
-					break;
-				default:
-					break;
-				}
-				
-				if (!authorized) {
-					// il profilo utente non è autorizzato ad eseguire l'operazione richiesta
-					LoggerUtil.warn(log,
-							String.format("[ProfileFilter::doFilter] Profilo corrente NON abilitato ad eseguire l'operazione [path: %s] -> la richiesta viene bloccata", path));
-					throw new ForbiddenException("Profilo corrente NON abilitato ad eseguire l'operazione -> la richiesta viene bloccata");
-				}
-			}
+			// check acl su funzione
+			checkAclFunction(path, httpMethod, currentProfileId);
+			
 			
 			// estraggo tutti i profili per i quali è definito il path
 			List<Long> pathProfiles = profilePaths.entrySet().stream()
@@ -167,30 +137,75 @@ public class ProfileFilter extends GenericFilterBean {
 				LoggerUtil.debug(log, String.format("[ProfileFilter::doFilter] path non profilato [%s] -> la richiesta viene servita", path));
 	
 			} else {
-				if (currentProfileId == null) {
-					LoggerUtil.warn(log,
-							String.format("[ProfileFilter::doFilter] Header 'idProfilocurrentUser' non presente nella request [path: %s] -> la richiesta viene bloccata", path));
-					throw new ForbiddenException(
-							"Header 'idProfilocurrentUser' non presente nella request -> la richiesta viene bloccata");
-				}
 				
-				if (!pathProfiles.contains(currentProfileId)) {
-					// il path è ristretto ai profili "pathProfiles" e il profilo corrente NON matcha
-					// NESSUNO di questi -> la richiesta NON può essere servita
-					LoggerUtil.warn(log,
-							String.format("[ProfileFilter::doFilter] Profilo corrente NON abilitato al path [%s] -> la richiesta viene bloccata", path));
-					throw new ForbiddenException("Profilo corrente NON abilitato al path -> la richiesta viene bloccata");
-				} else {
-					// il path è ristretto ai profili "pathProfiles" e il profilo corrente matcha uno di
-					// questi -> la richiesta può essere servita
-					LoggerUtil.debug(log,
-							String.format("[ProfileFilter::doFilter] Profilo corrente abilitato al path [%s] -> la richiesta viene servita", path));
-				}
+				checkProfiledPath(currentProfileId, pathProfiles, path);
 			}
 		}
 		
 		LoggerUtil.debug(log, "[ProfileFilter::doFilter] END");
 		filterChain.doFilter(request, response);
+	}
+
+	private void checkProfiledPath(Long currentProfileId, List<Long> pathProfiles, String path) {
+
+		if (currentProfileId == null) {
+			LoggerUtil.warn(log,
+					String.format("[ProfileFilter::doFilter] Header 'idProfilocurrentUser' non presente nella request [path: %s] -> la richiesta viene bloccata", path));
+			throw new ForbiddenException(
+					"Header 'idProfilocurrentUser' non presente nella request -> la richiesta viene bloccata");
+		}
+		
+		if (!pathProfiles.contains(currentProfileId)) {
+			// il path è ristretto ai profili "pathProfiles" e il profilo corrente NON matcha
+			// NESSUNO di questi -> la richiesta NON può essere servita
+			LoggerUtil.warn(log,
+					String.format("[ProfileFilter::doFilter] Profilo corrente NON abilitato al path [%s] -> la richiesta viene bloccata", path));
+			throw new ForbiddenException("Profilo corrente NON abilitato al path -> la richiesta viene bloccata");
+		} else {
+			// il path è ristretto ai profili "pathProfiles" e il profilo corrente matcha uno di
+			// questi -> la richiesta può essere servita
+			LoggerUtil.debug(log,
+					String.format("[ProfileFilter::doFilter] Profilo corrente abilitato al path [%s] -> la richiesta viene servita", path));
+		}
+		
+	}
+
+	private void checkAclFunction(String path, String httpMethod, Long currentProfileId) {
+		Entry<CodiceFunzione, List<EndpointFunzione>> functionPath = functionPaths.entrySet().stream()
+				.filter(e -> e.getValue().stream().anyMatch(ef -> path.equalsIgnoreCase(ef.getEndpoint())))
+				.map(e -> Map.entry(e.getKey(), e.getValue().stream().filter(ef -> ef.getMethod().matches(httpMethod)).collect(Collectors.toList())))
+				.findFirst().orElse(null);
+		
+		if (functionPath != null) {
+			FunzionalitaProfiloVO funzProf = aclUtil.getACLPerProfilo(currentProfileId, functionPath.getKey());
+			
+			boolean authorized = true;
+			
+			switch (HttpMethod.valueOf(httpMethod)) {
+			case GET:
+				authorized = funzProf.getRead();
+				break;
+			case POST:
+				authorized = funzProf.getInsert();
+				break;
+			case PUT:
+				authorized = funzProf.getUpdate();
+				break;
+			case DELETE:
+				authorized = funzProf.getDelete();
+				break;
+			default:
+				break;
+			}
+			
+			if (!authorized) {
+				// il profilo utente non è autorizzato ad eseguire l'operazione richiesta
+				LoggerUtil.warn(log,
+						String.format("[ProfileFilter::doFilter] Profilo corrente NON abilitato ad eseguire l'operazione [path: %s] -> la richiesta viene bloccata", path));
+				throw new ForbiddenException("Profilo corrente NON abilitato ad eseguire l'operazione -> la richiesta viene bloccata");
+			}
+		}
+		
 	}
 
 	@Override

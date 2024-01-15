@@ -156,9 +156,9 @@ public class ImpiantiControllerImpl implements ImpiantiController {
 	
 	@Override
 	public GenericResponse<List<GenericLineaVO>> getLineeImpianto(SecurityContext securityContext, HttpHeaders httpHeaders,
-			HttpServletRequest httpRequest, Long idImpianto) {
+			HttpServletRequest httpRequest, Long idImpianto, String idPrevCons) {
 		LoggerUtil.debug(logger, "[ImpiantiControllerImpl::getLineeImpianto] BEGIN");
-		GenericResponse<List<GenericLineaVO>> response = impiantoService.getLineeImpianto(idImpianto);
+		GenericResponse<List<GenericLineaVO>> response = impiantoService.getLineeImpianto(idImpianto, idPrevCons);
 		LoggerUtil.debug(logger, "[ImpiantiControllerImpl::getLineeImpianto] END");
 		return response;
 	}

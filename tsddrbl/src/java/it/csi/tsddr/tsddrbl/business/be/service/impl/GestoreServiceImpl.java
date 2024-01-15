@@ -86,80 +86,80 @@ import it.csi.tsddr.tsddrbl.vo.response.GenericResponse;
 @Service
 @Transactional
 public class GestoreServiceImpl implements GestoreService {
-	
+
 	private static Logger logger = Logger.getLogger(GestoreServiceImpl.class);
 
 	public SimpleDateFormat formatDate = new SimpleDateFormat(DateUtil.ddMMyyyy);
-	private static Long REPORT_ID = 4L;	
+	private static Long REPORT_ID = 4L;
 	private static final String GESTORE_NOT_FOUND = "TsddrTGestore non trovato con idGestore = [%d]";
 
 	@Autowired
 	private TsddrTReportRepository tsddrTReportRepository;
-	
+
 	@SuppressWarnings("el-syntax")
 	@Value("${id.istat.nazione.corrente:" + Constants.ID_ISTAT_NAZIONE_CORRENTE_DEFAULT + "}")
 	private String idIstatNazioneCorrente;
-	
+
 	@Autowired
 	private GestoreEntityMapper gestoreEntityMapper;
-	
+
 	@Autowired
 	private DatiSoggEntityMapper datiSoggEntityMapper;
-	
+
 	@Autowired
 	private IndirizzoEntityMapper indirizzoEntityMapper;
-	
+
 	@Autowired
 	private TsddrTGestoreRepository gestoreRepository;
-	
+
 	@Autowired
 	private TsddrTLegaleRappresentanteRepository legaleRappresentanteRepository;
-	
+
 	@Autowired
 	private TsddrRUtenteGestoreProfiloRepository utenteGestoreProfiloRepository;
-	
+
 	@Autowired
 	private TsddrTDatiSoggRepository datiSoggRepository;
-	
+
 	@Autowired
-	private TsddrTDomandaRepository domandaRepository; 
-	
+	private TsddrTDomandaRepository domandaRepository;
+
 	@Autowired
 	private TsddrTImpiantoRepository impiantoRepository;
-	
+
 	@Autowired
 	private TsddrDNaturaGiuridicaRepository naturaGiuridicaRepository;
-	
+
 	@Autowired
 	private TsddrTIndirizzoRepository indirizzoRepository;
-	
+
 	@Autowired
 	private TsddrDTipoIndirizzoRepository tipoIndirizzoRepository;
-	
+
 	@Autowired
 	private TsddrDNazioneRepository nazioneRepository;
-	
+
 	@Autowired
 	private TsddrDComuneRepository comuneRepository;
-	
+
 	@Autowired
 	private TsddrDProvinciaRepository provinciaRepository;
-	
+
 	@Autowired
-	private TsddrDSedimeRepository sedimeRepository; 
-	
+	private TsddrDSedimeRepository sedimeRepository;
+
 	@Autowired
 	private MessaggioService messaggioService;
-	
+
 	@Autowired
 	private CsiLogAuditService csiLogAuditService;
-	
+
 	@Autowired
 	private ValidazioneService validazioneService;
 
 	@Autowired
 	private AclUtil aclUtil;
-	
+
 	@Override
 	public GenericResponse<FunzionalitaProfiloVO> getACLGestori(HttpSession httpSession) {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::getACLGestori] BEGIN");
@@ -168,7 +168,7 @@ public class GestoreServiceImpl implements GestoreService {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::getACLGestori] END");
 		return response;
 	}
-	
+
 	@Override
 	public GenericResponse<List<SelectVO>> getComboGestore() {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::getComboGestore] BEGIN");
@@ -178,14 +178,14 @@ public class GestoreServiceImpl implements GestoreService {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::getComboGestore] END");
 		return response;
 	}
-	
+
 	@Override
 	public GenericResponse<String> getParametriFiltoApplicati(GestoreParametriRicerca parametriRicerca) {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::getParametriFiltoApplicati] BEGIN");
 		StringBuilder parametriFiltroBuilder = new StringBuilder();
-		
+
 		Date currentDate = new Date();
-		
+
 		if(parametriRicerca.getIdGestore() != null) {
 			Optional<TsddrTGestore> gestoreOpt = gestoreRepository.findByIdGestore(parametriRicerca.getIdGestore(), currentDate);
 			if(gestoreOpt.isEmpty()) {
@@ -257,25 +257,25 @@ public class GestoreServiceImpl implements GestoreService {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::createGestore] BEGIN");
 		// validazione dati gestore
 		this.validazioneGestore(gestoreVO);
-		
+
 		Date currentDate = new Date();
-		
+
 		Optional<TsddrTGestore> gestoreOpt = gestoreRepository.findByCodFiscPartiva(gestoreVO.getCodFiscPartiva(), new Date());
 		if (gestoreOpt.isPresent()) {
 			LoggerUtil.error(logger, String.format("Gestore gia' esistente con codFiscPartiva = [%s]", gestoreVO.getCodFiscPartiva()));
 			throw new FunctionalException(messaggioService.getMessaggioByCodMsg(CodiceMessaggio.E007.name()));
 		}
-		
+
 		Optional<TsddrDNaturaGiuridica> naturaGiuridicaOpt = naturaGiuridicaRepository.findByIdNaturaGiuridica(gestoreVO.getNaturaGiuridica().getIdNaturaGiuridica(), currentDate);
 		if (naturaGiuridicaOpt.isEmpty()) {
 			throw new RecordNotFoundException(String.format("TsddrDNaturaGiuridica non trovato con idNaturaGiuridica = [%d]", gestoreVO.getNaturaGiuridica().getIdNaturaGiuridica()));
 		}
-		
+
 		Long idUtenteSessione = SessionUtil.getIdUtente(httpSession);
 		Long idDatiSogg = SessionUtil.getIdDatiSoggetto(httpSession);
-		
+
 		TsddrTIndirizzo sedeLegale = this.createSedeLegale(gestoreVO.getSedeLegale(), null, 1L, currentDate, idUtenteSessione);
-		
+
 		TsddrTGestore gestore = gestoreEntityMapper.mapVOToEntity(gestoreVO);
 		gestore.setCodFiscPartiva(StringUtils.upperCase(gestore.getCodFiscPartiva()));
 		gestore.setNaturaGiuridica(naturaGiuridicaOpt.get());
@@ -283,16 +283,16 @@ public class GestoreServiceImpl implements GestoreService {
 		EntityUtil.setInsertedWithValidity(gestore, idUtenteSessione, gestoreVO.getDataInizioValidita() != null ? gestoreVO.getDataInizioValidita() : currentDate);
 		gestore.setDataFineValidita(gestoreVO.getDataFineValidita() != null ? gestoreVO.getDataFineValidita() : null);
 		gestore = gestoreRepository.save(gestore);
-		
+
 		// rappresentante legale
 		gestore.setLegaliRappresentanti(List.of(this.createLegaleRapp(gestoreVO.getLegaleRappresentante(), gestore, currentDate, idUtenteSessione)));
-		
+
 		csiLogAuditService.traceCsiLogAudit(httpSession, idDatiSogg,
 				LogConstants.TSDDR_GESTORI_INSERIMENTO_NUOVO_GESTORE, LogConstants.TSDDR_T_GESTORI, gestore.getIdGestore());
 
 		GenericResponse<GestoreVO> response = GenericResponse.build(messaggioService.getMessaggioByCodMsg(CodiceMessaggio.P001.name()),
 				gestoreEntityMapper.mapEntityToVO(gestore));
-		
+
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::createGestore] END");
 		return response;
 	}
@@ -302,35 +302,35 @@ public class GestoreServiceImpl implements GestoreService {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::updatGestore] BEGIN");
 		// validazione dati gestore
 		this.validazioneGestore(gestoreVO);
-		
+
 		Date currentDate = new Date();
-		
+
 		Optional<TsddrTGestore> gestoreOpt = gestoreRepository.findByIdGestore(idGestore, currentDate);
 		if (gestoreOpt.isEmpty()) {
 			throw new RecordNotFoundException(String.format(GESTORE_NOT_FOUND, idGestore));
 		}
-		
+
 		Optional<TsddrDNaturaGiuridica> naturaGiuridicaOpt = naturaGiuridicaRepository.findByIdNaturaGiuridica(gestoreVO.getNaturaGiuridica().getIdNaturaGiuridica(), currentDate);
 		if (naturaGiuridicaOpt.isEmpty()) {
 			throw new RecordNotFoundException(String.format("TsddrDNaturaGiuridica non trovato con idNaturaGiuridica = [%d]", gestoreVO.getNaturaGiuridica().getIdNaturaGiuridica()));
 		}
-		
+
 		if (!StringUtils.equalsIgnoreCase(gestoreVO.getCodFiscPartiva(), gestoreOpt.get().getCodFiscPartiva())) {
 			if (gestoreRepository.existsByCodFiscPartivaAndIdGestoreNot(gestoreVO.getCodFiscPartiva(), idGestore, currentDate)) {
 				LoggerUtil.error(logger, String.format("Gestore gia' esistente con codFiscPartiva = [%s]", gestoreVO.getCodFiscPartiva()));
 				throw new FunctionalException(messaggioService.getMessaggioByCodMsg(CodiceMessaggio.E007.name()));
 			}
 		}
-		
+
 		Long idUtenteSessione = SessionUtil.getIdUtente(httpSession);
 		Long idDatiSogg = SessionUtil.getIdDatiSoggetto(httpSession);
-		
+
 		TsddrTGestore gestore = gestoreOpt.get();
-		
+
 		if (gestore.getSedeLegale() == null || this.isAddressModified(indirizzoEntityMapper.mapEntityToVO(gestore.getSedeLegale()), gestoreVO.getSedeLegale())) {
 			// sede legale corrente
 			Optional<TsddrTIndirizzo> currentSedeLegaleOpt = indirizzoRepository.findByOriginalIdAndMaxVersione(gestore.getSedeLegale().getOriginalId());
-			
+
 			Long versione = 1L;
 			Long originalId = null;
 			if (currentSedeLegaleOpt.isPresent()) {
@@ -338,22 +338,22 @@ public class GestoreServiceImpl implements GestoreService {
 				versione = currentSedeLegaleOpt.get().getVersione() + 1;
 				originalId = currentSedeLegaleOpt.get().getOriginalId();
 			}
-			
+
 			gestore.setSedeLegale(this.createSedeLegale(gestoreVO.getSedeLegale(), originalId, versione, currentDate, idUtenteSessione));
 		}
-		
+
 		LegaleRappresentanteVO currentLegaleRapprVO = gestoreEntityMapper.activeLegaleRapp(gestore.getLegaliRappresentanti());
-		
+
 		if (currentLegaleRapprVO == null || this.isRappLegaleModified(currentLegaleRapprVO, gestoreVO.getLegaleRappresentante())) {
 			// eliminazione logica legale rapp corrente
 			Optional<TsddrTLegaleRappresentante> currentLegaleRapprOpt = legaleRappresentanteRepository.findByIdGestore(idGestore, currentDate);
 			if (currentLegaleRapprOpt.isPresent()) {
 				legaleRappresentanteRepository.save(EntityUtil.setDeleted(currentLegaleRapprOpt.get(), idUtenteSessione, currentDate));
 			}
-			
+
 			gestore.getLegaliRappresentanti().add(this.createLegaleRapp(gestoreVO.getLegaleRappresentante(), gestore, currentDate, idUtenteSessione));
 		}
-		
+
 		gestore.setNaturaGiuridica(naturaGiuridicaOpt.get());
 		gestore.setCodFiscPartiva(StringUtils.upperCase(gestoreVO.getCodFiscPartiva()));
 		gestore.setRagSociale(gestoreVO.getRagSociale());
@@ -363,39 +363,39 @@ public class GestoreServiceImpl implements GestoreService {
 		EntityUtil.setUpdated(gestore, idUtenteSessione, gestoreVO.getDataInizioValidita() != null ? gestoreVO.getDataInizioValidita() : currentDate);
 		gestore.setDataFineValidita(gestoreVO.getDataFineValidita() != null ? gestoreVO.getDataFineValidita() : null);
 		gestore = gestoreRepository.save(gestore);
-		
+
 		csiLogAuditService.traceCsiLogAudit(httpSession, idDatiSogg,
 				LogConstants.TSDDR_GESTORI_MODIFICA_DATI_GESTORE, LogConstants.TSDDR_T_GESTORI, gestore.getIdGestore());
 
 		GenericResponse<GestoreVO> response = GenericResponse.build(messaggioService.getMessaggioByCodMsg(CodiceMessaggio.P001.name()),
 				gestoreEntityMapper.mapEntityToVO(gestore));
-		
+
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::updatGestore] END");
 		return response;
 	}
-	
+
 	private TsddrTIndirizzo createSedeLegale(IndirizzoVO sedeLegaleVO, Long originalId, Long versione, Date currentDate, Long idUtenteSessione) {
 		TsddrTIndirizzo newSedeLegale = new TsddrTIndirizzo();
 		newSedeLegale.setVersione(versione != null ? versione : 1L);
-		
+
 		if (originalId != null) {
 			newSedeLegale.setOriginalId(originalId);
 		}
-		
+
 		Optional<TsddrDTipoIndirizzo> tipoIndirizzoOpt = tipoIndirizzoRepository.findByIdTipoIndirizzo(TipoIndirizzo.SEDE_LEGALE_GESTORE.getId(), currentDate);
 		newSedeLegale.setTipoIndirizzo(tipoIndirizzoOpt.orElse(null));
-		
+
 		if (sedeLegaleVO.getNazione() != null && sedeLegaleVO.getNazione().getIdNazione() != null) {
 			Optional<TsddrDNazione> nazioneOpt = nazioneRepository.findByIdNazione(sedeLegaleVO.getNazione().getIdNazione(), currentDate);
 			if (nazioneOpt.isEmpty()) {
 				throw new RecordNotFoundException(String.format("TsddrDNazione non trovata con idNazione = [%d]", sedeLegaleVO.getNazione().getIdNazione()));
 			}
-			
+
 			if(idIstatNazioneCorrente.equalsIgnoreCase(nazioneOpt.get().getIdIstatNazione())) {
 				throw new BadRequestException(String.format("Impossibile settare TsddrDNazione nazione estera con idIstatNazioneCorrente = [%s], è la nazione corrente", nazioneOpt.get().getIdIstatNazione()));
 			}
 			newSedeLegale.setNazione(nazioneOpt.get());
-		
+
 		} else {
 			// nazione è impostata di default
 			Optional<TsddrDNazione> nazioneOpt = nazioneRepository.findNazioneByIdIstatNazione(idIstatNazioneCorrente, currentDate);
@@ -403,7 +403,7 @@ public class GestoreServiceImpl implements GestoreService {
 				throw new BadRequestException(String.format("Nessuna TsddrDNazione trovata con idIstatNazioneCorrente = [%s]", idIstatNazioneCorrente));
 			}
 			newSedeLegale.setNazione(nazioneOpt.get());
-			
+
 			Optional<TsddrDSedime> sedimeOpt = sedimeRepository.findByIdSedime(sedeLegaleVO.getSedime().getIdSedime(), currentDate);
 			newSedeLegale.setSedime(sedimeOpt.orElseThrow(
 					() -> new RecordNotFoundException(String.format("TsddrDSedime non trovato con idSedime = [%d]",
@@ -416,9 +416,9 @@ public class GestoreServiceImpl implements GestoreService {
 					() -> new RecordNotFoundException(String.format("TsddrDComune non trovato con idComune = [%d]",
 							sedeLegaleVO.getComune().getIdComune()))));
 		}
-		
+
 		newSedeLegale = indirizzoRepository.save(EntityUtil.setInserted(newSedeLegale, idUtenteSessione, currentDate));
-		
+
 		if (newSedeLegale.getOriginalId() == null) {
 			// XXX attenzione: potrebbe verificarsi una violazione di
 			// unique key nel caso di scritture simultanee nella tabella prima
@@ -426,22 +426,22 @@ public class GestoreServiceImpl implements GestoreService {
 			// valorizzata, quindi in caso di primo inserimento di un indirizzo, potremmo
 			// avere già un record con versione 1 finchè non viene eseguita questa
 			// istruzione (o meglio finchè non termina la transazione)
-			
+
 			// inserisco originalId
 			newSedeLegale.setOriginalId(newSedeLegale.getIdIndirizzo());
 			newSedeLegale = indirizzoRepository.save(newSedeLegale);
 		}
-		
-		return newSedeLegale;		
+
+		return newSedeLegale;
 	}
-	
+
 	private TsddrTLegaleRappresentante createLegaleRapp(LegaleRappresentanteVO legaleRappVO, TsddrTGestore gestore, Date currentDate, Long idUtenteSessione) {
 		// DatiSogg nuovo legale rapp
 		Optional<TsddrTDatiSogg> datiSoggOpt = datiSoggRepository.findByCodFiscale(legaleRappVO.getDatiSogg().getCodFiscale());
 		// se non esiste già lo creo
 		TsddrTDatiSogg datiSogg = datiSoggOpt.isPresent() ? datiSoggOpt.get() : datiSoggRepository.save(EntityUtil.setInserted(
 				datiSoggEntityMapper.mapVOToEntity(legaleRappVO.getDatiSogg()), idUtenteSessione, currentDate));
-		
+
 		// nuovo legale rappr
 		TsddrTLegaleRappresentante newRapprLegale = new TsddrTLegaleRappresentante();
 		newRapprLegale.setIdGestore(gestore.getIdGestore());
@@ -452,7 +452,7 @@ public class GestoreServiceImpl implements GestoreService {
 		return legaleRappresentanteRepository
 				.save(EntityUtil.setInsertedWithValidity(newRapprLegale, idUtenteSessione, currentDate));
 	}
-	
+
 	private void validazioneGestore(GestoreVO gestoreVO) {
 		List<MessaggioVO> errori = this.verificaDatiObbligatori(gestoreVO);
 		if (CollectionUtils.isNotEmpty(errori)) {
@@ -462,7 +462,7 @@ public class GestoreServiceImpl implements GestoreService {
 							: "Impossibile creare il nuovo gestore"));
 			throw new FunctionalException(errori);
 		}
-		
+
 		// verifica dati
 		errori = this.verificaDatiGestore(gestoreVO);
 		if (CollectionUtils.isNotEmpty(errori)) {
@@ -473,58 +473,58 @@ public class GestoreServiceImpl implements GestoreService {
 			throw new FunctionalException(errori);
 		}
 	}
-	
+
 	private List<MessaggioVO> verificaDatiObbligatori(GestoreVO gestoreVO) {
 		List<MessaggioVO> messaggiVO = new ArrayList<>();
-		
+
 		MessaggioVO messaggioVO = messaggioService.getMessaggioByCodMsg(CodiceMessaggio.E010.name());
 
 		if (StringUtils.isBlank(gestoreVO.getCodFiscPartiva())) {
 			messaggiVO.add(MessaggioVO.forCampo(messaggioVO, "codFiscPartiva"));
 		}
-		
+
 		if (StringUtils.isBlank(gestoreVO.getRagSociale())) {
 			messaggiVO.add(MessaggioVO.forCampo(messaggioVO, "ragSociale"));
 		}
-		
+
 		if (gestoreVO.getNaturaGiuridica() == null || gestoreVO.getNaturaGiuridica().getIdNaturaGiuridica() == null) {
 			messaggiVO.add(MessaggioVO.forCampo(messaggioVO, "naturaGiuridica.idNaturaGiuridica"));
 		}
-		
+
 		checkSedeLegale(gestoreVO, messaggiVO, messaggioVO);
 		checkNazione(gestoreVO, messaggiVO, messaggioVO);
-		 
+
 		if (StringUtils.isBlank(gestoreVO.getEmail())) {
 			messaggiVO.add(MessaggioVO.forCampo(messaggioVO, "email"));
 		}
-		
+
 		if (StringUtils.isBlank(gestoreVO.getPec())) {
 			messaggiVO.add(MessaggioVO.forCampo(messaggioVO, "pec"));
 		}
-		
+
 		checkDatiSogg(gestoreVO, messaggiVO, messaggioVO);
-		
+
 		if (gestoreVO.getDataInizioValidita() == null) {
 			messaggiVO.add(MessaggioVO.forCampo(messaggioVO, "dataInizioValidita"));
 		}
-		
+
 		return messaggiVO;
 	}
-	
+
 	private void checkSedeLegale(GestoreVO gestoreVO, List<MessaggioVO> messaggiVO, MessaggioVO messaggioVO) {
 	    if (gestoreVO.getSedeLegale() != null && (gestoreVO.getSedeLegale().getNazione() == null || gestoreVO.getSedeLegale().getNazione().getIdNazione() == null)) {
             if (gestoreVO.getSedeLegale().getSedime() == null || gestoreVO.getSedeLegale().getSedime().getIdSedime() == null) {
                 messaggiVO.add(MessaggioVO.forCampo(messaggioVO, "sedeLegale.sedime.idSedime"));
             }
-            
+
             if (StringUtils.isBlank(gestoreVO.getSedeLegale().getIndirizzo())) {
                 messaggiVO.add(MessaggioVO.forCampo(messaggioVO, "sedeLegale.indirizzo"));
             }
-            
+
             if (gestoreVO.getSedeLegale().getComune() == null || gestoreVO.getSedeLegale().getComune().getIdComune() == null) {
                 messaggiVO.add(MessaggioVO.forCampo(messaggioVO, "sedeLegale.comune.idComune"));
             }
-            
+
             if (gestoreVO.getSedeLegale().getComune() == null
                     || gestoreVO.getSedeLegale().getComune().getProvincia() == null
                     || gestoreVO.getSedeLegale().getComune().getProvincia().getIdProvincia() == null) {
@@ -532,7 +532,7 @@ public class GestoreServiceImpl implements GestoreService {
             }
         }
 	}
-	
+
 	private void checkNazione(GestoreVO gestoreVO, List<MessaggioVO> messaggiVO, MessaggioVO messaggioVO) {
 	    if (gestoreVO.getSedeLegale() != null && (gestoreVO.getSedeLegale().getSedime() == null
                 || gestoreVO.getSedeLegale().getSedime().getIdSedime() == null)
@@ -547,87 +547,98 @@ public class GestoreServiceImpl implements GestoreService {
             }
         }
 	}
-	
+
 	private void checkDatiSogg(GestoreVO gestoreVO, List<MessaggioVO> messaggiVO, MessaggioVO messaggioVO) {
 	    if (StringUtils.isBlank(gestoreVO.getLegaleRappresentante().getDatiSogg().getCodFiscale())) {
             messaggiVO.add(MessaggioVO.forCampo(messaggioVO, "legaleRappresentante.datiSogg.codFiscale"));
         }
-        
+
         if (StringUtils.isBlank(gestoreVO.getLegaleRappresentante().getDatiSogg().getCognome())) {
             messaggiVO.add(MessaggioVO.forCampo(messaggioVO, "legaleRappresentante.datiSogg.cognome"));
         }
-        
+
         if (StringUtils.isBlank(gestoreVO.getLegaleRappresentante().getDatiSogg().getNome())) {
             messaggiVO.add(MessaggioVO.forCampo(messaggioVO, "legaleRappresentante.datiSogg.nome"));
         }
 	}
 
-	
+
 	private List<MessaggioVO> verificaDatiGestore(GestoreVO gestoreVO) {
 		List<MessaggioVO> errors = new ArrayList<>();
-		
+
 		CollectionUtils.addIgnoreNull(errors, validazioneService.verificaFormatoCodiceFiscale(gestoreVO.getLegaleRappresentante().getDatiSogg().getCodFiscale()));
 		CollectionUtils.addIgnoreNull(errors, validazioneService.verificaFormatoEmail(gestoreVO.getEmail()));
 		if (gestoreVO.getDataInizioValidita() != null && gestoreVO.getDataFineValidita() != null) {
 			CollectionUtils.addIgnoreNull(errors, validazioneService.verificaValiditaDate(gestoreVO.getDataInizioValidita(), gestoreVO.getDataFineValidita()));
 		}
-		
+
 		return errors;
 	}
-	
+
 	private boolean isAddressModified(IndirizzoVO corrente, IndirizzoVO nuovo) {
 		if (corrente == null) {
 			return true;
 		}
-		
+		if(nuovo.getNazione() != null){
+			if(corrente.getNazione() != null){
+				if (corrente.getNazione().getIdNazione().longValue() != nuovo.getNazione().getIdNazione().longValue()) {
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return true;
+			}
+		}else{
+			if(corrente.getNazione() != null){
+				return true;
+			}
+		}
+
 		if (!StringUtils.equalsIgnoreCase(corrente.getIndirizzo(), nuovo.getIndirizzo())) {
 			return true;
 		}
-		
+
 		if (corrente.getComune().getIdComune().longValue() != nuovo.getComune().getIdComune().longValue()) {
 			return true;
 		}
-		
+
 		if (!StringUtils.equalsIgnoreCase(corrente.getCap(), nuovo.getCap())) {
 			return true;
 		}
-		
+
 		if (corrente.getComune().getProvincia().getIdProvincia().longValue() != nuovo.getComune().getProvincia().getIdProvincia().longValue()) {
 			return true;
 		}
-		
-		if (corrente.getNazione().getIdNazione().longValue() != nuovo.getNazione().getIdNazione().longValue()) {
-			return true;
-		}
-		
+
 		if (corrente.getSedime().getIdSedime().longValue() != nuovo.getSedime().getIdSedime().longValue()) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	private boolean isRappLegaleModified(LegaleRappresentanteVO corrente, LegaleRappresentanteVO nuovo) {
 		if (corrente == null) {
 			return true;
-		}	
-		
+		}
+
 		if (!StringUtils.equalsIgnoreCase(corrente.getDatiSogg().getCodFiscale(), nuovo.getDatiSogg().getCodFiscale())) {
 			return true;
 		}
-		
+
 		if (!StringUtils.equalsIgnoreCase(corrente.getDatiSogg().getNome(), nuovo.getDatiSogg().getNome())) {
 			return true;
 		}
-		
+
 		if (!StringUtils.equalsIgnoreCase(corrente.getDatiSogg().getCognome(), nuovo.getDatiSogg().getCognome())) {
 			return true;
 		}
-		
+
 		if (!StringUtils.equalsIgnoreCase(corrente.getQualifica(), nuovo.getQualifica())) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -635,12 +646,12 @@ public class GestoreServiceImpl implements GestoreService {
 	public GenericResponse<GestoreVO> removeGestore(HttpSession httpSession, Long idGestore) {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::removeGestore] BEGIN");
 		Date currentDate = new Date();
-		
+
 		Optional<TsddrTGestore> gestoreOpt = gestoreRepository.findByIdGestore(idGestore, currentDate);
 		if(!gestoreOpt.isPresent()) {
 			throw new RecordNotFoundException(String.format(GESTORE_NOT_FOUND, idGestore));
 		}
-		
+
 		// cerco domande accreditamento associate al gestore
 		if (domandaRepository.existsNotCanceledByGestore(idGestore)) {
 			LoggerUtil.warn(logger, String.format(
@@ -648,18 +659,18 @@ public class GestoreServiceImpl implements GestoreService {
 					idGestore));
 			throw new FunctionalException(messaggioService.getMessaggioByCodMsg(CodiceMessaggio.I004.name()));
 		}
-		
+
 		Long idUtenteSessione = SessionUtil.getIdUtente(httpSession);
 		Long idDatiSogg = SessionUtil.getIdDatiSoggetto(httpSession);
-		
+
 		TsddrTGestore gestore = gestoreOpt.get();
 		gestore.setDataFineValidita(currentDate);
 		gestore.setDataDelete(currentDate);
 		gestore.setIdUserDelete(idUtenteSessione);
 		gestoreRepository.save(gestore);
-		
+
 		Optional<TsddrTLegaleRappresentante> legaleRappOpt = legaleRappresentanteRepository.findByIdGestore(idGestore, currentDate);
-		
+
 		if (legaleRappOpt.isPresent()) {
 			TsddrTLegaleRappresentante legaleRapp = legaleRappOpt.get();
 			legaleRapp.setDataFineValidita(currentDate);
@@ -667,9 +678,9 @@ public class GestoreServiceImpl implements GestoreService {
 			legaleRapp.setIdUserDelete(idUtenteSessione);
 			legaleRappresentanteRepository.save(legaleRapp);
 		}
-		
+
 		List<TsddrRUtenteGestoreProfilo> rugpList = utenteGestoreProfiloRepository.findByIdGestore(idGestore, currentDate);
-		
+
 		if (CollectionUtils.isNotEmpty(rugpList)) {
 			rugpList.forEach(rugp -> {
 				rugp.setDataFineValidita(currentDate);
@@ -678,9 +689,9 @@ public class GestoreServiceImpl implements GestoreService {
 				utenteGestoreProfiloRepository.save(rugp);
 			});
 		}
-		
+
 		List<TsddrTImpianto> impianti = impiantoRepository.findByIdGestore(idGestore, currentDate);
-		
+
 		if (CollectionUtils.isNotEmpty(impianti)) {
 			impianti.forEach(i -> {
 				i.setDataFineValidita(currentDate);
@@ -689,7 +700,7 @@ public class GestoreServiceImpl implements GestoreService {
 				impiantoRepository.save(i);
 			});
 		}
-		
+
 		csiLogAuditService.traceCsiLogAudit(httpSession, idDatiSogg, LogConstants.TSDDR_GESTORI_ELIMINAZIONE_GESTORE,
 				LogConstants.TSDDR_T_GESTORI, String.format("%d||%s", gestoreOpt.get().getIdGestore(), impianti.stream()
 						.map(i -> String.valueOf(i.getIdImpianto())).collect(Collectors.joining(","))));
@@ -698,7 +709,7 @@ public class GestoreServiceImpl implements GestoreService {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::removeGestore] END");
 		return response;
 	}
-	
+
 	@Override
 	public GenericResponse<Boolean> hasDomandeAccreditamento(Long idGestore) {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::hasDomandeAccreditamento] BEGIN");
@@ -706,7 +717,7 @@ public class GestoreServiceImpl implements GestoreService {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::hasDomandeAccreditamento] END");
 		return response;
 	}
-	
+
 	@Override
 	public GenericResponse<Boolean> hasImpianti(Long idGestore) {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::hasImpianti] BEGIN");
@@ -714,7 +725,7 @@ public class GestoreServiceImpl implements GestoreService {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::hasImpianti] END");
 		return response;
 	}
-	
+
 	@Override
 	public GenericResponse<DatiSoggVO> getRappresentanteLegale(String codFiscPartiva) {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::getRappresentanteLegale] BEGIN");
@@ -726,7 +737,7 @@ public class GestoreServiceImpl implements GestoreService {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::getRappresentanteLegale] END");
 		return response;
 	}
-	
+
 	@Override
 	public GenericResponse<Boolean> existsGestore(String codFiscPartiva) {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::existsGestore] BEGIN");
@@ -735,7 +746,7 @@ public class GestoreServiceImpl implements GestoreService {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::existsGestore] END");
 		return response;
 	}
-	
+
 	TsddrTReport tsddrTReport = null;
 
 	public TsddrTReport getTsddrTReport(){
@@ -750,9 +761,9 @@ public class GestoreServiceImpl implements GestoreService {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::downloadReport] BEGIN");
 		//metodo per riportare i filtri su nome file
 		String filtriSuffix = getFilterByRequest(parametriRicerca);
-		
+
 		GenericResponse<List<GestoreVO>> listaGestiori = getListaGestoriReport(httpSession, parametriRicerca, filtriSuffix);
-				
+
         ExcelDataUtil excel = new ExcelDataUtil(getTsddrTReport().getDescReport(), filtriSuffix);
         ExcelSheet sheet = excel.addSheet(getTsddrTReport().getDescReport());
 		sheet.addColumn("CF/PI");
@@ -767,18 +778,18 @@ public class GestoreServiceImpl implements GestoreService {
         sheet.addColumn("Telefono");
         sheet.addColumn("Email");
         sheet.addColumn("PEC");
-        
+
         addContent(sheet, listaGestiori.getContent());
-        
+
         ReportVO report = null;
 		try {
 			report = new ReportVO(excel.getFileName(), excel.getFile());
 		} catch (IOException e) {
 			LoggerUtil.warn(logger, "[GestoreServiceImpl::downloadReport] problemi in generazione report");
 		}
-        
+
 		GenericResponse<ReportVO> response = new GenericResponse<ReportVO>(report);
-		
+
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::downloadReport] END");
 		return response;
 	}
@@ -807,20 +818,23 @@ public class GestoreServiceImpl implements GestoreService {
 		if(sb.toString().length()>0) {
 			sb.append("_");
 		}
-		
+
 		return sb.toString();
 	}
 
 	private void addContent(ExcelSheet sheet, List<GestoreVO> content) {
-		
+
 		for(GestoreVO gestore : content){
-			sheet.addDataToBody(gestore.getCodFiscPartiva(), 
+			sheet.addDataToBody(
+					gestore.getCodFiscPartiva(),
 					gestore.getRagSociale(),
 					gestore.getNaturaGiuridica()!=null?gestore.getNaturaGiuridica().getDescNaturaGiuridica():"",
 					gestore.getDataInizioValidita()!=null?formatDate.format(gestore.getDataInizioValidita()):"",
 					gestore.getDataFineValidita()!=null?formatDate.format(gestore.getDataFineValidita()):"",
-					gestore.getSedeLegale()!=null?gestore.getSedeLegale().getIndirizzo()!=null?gestore.getSedeLegale().getSedime()!=null?gestore.getSedeLegale().getSedime().getDescSedime()+" "+gestore.getSedeLegale().getIndirizzo():"":"":"",
-					gestore.getSedeLegale()!=null?gestore.getSedeLegale().getComune()!=null?gestore.getSedeLegale().getComune().getComune():"":"",
+					// CR OB 258-259-260
+//					gestore.getSedeLegale()!=null?gestore.getSedeLegale().getIndirizzo()!=null?gestore.getSedeLegale().getSedime()!=null?gestore.getSedeLegale().getSedime().getDescSedime()+" "+gestore.getSedeLegale().getIndirizzo():"":"":"",
+					getIndirizzoSedeLegale(gestore),
+                    gestore.getSedeLegale()!=null?gestore.getSedeLegale().getComune()!=null?gestore.getSedeLegale().getComune().getComune():"":"",
 					gestore.getSedeLegale()!=null?gestore.getSedeLegale().getCap()!=null?gestore.getSedeLegale().getCap():"":"",
 					gestore.getSedeLegale()!=null?gestore.getSedeLegale().getComune()!=null?gestore.getSedeLegale().getComune().getProvincia()!=null?gestore.getSedeLegale().getComune().getProvincia().getSiglaProv():"":"":"",
 					gestore.getTelefono()!=null?gestore.getTelefono():"",
@@ -828,21 +842,43 @@ public class GestoreServiceImpl implements GestoreService {
 					gestore.getPec()!=null?gestore.getPec():"");
 		}
 	}
-	
+
+	private String getIndirizzoSedeLegale(GestoreVO gestore){
+		String response = "";
+
+        if(gestore.getSedeLegale() != null){
+            if (StringUtils.isEmpty(gestore.getSedeLegale().getIndirizzo())
+                    && (gestore.getSedeLegale().getComune() == null || (gestore.getSedeLegale().getComune() != null && gestore.getSedeLegale().getComune().getIdComune() == null))
+					&& (gestore.getSedeLegale().getSedime() == null || (gestore.getSedeLegale().getSedime() != null && gestore.getSedeLegale().getSedime().getIdSedime() == null))
+					&& gestore.getSedeLegale().getNazione() != null
+            ) {
+                response = String.format(
+                        Constants.INDIRIZZO_SEDE_LEGALE_NON_PRESENTE,
+                        gestore.getSedeLegale().getNazione().getDescNazione()
+                );
+            } else if (gestore.getSedeLegale().getSedime() != null && gestore.getSedeLegale().getIndirizzo() != null) {
+                response = gestore.getSedeLegale().getSedime().getDescSedime() + " " + gestore.getSedeLegale().getIndirizzo();
+            }
+        }
+
+        return response;
+
+	}
+
 
 	public GenericResponse<List<GestoreVO>> getListaGestoriReport(HttpSession httpSession, GestoreParametriRicerca parametriRicerca, String filtriSuffix) {
 		LoggerUtil.debug(logger, "[GestoreServiceImpl::getListaGestoriReport] BEGIN");
 		Long idDatiSogg = SessionUtil.getIdDatiSoggetto(httpSession);
 		List<TsddrTGestore> gestori = gestoreRepository.findAll(TsddrTGestoreSpecification.searchByParams(parametriRicerca, new Date()));
 		List<GestoreVO> selectVO = gestoreEntityMapper.mapListEntityToListVO(gestori);
-		
+
 		String operation = LogConstants.TSDDR_REPORT_GESTORI_COMPLETO;
 		String ids = "";
 		if(filtriSuffix != null && filtriSuffix.length()>0) {
 			ids = selectVO.stream().map(g -> String.valueOf(g.getIdGestore())).collect(Collectors.joining(","));
 			operation = LogConstants.TSDDR_REPORT_GESTORI_FILTRATO;
 		}
-		
+
 		csiLogAuditService.traceCsiLogAudit(httpSession, idDatiSogg, operation,
 				LogConstants.TSDDR_T_GESTORI,
 				ids);
@@ -851,5 +887,5 @@ public class GestoreServiceImpl implements GestoreService {
 		return response;
 	}
 
-	
+
 }

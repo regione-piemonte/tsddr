@@ -35,5 +35,11 @@ public interface TsddrTPrevConsDettRepository extends JpaRepository<TsddrTPrevCo
             + "FROM TsddrTPrevConsDett ttpcd "
             + "WHERE ttpcd.idPrevConsDett = :idPrevConsDett")
     Optional<TsddrTPrevConsDett> findByIdPrevConsDett(@Param("idPrevConsDett")Long idPrevConsDett);
+        
+	@Query("SELECT ttpcd " 
+            + "FROM TsddrTPrevConsDett ttpcd INNER JOIN ttpcd.prevConsLinea trpcl "
+            + "WHERE ttpcd.idPrevConsDett = :idPrevConsDett "
+			+ "AND trpcl.prevCons.idPrevCons = :idPrevCons")
+    Optional<TsddrTPrevConsDett> findByIdPrevConsDett(@Param("idPrevCons")Long idPrevCons, @Param("idPrevConsDett")Long idPrevConsDett);
     
 }

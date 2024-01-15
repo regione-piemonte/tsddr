@@ -6,6 +6,7 @@ package it.csi.tsddr.tsddrbl.vo.dichiarazione;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import it.csi.tsddr.tsddrbl.vo.AbstractVO;
 
@@ -88,8 +89,12 @@ public class RiepilogoTotale extends AbstractVO {
 	 *
 	 * @param importo the importo
 	 */
+	private static final DecimalFormat df = new DecimalFormat("0.00");
 	public void addImporto(Double importo) {
-		this.importo += (importo == null ? Double.valueOf(0) : importo);
+		this.importo += (importo == null ? Double.valueOf(0) : 
+			BigDecimal.valueOf(importo)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue());
 	}
 	
 	/**

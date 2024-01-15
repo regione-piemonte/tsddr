@@ -49,12 +49,36 @@ public interface TsddrTDichAnnualeRepository
 			+ "INNER JOIN ttimp.gestore ttg "
 			+ "INNER JOIN ttda.statoDichiarazione tdsdich "
 			+ "WHERE ttda.anno = :anno AND "
-			+ "ttda.versione = (SELECT MAX(ttda1.versione) FROM TsddrTDichAnnuale ttda1 WHERE ttda1.impianto.idImpianto = :idImpianto AND ttda1.anno = :anno) AND "
+			//+ "ttda.versione = (SELECT MAX(ttda1.versione) FROM TsddrTDichAnnuale ttda1 WHERE ttda1.impianto.idImpianto = :idImpianto AND ttda1.anno = :anno) AND "
 			+ "ttimp.idImpianto = :idImpianto AND "
 			+ "ttg.idGestore = :idGestore AND "
 			+ "tdsdich.idStatoDichiarazione = :idStatoDichiarazione AND "
             + RepositoryUtil.TTDA_DICH_ANNUALE_DELETE_VALIDITY_CHECK)
-	Optional<TsddrTDichAnnuale> findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazione(@Param("idImpianto")Long idImpianto, @Param("anno")Long anno, 
+	Optional<List<TsddrTDichAnnuale>> findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazione(@Param("idImpianto")Long idImpianto, @Param("anno")Long anno, 
+			@Param("idGestore")Long idGestore, @Param("idStatoDichiarazione")Long idStatoDichiarazione);
+	
+	
+	/**
+	 * Find by id impianto and anno and id gestore and id stato dichichiarazione.
+	 *
+	 * @param idImpianto the id impianto
+	 * @param anno the anno
+	 * @param idGestore the id gestore
+	 * @param idStatoDichiarazione the id stato dichiarazione
+	 * @return the optional
+	 */
+	@Query("SELECT ttda "
+			+ "FROM TsddrTDichAnnuale ttda "
+			+ "INNER JOIN ttda.impianto ttimp "
+			+ "INNER JOIN ttimp.gestore ttg "
+			+ "INNER JOIN ttda.statoDichiarazione tdsdich "
+			+ "WHERE ttda.anno = :anno AND "
+			+ "ttda.versione = (SELECT MAX(ttda1.versione) FROM TsddrTDichAnnuale ttda1 WHERE ttda1.impianto.idImpianto = :idImpianto AND ttda1.anno = :anno) AND "
+			+ "ttimp.idImpianto = :idImpianto AND "
+			+ "ttg.idGestore = :idGestore AND "
+			+ "tdsdich.idStatoDichiarazione <> :idStatoDichiarazione AND "
+            + RepositoryUtil.TTDA_DICH_ANNUALE_DELETE_VALIDITY_CHECK)
+	Optional<TsddrTDichAnnuale> findByIdImpiantoAndAnnoAndIdGestoreAndNotIdStatoDichichiarazione(@Param("idImpianto")Long idImpianto, @Param("anno")Long anno, 
 			@Param("idGestore")Long idGestore, @Param("idStatoDichiarazione")Long idStatoDichiarazione);
 	
 	@Query("SELECT ttda "
@@ -94,7 +118,27 @@ public interface TsddrTDichAnnualeRepository
 			+ "FROM TsddrTDichAnnuale ttda1 "
 			+ "WHERE ttda1.impianto.idImpianto = :idImpianto "
 			+ "AND ttda1.anno = :anno)")
-	Optional<TsddrTDichAnnuale> findByIdImpiantoAndAnno(@Param("idImpianto") Long idImpianto, @Param("anno") Long anno);
+	Optional<List<TsddrTDichAnnuale>> findByIdImpiantoAndAnno(@Param("idImpianto") Long idImpianto, @Param("anno") Long anno);
+	
+	/**
+	 * Find by id impianto and anno.
+	 *
+	 * @param idImpianto the id impianto
+	 * @param anno the anno
+	 * @return the optional
+	 */
+	@Query("SELECT ttda " 
+			+ "FROM TsddrTDichAnnuale ttda " 
+			+ "INNER JOIN ttda.statoDichiarazione tdsdich "
+			+ "WHERE ttda.impianto.idImpianto = :idImpianto "
+			+ "AND ttda.anno = :anno "
+			+ "AND ttda.versione = "
+			+ "(SELECT MAX(ttda1.versione) "
+			+ "FROM TsddrTDichAnnuale ttda1 "
+			+ "WHERE ttda1.impianto.idImpianto = :idImpianto "
+			+ "AND ttda1.anno = :anno) "
+			+ "AND tdsdich.idStatoDichiarazione = :idStatoDichiarazione")
+	Optional<TsddrTDichAnnuale> findByIdImpiantoAndAnnoAndStato(@Param("idImpianto") Long idImpianto, @Param("anno") Long anno, @Param("idStatoDichiarazione")Long idStatoDichiarazione);
 
 	/**
 	 * Find by id dich annuale and id stato dich annuale.

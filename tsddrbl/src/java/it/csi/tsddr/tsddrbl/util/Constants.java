@@ -64,4 +64,9 @@ public class Constants {
 	 */
 	public static final String ID_ISTAT_NAZIONE_CORRENTE_DEFAULT = "100";
 
+	/**
+	 * The constant INDIRIZZO_SEDE_LEGALE_NON_PRESENTE.
+	 */
+	public static final String INDIRIZZO_SEDE_LEGALE_NON_PRESENTE = "Indirizzo non presente, la sede legale è in %s";
+
 }

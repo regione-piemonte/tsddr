@@ -1192,8 +1192,9 @@ public class PrevConsServiceImpl implements PrevConsService {
             sheet.addColumn("Stato");
 //        	7	Colonna G	Protocollo
             sheet.addColumn("Protocollo");
-//        	8	Colonna H	N° Dichiarazioni collegate
-            sheet.addColumn("N° Dichiarazioni collegate");      
+//        	8	Colonna H	N° Dichiarazioni collegate inviate
+            // CR OB 258-259-260
+            sheet.addColumn("N° Dichiarazioni collegate inviate");
         
         }else {
 //          1	Colonna A	Gestore CF / PI - Denominazione
@@ -1292,18 +1293,22 @@ public class PrevConsServiceImpl implements PrevConsService {
 		
     private String getInfoRichiesta(PrevConsExtendedVO prevConsExtVO) {
 		if(prevConsExtVO.getPrevConsRichiesta() == null) {
-			return (prevConsExtVO.getModalita()!=null?prevConsExtVO.getModalita():"")
-					+ " - " 
-					+(prevConsExtVO.getNumProtDoc()!=null?prevConsExtVO.getNumProtDoc():"") 
-					+ " - " 
-					+(prevConsExtVO.getDataDoc()!=null? new SimpleDateFormat(DateUtil.ddMMyyyy).format(prevConsExtVO.getDataDoc()):"");
-		}else {
+            // CR OB 258-259-260
+            return (prevConsExtVO.getModalita() != null ? prevConsExtVO.getModalita() : "")
+                    + " - "
+                    + (prevConsExtVO.getDataInvioDoc() != null ? new SimpleDateFormat(DateUtil.ddMMyyyy).format(prevConsExtVO.getDataInvioDoc()) : "")
+                    + " - "
+                    + (prevConsExtVO.getNumProtDoc() != null ? prevConsExtVO.getNumProtDoc() : "");
+        }else {
 			return  prevConsExtVO.getPrevConsRichiesta().getNumProtocollo() + " - " + new SimpleDateFormat(DateUtil.ddMMyyyy).format(prevConsExtVO.getPrevConsRichiesta().getDataProtocollo());
 		}
 	}
 
 	private long getNumeroCollegate(PrevConsExtendedVO prevConsExtVO) {
-		return prevConsRepository.countByIdPrevConsRMr(prevConsExtVO.getIdPrevCons());
+        // CR OB 258-259-260
+        return prevConsRepository.countByIdTipoDocAndIdStatoDichiarazioneAndIdPrevConsRMr(
+                2L, 2L, prevConsExtVO.getIdPrevCons()
+        );
 	}
 
 	private PrevConsExtendedVO getPrevConsInternal(Long idPrevCons) {
@@ -1382,10 +1387,13 @@ public class PrevConsServiceImpl implements PrevConsService {
 		LoggerUtil.debug(logger, "[PrevConsServiceImpl::isPercRecuperoVisible] BEGIN");
 		Long idLinea = null;
 		Long idSottoLinea = null;
+		if(codLinea == null || codLinea.equalsIgnoreCase("undefined")) {
+			return GenericResponse.build(false);
+		}
 		if(codLinea.contains(".")) {
 			Optional<TsddrTSottoLinea> sottoLinea = tsddrTSottoLineaRepository.findByCodSottoLinea(codLinea);
-			idLinea = sottoLinea.get().getLinea().getIdLinea();
-			idSottoLinea = sottoLinea.get().getIdSottoLinea();
+			idLinea = sottoLinea.isPresent()?sottoLinea.get().getLinea().getIdLinea():null;
+			idSottoLinea = sottoLinea.isPresent()?sottoLinea.get().getIdSottoLinea():null;
 		}else {
 			idLinea = Long.parseLong(codLinea);
 		}
@@ -1411,10 +1419,13 @@ public class PrevConsServiceImpl implements PrevConsService {
 		LoggerUtil.debug(logger, "[PrevConsServiceImpl::isPercScartoVisible] BEGIN");
 		Long idLinea = null;
 		Long idSottoLinea = null;
+		if(codLinea == null || codLinea.equalsIgnoreCase("undefined")) {
+			return GenericResponse.build(false);
+		}
 		if(codLinea.contains(".")) {
 			Optional<TsddrTSottoLinea> sottoLinea = tsddrTSottoLineaRepository.findByCodSottoLinea(codLinea);
-			idLinea = sottoLinea.get().getLinea().getIdLinea();
-			idSottoLinea = sottoLinea.get().getIdSottoLinea();
+			idLinea = sottoLinea.isPresent()?sottoLinea.get().getLinea().getIdLinea():null;
+			idSottoLinea = sottoLinea.isPresent()?sottoLinea.get().getIdSottoLinea():null;
 		}else {
 			idLinea = Long.parseLong(codLinea);
 		}
