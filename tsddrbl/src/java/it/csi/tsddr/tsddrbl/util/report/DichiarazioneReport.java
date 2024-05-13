@@ -6,6 +6,7 @@ package it.csi.tsddr.tsddrbl.util.report;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -101,6 +102,7 @@ public class DichiarazioneReport implements TsddrReport {
 		}
 		// ordino i conferimenti
 		// ordino i rifiuti conferiti
+		List<RifiutoConferitoVO> rifiutiConferitiSorted = new ArrayList<RifiutoConferitoVO>();
         if(dichAnnualeVO.getRifiutiConferiti() != null && 
                 dichAnnualeVO.getRifiutiConferiti().getRifiutiConferiti() != null) {
             for(RifiutoConferitoVO rifiutoConferitoVO : dichAnnualeVO.getRifiutiConferiti().getRifiutiConferiti()) {
@@ -108,10 +110,12 @@ public class DichiarazioneReport implements TsddrReport {
                     .stream()
                     .sorted((o1, o2) -> o1.getPeriodo().getIdPeriodo().compareTo(o2.getPeriodo().getIdPeriodo()))
                     .collect(Collectors.toList());
-                rifiutoConferitoVO.setConferimenti(conferimentiVO);
+                //rifiutoConferitoVO.setConferimenti(conferimentiVO);
+				rifiutiConferitiSorted.add(new RifiutoConferitoVO(rifiutoConferitoVO.getRifiutoTariffa(), rifiutoConferitoVO.getUnitaMisura(), conferimentiVO, rifiutoConferitoVO.getTotale()));
             }
         }
-    	jasperParam.put("rifiutiConferiti", new JRBeanCollectionDataSource(rifiutiConferiti.getRifiutiConferiti()));
+    	//jasperParam.put("rifiutiConferiti", new JRBeanCollectionDataSource(rifiutiConferiti.getRifiutiConferiti()));
+    	jasperParam.put("rifiutiConferiti", new JRBeanCollectionDataSource(rifiutiConferitiSorted));
     	jasperParam.put("totalerifiutiConferiti" , new JRBeanCollectionDataSource(rifiutiConferiti.getTotali().getTotaliPeriodi()));
 
     	jasperParam.put("totaleQuantita" , rifiutiConferiti.getTotali().getTotale().getQuantita());

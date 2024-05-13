@@ -57,11 +57,12 @@ export class EditComponent implements OnInit {
     // this._initHelper();
     this.route.data.pipe(untilDestroyed(this)).subscribe((data: any) => {
       this.currentUser = data['utente'].content;
+      console.log(data);
       this.profiliUtente$ = this.service
         .getComboProfiliUtente(this.currentUser.idUtente)
         .pipe(
           tap((r) => {
-            if(!this.acl.content.update){
+            if (!this.acl.content.update) {
               this.isReadonlyAll = true;
             }
 
@@ -77,6 +78,7 @@ export class EditComponent implements OnInit {
               .subscribe((message) => {
                 this.mandatoryMessage = message;
                 this._initForm(data['utente'].content);
+                console.log(data['utente'].content);
                 this.loadingService.hide();
               });
           })
@@ -88,7 +90,7 @@ export class EditComponent implements OnInit {
 
   onEdit() {
     this.loadingService.show();
-    const utente = {...this.currentUser, ...this.form.value};
+    const utente = { ...this.currentUser, ...this.form.value };
     delete utente.divider;
     utente.idUtente = this.currentUser.idUtente;
 
@@ -283,11 +285,26 @@ export class EditComponent implements OnInit {
         dataFineValidita: new DateInput({
           label: 'UTENTI.EDIT.FORM.FINE.LABEL',
           placeholder: 'UTENTI.EDIT.FORM.FINE.PLACEHOLDER',
-          value: new Date(currentValue.dataFineValidita),
+          value: currentValue.dataFineValidita
+            ? this.datePipe.transform(
+                new Date(currentValue.dataFineValidita),
+                'yyyy-MM-dd'
+              )
+            : new Date(currentValue.dataFineValidita),
           size,
           validatorOrOpts: { updateOn: 'blur' },
           readonly: this.isReadonlyAll,
-          clearable: true
+          clearable: true,
+         /* valueChange: (value) => {
+            console.log(
+              typeof currentValue.dataFineValidita,
+              typeof currentValue.dataInizioValidita
+            );
+            console.log(
+              currentValue.dataFineValidita,
+              currentValue.dataInizioValidita
+            );
+          }*/
         })
       }
     });

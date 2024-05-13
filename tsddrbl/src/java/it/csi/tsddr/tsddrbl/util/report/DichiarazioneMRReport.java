@@ -6,6 +6,7 @@
 package it.csi.tsddr.tsddrbl.util.report;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +87,14 @@ public class DichiarazioneMRReport implements TsddrReport {
 		lineeExtended = lineeExtended.stream()
 		        .filter(obj -> obj.getIdPrevConsLinee() != null)
 		        .collect(Collectors.toList());
-		
+        
+        lineeExtended = lineeExtended.stream()
+                    .filter(obj -> (obj.getTotMat().compareTo(BigDecimal.valueOf(0L)) != 0
+                                    || obj.getTotRii().compareTo(BigDecimal.valueOf(0L)) != 0
+                                    || obj.getTotRru().compareTo(BigDecimal.valueOf(0L)) != 0
+                                    || obj.getTotRu().compareTo(BigDecimal.valueOf(0L)) != 0))
+                    .collect(Collectors.toList());
+                
 		lineeExtended = lineeExtended.stream()
 		        .map(lineaExtended -> {
 		            lineaExtended.setPrevConsDett(lineaExtended.getPrevConsDett().stream()

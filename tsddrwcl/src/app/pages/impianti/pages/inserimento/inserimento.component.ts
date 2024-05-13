@@ -662,6 +662,7 @@ export class InserimentoComponent implements OnInit {
       }
     });
     this.createForm.valueChanges.subscribe(x => {
+
      // this._verifyProfiloCreate(x);
     });
   }
@@ -673,7 +674,11 @@ export class InserimentoComponent implements OnInit {
     //this.hasUnsavedCreate = false;
   }
   createLinea(): void{
+
     if (this.createForm.valid) {
+      if(this.createForm.get('dataInizioValidita').value === null){
+        this.createForm.get('dataInizioValidita').setValue(this.datePipe.transform(new Date(), 'yyyy-MM-dd'))
+      }
       this.storeLineeGridMemoryService.addLinea(({...this.toCreate,...this.createForm.value} as LineaExtended));
       this._comboLineFollowGrid(({...this.toCreate,...this.createForm.value} as LineaExtended),true);
       this.dataSource.refresh();
@@ -761,6 +766,7 @@ export class InserimentoComponent implements OnInit {
   }
 
   updateDatasourceAtti() {
+
     if (!this.dataSourceAtti) {
       this.dataSourceAtti = new LocalPagedDataSource<Atto>({
         observable: this.storeLineeGridMemoryService.getStoredAtti.bind(this.storeLineeGridMemoryService),
@@ -861,6 +867,7 @@ export class InserimentoComponent implements OnInit {
   }
 
   createAtto(): void{
+
     if (this.createFormAtto.valid) {
       this.storeLineeGridMemoryService.addAtto({...this.createFormAtto.value,...this.toCreateAtto});
       this.dataSourceAtti.refresh();

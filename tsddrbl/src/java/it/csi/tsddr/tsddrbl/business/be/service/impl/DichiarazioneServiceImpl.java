@@ -441,7 +441,11 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 			ExistsDichiarazioneVO existsDichiarazioneVO) {
 		LoggerUtil.debug(logger, "[DichiarazioneServiceImpl::existsDichiarazione] BEGIN");
 		Optional<List<TsddrTDichAnnuale>> dichAnnuali = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazione(existsDichiarazioneVO.getIdImpianto(), existsDichiarazioneVO.getAnno(), existsDichiarazioneVO.getIdGestore(), StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
-		GenericResponse<Boolean> response = GenericResponse.build(!dichAnnuali.isEmpty());
+		GenericResponse<Boolean> response = null;
+		if(dichAnnuali.isEmpty()){
+			dichAnnuali = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazione(existsDichiarazioneVO.getIdImpianto(), existsDichiarazioneVO.getAnno(), existsDichiarazioneVO.getIdGestore(), StatoDichiarazione.BOZZA.getId());
+		}
+		response = GenericResponse.build(!dichAnnuali.isEmpty());		
 		LoggerUtil.debug(logger, "[DichiarazioneServiceImpl::existsDichiarazione] END");
 		return response;
 	}

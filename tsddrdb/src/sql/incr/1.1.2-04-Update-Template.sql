@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.6.final utlizzo versione della libreria JasperReports6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+UPDATE tsddr_t_report
+SET data_delete=NULL, data_insert=NULL, data_update=NULL, id_user_delete=NULL, id_user_insert=NULL, id_user_update=NULL, desc_report='DICHIARAZIONE ANNUALE', xml_report='
+<!-- Created with Jaspersoft Studio version 7.9.0.final utlizzo versione della libreria JasperReports6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="UMA_MODELLO_26_V" pageWidth="595" pageHeight="900" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="3e2d4fe0-be96-423a-93be-f74048f83696">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Nuovo Data Adapter (2)"/>
 	<subDataset name="soggettimrDataset" uuid="4d37fa87-5587-4ab4-9454-80c417108cf4">
@@ -216,8 +217,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{H_C_1}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="184" y="53" width="200" height="11" uuid="d9756cc6-9881-461b-9ba8-90f4f2c3e5e1">
+			<textField textAdjust="StretchHeight">
+				<reportElement x="162" y="53" width="234" height="11" uuid="d9756cc6-9881-461b-9ba8-90f4f2c3e5e1">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
@@ -226,8 +227,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{H_C_2}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="184" y="62" width="200" height="9" uuid="2f6fa418-fe0c-49b7-b8f7-5a2f28d9a691">
+			<textField textAdjust="StretchHeight">
+				<reportElement x="162" y="62" width="234" height="9" uuid="2f6fa418-fe0c-49b7-b8f7-5a2f28d9a691">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
@@ -734,7 +735,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[QUANTITA']]></text>
+				<text><![CDATA[QUANTITA'''']]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="66" y="450" width="50" height="12" backcolor="#FFFFFF" uuid="ab2130d7-f80b-4174-940d-f8f27530ded7">
@@ -779,7 +780,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[QUANTITA']]></text>
+				<text><![CDATA[QUANTITA'''']]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="176" y="450" width="50" height="12" backcolor="#FFFFFF" uuid="4e4c77b1-bbf4-423a-ab3a-87102b276713">
@@ -824,7 +825,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[QUANTITA']]></text>
+				<text><![CDATA[QUANTITA'''']]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="286" y="450" width="50" height="12" backcolor="#FFFFFF" uuid="e5baa174-9988-428d-b285-c8bbbb7f5025">
@@ -869,7 +870,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[QUANTITA']]></text>
+				<text><![CDATA[QUANTITA'''']]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="396" y="450" width="50" height="12" backcolor="#FFFFFF" uuid="43483503-8a92-453e-8a91-2f3d41f4cfa5">
@@ -914,7 +915,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[QUANTITA']]></text>
+				<text><![CDATA[QUANTITA'''']]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="506" y="450" width="50" height="12" backcolor="#71B2DE" uuid="ddaa1cc4-41e4-44d3-af88-33ba05f361f1">
@@ -1820,7 +1821,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7.7" isBold="true"/>
+					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SECONDO TRIMESTRE]]></text>
 			</staticText>
@@ -2059,7 +2060,7 @@
 				<textFieldExpression><![CDATA[$P{versamentiTotale}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="137" y="586" width="211" height="12" backcolor="#FFFFFF" uuid="37a9bfe9-a805-4673-8a54-f59d9652712d">
+				<reportElement positionType="Float" x="118" y="586" width="246" height="12" backcolor="#FFFFFF" uuid="37a9bfe9-a805-4673-8a54-f59d9652712d">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="pixel"/>
@@ -2075,10 +2076,10 @@
 					<font size="8" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<text><![CDATA[Importo totale dovuto per l'anno di riferimento]]></text>
+				<text><![CDATA[Importo totale dovuto per l''anno di riferimento]]></text>
 			</staticText>
 			<textField textAdjust="ScaleFont" pattern="#,##0.###;#,##0.###-">
-				<reportElement key="" positionType="Float" x="354" y="586" width="71" height="12" backcolor="#E0E0E0" uuid="d69ec5c3-ee93-4529-9436-928371523843">
+				<reportElement key="" positionType="Float" x="371" y="586" width="71" height="12" backcolor="#E0E0E0" uuid="d69ec5c3-ee93-4529-9436-928371523843">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
@@ -2095,7 +2096,7 @@
 				<textFieldExpression><![CDATA[$P{totaleImporto}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="ScaleFont" pattern="#,##0.###;#,##0.###-">
-				<reportElement key="" positionType="Float" x="354" y="600" width="71" height="12" backcolor="#E0E0E0" uuid="fe11c48f-eb85-475d-bfa8-ebed99e535d6">
+				<reportElement key="" positionType="Float" x="371" y="600" width="71" height="12" backcolor="#E0E0E0" uuid="fe11c48f-eb85-475d-bfa8-ebed99e535d6">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
@@ -2112,7 +2113,7 @@
 				<textFieldExpression><![CDATA[$P{versamentiTotale}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="137" y="600" width="211" height="12" backcolor="#FFFFFF" uuid="f3110847-2884-4dbd-a8f8-07ee88a732d5">
+				<reportElement positionType="Float" x="118" y="600" width="246" height="12" backcolor="#FFFFFF" uuid="f3110847-2884-4dbd-a8f8-07ee88a732d5">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -2130,7 +2131,7 @@
 				<text><![CDATA[Importo totale versato]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="137" y="614" width="211" height="12" backcolor="#FFFFFF" uuid="b97140bd-24cf-433c-8cc1-e375d9977cce">
+				<reportElement positionType="Float" x="118" y="614" width="246" height="12" backcolor="#FFFFFF" uuid="b97140bd-24cf-433c-8cc1-e375d9977cce">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -2148,7 +2149,7 @@
 				<text><![CDATA[Credito risultante dalla precedente dichiarazione]]></text>
 			</staticText>
 			<textField textAdjust="ScaleFont" pattern="#,##0.###;#,##0.###-">
-				<reportElement key="" positionType="Float" x="354" y="614" width="71" height="12" backcolor="#E0E0E0" uuid="2446e427-17dd-4bed-a799-a906789a8a88">
+				<reportElement key="" positionType="Float" x="371" y="614" width="71" height="12" backcolor="#E0E0E0" uuid="2446e427-17dd-4bed-a799-a906789a8a88">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
@@ -2165,7 +2166,7 @@
 				<textFieldExpression><![CDATA[$P{versamentiCreditoAP}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="137" y="628" width="211" height="15" backcolor="#FFFFFF" uuid="243cb2d3-5f36-4f64-bad5-a9c21b6a8d20">
+				<reportElement positionType="Float" x="118" y="628" width="246" height="15" backcolor="#FFFFFF" uuid="243cb2d3-5f36-4f64-bad5-a9c21b6a8d20">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -2183,7 +2184,7 @@
 				<text><![CDATA[Importo a debito (da versare a saldo)]]></text>
 			</staticText>
 			<textField textAdjust="ScaleFont" pattern="#,##0.###;#,##0.###-" isBlankWhenNull="false">
-				<reportElement key="" positionType="Float" x="354" y="628" width="71" height="15" backcolor="#E0E0E0" uuid="186c5765-86c4-419a-88f4-a16bade0200d">
+				<reportElement key="" positionType="Float" x="371" y="628" width="71" height="15" backcolor="#E0E0E0" uuid="186c5765-86c4-419a-88f4-a16bade0200d">
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
 				<box>
@@ -2382,7 +2383,7 @@
 				<text><![CDATA[Denominazione o Ragione sociale]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="385" y="700" width="85" height="12" backcolor="#FFFFFF" uuid="a0c35f16-52a3-4af2-a048-c03a4ff7030e">
+				<reportElement positionType="Float" x="385" y="700" width="104" height="12" backcolor="#FFFFFF" uuid="a0c35f16-52a3-4af2-a048-c03a4ff7030e">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="pixel"/>
@@ -2458,7 +2459,7 @@
 				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="385" y="712" width="85" height="12" backcolor="#FFFFFF" uuid="cbaff7fb-4b9e-4355-9e55-f0624846faf0">
+				<reportElement positionType="Float" x="385" y="712" width="104" height="12" backcolor="#FFFFFF" uuid="cbaff7fb-4b9e-4355-9e55-f0624846faf0">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="pixel"/>
@@ -2477,7 +2478,7 @@
 				<text><![CDATA[]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="101" y="712" width="369" height="12" uuid="07d3356b-c8ec-49b6-a79a-fbd2d94e9e54">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="101" y="712" width="387" height="12" uuid="07d3356b-c8ec-49b6-a79a-fbd2d94e9e54">
 					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Soggetti"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -2488,7 +2489,7 @@
 					<datasetRun subDataset="soggettimrDataset" uuid="f5c44942-3e91-4469-b9df-d02298255fa5">
 						<dataSourceExpression><![CDATA[$P{soggettimr}]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="12" width="369">
+					<jr:listContents height="12" width="387">
 						<textField textAdjust="ScaleFont">
 							<reportElement key="" mode="Transparent" x="0" y="0" width="35" height="12" backcolor="#FFFFFF" uuid="9e417769-e7ad-45ee-bddb-bf0a1a02d7ad">
 								<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -2544,7 +2545,7 @@
 							<textFieldExpression><![CDATA[$F{ragSociale}]]></textFieldExpression>
 						</textField>
 						<textField textAdjust="ScaleFont">
-							<reportElement key="" mode="Transparent" x="284" y="0" width="85" height="12" backcolor="#FFFFFF" uuid="bce3e2fd-8647-4fb9-a017-2e770d9d9aca">
+							<reportElement key="" mode="Transparent" x="284" y="0" width="103" height="12" backcolor="#FFFFFF" uuid="bce3e2fd-8647-4fb9-a017-2e770d9d9aca">
 								<property name="com.jaspersoft.studio.unit.x" value="px"/>
 								<property name="com.jaspersoft.studio.unit.y" value="px"/>
 								<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -2565,7 +2566,7 @@
 				</jr:list>
 			</componentElement>
 			<textField textAdjust="ScaleFont" pattern="#,##0.###;#,##0.###-" isBlankWhenNull="false">
-				<reportElement key="" positionType="Float" x="354" y="645" width="71" height="24" backcolor="#E0E0E0" uuid="c05ad6ca-14a5-4338-b170-da6094382cd0">
+				<reportElement key="" positionType="Float" x="371" y="645" width="71" height="24" backcolor="#E0E0E0" uuid="c05ad6ca-14a5-4338-b170-da6094382cd0">
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
 				<box>
@@ -2581,7 +2582,7 @@
 				<textFieldExpression><![CDATA[$P{versamentiCredito}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="137" y="645" width="211" height="24" backcolor="#FFFFFF" uuid="0fa29d08-4134-4e9d-a6f7-2a191b9e4bb4">
+				<reportElement positionType="Float" x="118" y="645" width="246" height="24" backcolor="#FFFFFF" uuid="0fa29d08-4134-4e9d-a6f7-2a191b9e4bb4">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -2654,3 +2655,5 @@
 		</band>
 	</title>
 </jasperReport>
+', data_fine_validita=NULL, data_inizio_validita='2022-01-01'
+WHERE id_report=1;

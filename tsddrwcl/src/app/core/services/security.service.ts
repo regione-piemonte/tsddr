@@ -109,7 +109,10 @@ export class SecurityService {
       }),
       map((response: any) => {
         this._user$.next(null);
-        localStorage.removeItem('idProfilo');
+        //localStorage.removeItem('idProfilo');
+        localStorage.clear();
+        sessionStorage.clear();
+        console.log('logout OK');
         return true;
       })
     );

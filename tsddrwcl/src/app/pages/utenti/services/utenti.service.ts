@@ -80,6 +80,12 @@ export class UtentiService {
         return of({ unfilled: true });
       }
 
+      //if the request is empty
+      if(JSON.stringify(searchInput)==='{}'){
+
+        return of({ unfilled: true });
+      }
+
       return this.apiClient.request('validateSearchUtenti', searchInput).pipe(
         csiCatchErrorForValidators(),
         map((result) => {

@@ -1119,7 +1119,7 @@ public class AccreditamentoServiceImpl implements AccreditamentoService {
 					domanda.getIdDomanda(),
 					domanda.getStato().getDesc(),
 					domanda.getGestore().getCodFiscPartiva() + " - " + domanda.getGestore().getRagSociale(),
-					domanda.getRichiedente().getCodFiscale() + " - " + domanda.getRichiedente().getCognome() + domanda.getRichiedente().getNome(),
+					domanda.getRichiedente().getCodFiscale() + " - " + domanda.getRichiedente().getCognome() + " " + domanda.getRichiedente().getNome(),
 					domanda.getRichiedente().getTelefono(),
 					domanda.getRichiedente().getEmail(),
 					domanda.getNotaUtente(),

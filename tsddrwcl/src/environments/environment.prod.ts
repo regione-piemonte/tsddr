@@ -2,9 +2,10 @@ import { backendApi } from '../config/backend-api.conf';
 export const environment = {
   production: true,
   iconBaseUrl: '/tsddr',
-  auth: {          
+  auth: {
     ssoLogoutBO: 'https://tsddr.ruparpiemonte.it/tsddr_rup_443sliv1irup/Shibboleth.sso/Logout',
-    ssoLogoutFO: 'https://tsddr.regione.piemonte.it/tsddr_int_443s_liv3_sispliv1spid_gasp_regione/logout.do'
+    //ssoLogoutFO: 'https://tsddr.regione.piemonte.it/tsddr_int_443s_liv3_sispliv1spid_gasp_regione/logout.do'
+    ssoLogoutFO: 'https://tsddr.regione.piemonte.it/tsddr_int_443s_liv3_sispliv2spid_gasp_regione/logout.do'
   },
   fakeAuth: {
     enabled: false,

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
+UPDATE tsddr_t_report
+SET data_delete=NULL, data_insert=NULL, data_update=NULL, id_user_delete=NULL, id_user_insert=NULL, id_user_update=NULL, desc_report='DICHIARAZIONE ANNUALE', xml_report='
 <!-- Created with Jaspersoft Studio version 6.20.6.final utlizzo versione della libreria JasperReports6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="UMA_MODELLO_26_V" pageWidth="595" pageHeight="900" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="3e2d4fe0-be96-423a-93be-f74048f83696">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Nuovo Data Adapter (2)"/>
@@ -734,7 +735,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[QUANTITA']]></text>
+				<text><![CDATA[QUANTITA'']]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="66" y="450" width="50" height="12" backcolor="#FFFFFF" uuid="ab2130d7-f80b-4174-940d-f8f27530ded7">
@@ -779,7 +780,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[QUANTITA']]></text>
+				<text><![CDATA[QUANTITA'']]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="176" y="450" width="50" height="12" backcolor="#FFFFFF" uuid="4e4c77b1-bbf4-423a-ab3a-87102b276713">
@@ -824,7 +825,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[QUANTITA']]></text>
+				<text><![CDATA[QUANTITA'']]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="286" y="450" width="50" height="12" backcolor="#FFFFFF" uuid="e5baa174-9988-428d-b285-c8bbbb7f5025">
@@ -869,7 +870,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[QUANTITA']]></text>
+				<text><![CDATA[QUANTITA'']]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="396" y="450" width="50" height="12" backcolor="#FFFFFF" uuid="43483503-8a92-453e-8a91-2f3d41f4cfa5">
@@ -914,7 +915,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[QUANTITA']]></text>
+				<text><![CDATA[QUANTITA'']]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="506" y="450" width="50" height="12" backcolor="#71B2DE" uuid="ddaa1cc4-41e4-44d3-af88-33ba05f361f1">
@@ -2075,7 +2076,7 @@
 					<font size="8" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<text><![CDATA[Importo totale dovuto per l'anno di riferimento]]></text>
+				<text><![CDATA[Importo totale dovuto per l''anno di riferimento]]></text>
 			</staticText>
 			<textField textAdjust="ScaleFont" pattern="#,##0.###;#,##0.###-">
 				<reportElement key="" positionType="Float" x="354" y="586" width="71" height="12" backcolor="#E0E0E0" uuid="d69ec5c3-ee93-4529-9436-928371523843">
@@ -2654,3 +2655,5 @@
 		</band>
 	</title>
 </jasperReport>
+', data_fine_validita=NULL, data_inizio_validita='2022-01-01'
+WHERE id_report=1;

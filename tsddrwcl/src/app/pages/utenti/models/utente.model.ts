@@ -25,6 +25,7 @@ export interface UtenteUpdateResponse {
     cognome: string;
     nome: string;
     dataInizioValidita: string;
+    dataFineValidita?: string;
   };
 }
 

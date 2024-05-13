@@ -181,7 +181,7 @@ public class MailHelper {
 		try {
 			MimeMessage message = sender.createMimeMessage();
 			
-			MimeMessageHelper helper = new MimeMessageHelper(message, true);
+			MimeMessageHelper helper = new MimeMessageHelper(message, true, "ISO-8859-1");
 	
 			helper.setSentDate(new Date());
 			helper.setFrom(new InternetAddress(from));

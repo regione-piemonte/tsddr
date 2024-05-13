@@ -29,7 +29,7 @@
             <button (click)="onBack()" aria-label="Indietro" type="button" class="btn btn-link px-0">
                 {{'UTILS.BACK'|translate}}
             </button>
-            <button (click)="onExportExcel()" [disabled]="dataSource?.rows?.length===0" aria-label="Esporta elenco" type="button" class="btn btn-light export ml-4" style="color:#007bff; background-color:white; border: 1px solid #007bff; ">
+            <button (click)="onExportExcel()" [disabled]="dataSource?.rows?.length===0" aria-label="Esporta elenco" type="button" class="btn btn-light csi-secondary-button export ml-4" >
                 {{'UTILS.EXPORT'|translate}}
             </button>
         </div>

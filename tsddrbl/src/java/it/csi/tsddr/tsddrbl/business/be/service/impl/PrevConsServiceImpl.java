@@ -539,7 +539,7 @@ public class PrevConsServiceImpl implements PrevConsService {
                 }
                 this.logSalvaRichiestaPrevCons(httpSession, idDatiSogg, prevCons.getIdPrevCons());
             } else if (tipoDoc.getIdTipoDoc().compareTo(TipoDoc.DICHIARAZIONE.getId()) == 0) {
-                responseProtocollaDocumento = doquiServiceFacade.protocollaDocumentoFisicoDichiarazione(prevCons, dichiarazioneGeneraReportPDFToByte(prevCons), this.dichiarazioneGeneraPdfFilename(prevCons), user);
+            	responseProtocollaDocumento = doquiServiceFacade.protocollaDocumentoFisicoDichiarazione(prevCons, dichiarazioneGeneraReportPDFToByte(prevCons), this.dichiarazioneGeneraPdfFilename(prevCons), user);
                 prevCons.setNumProtocollo(responseProtocollaDocumento.getProtocollo());
                 prevCons.setDataProtocollo(new Date());
                 Optional<TsddrDStatoDichiarazione> statoDichOpt = statoDichiarazioneRepository.findStatoDichiarazioneById(StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
@@ -553,7 +553,7 @@ public class PrevConsServiceImpl implements PrevConsService {
         } catch(Exception e) {
             LoggerUtil.error(logger, "[PrevConsServiceImpl::insertPrevCons] Errore nella generazione del PDF", e);
         }
-        GenericResponse<PrevConsVO> response = GenericResponse.build(messaggioService.getMessaggioByCodMsg(CodiceMessaggio.P014.name()), prevConsEntityMapper.mapEntityToVO(prevCons));
+        GenericResponse<PrevConsVO> response = GenericResponse.build(messaggioService.getMessaggioByCodMsg(tipoDoc.getIdTipoDoc().compareTo(TipoDoc.RICHIESTA.getId()) == 0?CodiceMessaggio.P020.name():CodiceMessaggio.P014.name()), prevConsEntityMapper.mapEntityToVO(prevCons));
         return response;
     }
 
@@ -711,7 +711,7 @@ public class PrevConsServiceImpl implements PrevConsService {
         MessaggioVO messaggioVO = null;
         if(idSezione == null) { // ELIMINAZIONE INTERA LINEA
             prevConsLineaRepository.delete(prevConsLinea);
-            messaggioVO = messaggioService.getMessaggioByCodMsg(CodiceMessaggio.P017.name());
+            messaggioVO = messaggioService.getMessaggioByCodMsg(CodiceMessaggio.P018.name());
         } else { // ELIMINAZIONE LINEA PER ID_SEZIONE
             for(TsddrTPrevConsDett prevConsDett : prevConsLinea.getPrevConsDett()) {
                 if(prevConsDett.getSezione().getIdSezione().equals(idSezione)) {
@@ -1012,7 +1012,7 @@ public class PrevConsServiceImpl implements PrevConsService {
         JasperPrint jasperPrint = utilsReportImpl.printJasper(jasperParam, dichiarazioneMRReport);
         byte[] b = JasperExportManager.exportReportToPdf(jasperPrint);
         // salva il report in locale
-//         this.saveDevFile(b);
+//        this.saveDevFile(b);
         return b;
     }
     

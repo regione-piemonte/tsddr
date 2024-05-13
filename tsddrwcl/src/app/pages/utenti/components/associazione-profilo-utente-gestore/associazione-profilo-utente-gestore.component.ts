@@ -280,16 +280,17 @@ export class AssociazioneProfiloUtenteGestoreComponent
         cellClass: 'align-middle',
         sortable: false
       },
-      {
+      { prop: 'gestore.ragSociale',
         cellTemplate: this.gestoreTemplate,
         name: this.i18n.translate('UTENTI.EDIT.TABLE.COLUMNS.GESTORE'),
         cellClass: 'align-middle min-w-250',
         sortable: true,
         sortFn: (a, b, dir) => {
+      
           if (dir === 'asc') {
-            return ('' + a.ragSociale).localeCompare(b.ragSociale);
+            return ('' + a.gestore.ragSociale).localeCompare(b.gestore.ragSociale);
           }
-          return ('' + b.ragSociale).localeCompare(a.ragSociale);
+          return ('' + b.gestore.ragSociale).localeCompare(a.gestore.ragSociale);
         }
       },
       {

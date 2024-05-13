@@ -27,6 +27,7 @@ export class UtenteResolver implements Resolve<any> {
   ): Observable<any> | Promise<any> | any {
     return this.service.getUtente(route.params.id).pipe(
       map((res: any) => {
+        console.log(res)
         return res || {};
       }),
       catchError((err: HttpErrorResponse) => {

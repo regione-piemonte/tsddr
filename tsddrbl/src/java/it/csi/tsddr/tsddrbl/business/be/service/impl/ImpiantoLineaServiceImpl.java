@@ -5,6 +5,7 @@
 package it.csi.tsddr.tsddrbl.business.be.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -39,7 +40,8 @@ public class ImpiantoLineaServiceImpl implements ImpiantoLineaService {
         if(idPrevCons != null) {
             impiantiLinee = impiantoLineaRepository.findByIdImpiantoAndIdPrevCons(idImpianto, idPrevCons);
         } else {
-            impiantiLinee = impiantoLineaRepository.findByIdImpiantoAll(idImpianto);
+//            impiantiLinee = impiantoLineaRepository.findByIdImpiantoAll(idImpianto);
+            impiantiLinee = impiantoLineaRepository.findByIdImpiantoAllValid(idImpianto, new Date());
         }
         
         GenericResponse<List<ImpiantoLineeVO>> response = GenericResponse.build(impiantoLineeEntityMapper.mapListEntityToListVO(impiantiLinee));

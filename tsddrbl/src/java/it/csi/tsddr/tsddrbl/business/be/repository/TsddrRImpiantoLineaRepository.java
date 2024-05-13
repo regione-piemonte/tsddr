@@ -4,6 +4,7 @@
  */
 package it.csi.tsddr.tsddrbl.business.be.repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,9 +45,25 @@ public interface TsddrRImpiantoLineaRepository extends JpaRepository<TsddrRImpia
 	@Query("SELECT tril "
 			+ "FROM TsddrRImpiantoLinea tril "
 			+ "INNER JOIN tril.impianto tti "
-			+ "WHERE tti.idImpianto = :idImpianto "
+			+ "WHERE tti.idImpianto = :idImpianto AND "
+			+ RepositoryUtil.TRIL_RIMPIANTOLINEA_VALIDITY_CHECK
 			+ "ORDER BY tril.linea.idLinea ASC, tril.sottoLinea.idSottoLinea")
 	List<TsddrRImpiantoLinea> findByIdImpiantoAll(@Param("idImpianto") Long idImpianto);
+	
+
+	/**
+	 * Find by id impianto.
+	 *
+	 * @param idImpianto the id impianto
+	 * @return the list
+	 */
+	@Query("SELECT tril "
+			+ "FROM TsddrRImpiantoLinea tril "
+			+ "INNER JOIN tril.impianto tti "
+			+ "WHERE tti.idImpianto = :idImpianto AND "
+			+ RepositoryUtil.TRIL_RIMPIANTOLINEA_VALIDITY_CHECK
+			+ "ORDER BY tril.linea.idLinea ASC, tril.sottoLinea.idSottoLinea")
+	List<TsddrRImpiantoLinea> findByIdImpiantoAllValid(@Param("idImpianto") Long idImpianto, @Param("currentDate") Date currentDate);
 	
 	/**
 	 * Find by id impianto and id prev cons rmr.

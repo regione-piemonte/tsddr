@@ -175,10 +175,11 @@ export class PrevConsEditComponent implements OnInit {
           });
           dialog.dismissed.pipe(untilDestroyed(this)).subscribe(() => {
             if (this.mr.path === 'dichiarazioni-mr') {
-
               //In case of error E014 is set the previousPage param to restore the filters
               //In dichiarazioni-mr/pre-nserimento the param is istantly removed
-              this.router.navigate([this.mr.path, 'pre-inserimento'], {queryParams: {previousUrl: 'da-duplicate'}});
+              this.router.navigate([this.mr.path, 'pre-inserimento'], {
+                queryParams: { previousUrl: 'da-duplicate' }
+              });
             } else {
               this.router.navigate([this.mr.path]);
             }
@@ -327,7 +328,9 @@ export class PrevConsEditComponent implements OnInit {
             SelectOption<string | number, string>[]
           >,
           valueChange: (selected) => {
-            if (!(this.form.get('idGestorePrevCons') as AutocompleteInput).value) {
+            if (
+              !(this.form.get('idGestorePrevCons') as AutocompleteInput).value
+            ) {
               this.comboLocalImpianti.subscribe((value) => {
                 let impianto = value.content.find(
                   (item) => item.id === selected
@@ -352,7 +355,10 @@ export class PrevConsEditComponent implements OnInit {
           size,
           value:
             this.mr.prevCons?.annoTributo?.toString() ??
-            new Date().getFullYear().toString(),
+            //se sono in inserimento dichiarazione mostro la sysdate-1 come da cdu37
+            (this.mr.path === 'dichiarazioni-mr'
+              ? (new Date().getFullYear() - 1).toString()
+              : new Date().getFullYear().toString()),
           clearable: true,
           required: true,
           validationStatus: [

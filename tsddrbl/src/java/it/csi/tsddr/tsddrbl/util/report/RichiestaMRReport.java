@@ -184,7 +184,12 @@ public class RichiestaMRReport implements TsddrReport {
 	
 	private List<SezioneQuattro> valorizeSezioneQuattro(List<SezioneQuattro> sezioniQuattro,
             List<PrevConsLineeExtendedVO> prevConsLineeExtended, Long anno) {
+
+        List<String> lineeInserite = new ArrayList<String>();
 	    for(PrevConsLineeExtendedVO prevConsLineaExtended : prevConsLineeExtended) {
+            if(lineeInserite.contains(prevConsLineaExtended.getCodLinea())){
+                continue;
+            }
 	        SezioneQuattro sezioneQuattro = new SezioneQuattro();
 	        sezioneQuattro.setDescLinea(prevConsLineaExtended.getDescLinea());
 	        sezioneQuattro.setDescSommaria(prevConsLineaExtended.getDescSommaria());
@@ -248,6 +253,7 @@ public class RichiestaMRReport implements TsddrReport {
 	        sezioneQuattro.setSezioneRru(new JRBeanCollectionDataSource(sezioneRru));
 	        sezioneQuattro.setSezioneRu(new JRBeanCollectionDataSource(sezioneRu));
 	        sezioniQuattro.add(sezioneQuattro);
+            lineeInserite.add(prevConsLineaExtended.getCodLinea());
 	    }
         return sezioniQuattro;
     }
