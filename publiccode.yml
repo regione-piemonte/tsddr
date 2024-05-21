@@ -96,7 +96,7 @@ platforms:
   - linux
   - windows
   - mac
-releaseDate: '2024-15-01'
+releaseDate: '2024-21-05'
 softwareType: standalone/web
 softwareVersion: 1.1.2
 url: 'https://github.com/regione-piemonte/tsddr.git'
