@@ -20,6 +20,7 @@ public class DichAnnualeBasicVO {
 	private ImpiantoVO impianto;
 	private String numProtocollo;
 	private Date dataProtocollo;
+	private Boolean pregresso;
 
 	private Boolean annullable;
 	private Boolean printable;
@@ -169,6 +170,25 @@ public class DichAnnualeBasicVO {
 	}
 
 	/**
+	 * Gets the pregresso.
+	 *
+	 * @return the pregresso
+	 */
+	public Boolean getPregresso() {
+		return pregresso;
+	}
+
+	/**
+	 * Sets the data pregresso.
+	 *
+	 * @param pregresso the new data pregresso
+	 */
+	public void setPregresso(Boolean pregresso) {
+		this.pregresso = pregresso;
+	}
+
+
+	/**
 	 * Gets the annullable.
 	 *
 	 * @return the annullable
@@ -203,5 +223,6 @@ public class DichAnnualeBasicVO {
 	public void setPrintable(Boolean printable) {
 		this.printable = printable;
 	}
+	
 
 }

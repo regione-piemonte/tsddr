@@ -4,6 +4,8 @@
  */
 package it.csi.tsddr.tsddrbl.business.be.web.impl;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,9 +42,15 @@ public class RifiutiTariffeControllerImpl implements RifiutiTariffeController {
 
     @Override
     public GenericResponse<List<RifiutoTariffaVO>> getRifiutoTariffa(SecurityContext securityContext, HttpHeaders httpHeaders,
-            HttpServletRequest httpRequest, Long idDichAnnuale) {
+            HttpServletRequest httpRequest, Long idDichAnnuale, String anno) {
         LoggerUtil.debug(logger, "[RifiutiTariffeControllerImpl::getRifiutoTariffa] BEGIN");
-        GenericResponse<List<RifiutoTariffaVO>> response = rifiutoTariffaService.getRifiutoTariffa(httpRequest.getSession(), idDichAnnuale);
+		GenericResponse<List<RifiutoTariffaVO>> response = null;
+		if(anno == null){
+			response = rifiutoTariffaService.getRifiutoTariffa(httpRequest.getSession(), idDichAnnuale);
+		}else{
+			response = rifiutoTariffaService.getRifiutoTariffaByDate(httpRequest.getSession(), idDichAnnuale, anno);
+		}
+		
         LoggerUtil.debug(logger, "[RifiutiTariffeControllerImpl::getRifiutoTariffa] END");
         return response;
     }

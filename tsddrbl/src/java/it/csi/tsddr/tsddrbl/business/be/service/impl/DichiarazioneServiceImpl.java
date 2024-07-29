@@ -252,7 +252,7 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 		Date currentDate = new Date();
 		List<TsddrTGestore> gestori = gestoreRepository.findGestoriByIdUtenteIdProfilo(idUtente, idProfilo, currentDate);
 		
-		if (CollectionUtils.isEmpty(gestori) && profiloService.isProfiloBO(idProfilo)) {
+		if (CollectionUtils.isEmpty(gestori) && (profiloService.isProfiloBO(idProfilo) || profiloService.isProfiloPregresso(idProfilo))) {
 			gestori = gestoreRepository.findGestori(currentDate);
 		}
 		
@@ -272,7 +272,7 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 				? impiantoRepository.findByIdUtenteAndIdProfiloAndIdGestore(idUtente, idProfilo, idGestore, currentDate)
 				: impiantoRepository.findByIdUtenteAndIdProfilo(idUtente, idProfilo, currentDate);
 		
-		if (CollectionUtils.isEmpty(impianti) && profiloService.isProfiloBO(idProfilo)) {
+		if (CollectionUtils.isEmpty(impianti) && (profiloService.isProfiloBO(idProfilo) || profiloService.isProfiloPregresso(idProfilo))) {
 		    impianti = idGestore != null
 			? impiantoRepository.findImpiantiByIdGestore(idGestore, currentDate)
 		    : impiantoRepository.findImpianti(currentDate);
@@ -338,8 +338,9 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 		Date currentDate = new Date();
 		
 		boolean isProfiloBO = profiloService.isProfiloBO(idProfilo);
+		boolean isProfiloPregresso = profiloService.isProfiloPregresso(idProfilo);
 		List<TsddrTGestore> gestoriUtente = gestoreRepository.findGestoriByIdUtenteIdProfilo(idUtente, idProfilo, currentDate);
-		List<TsddrTDichAnnuale> dichAnnuali = dichAnnualeRepository.findAll(TsddrTDichAnnualeSpecification.searchByParams(parametriRicerca, currentDate, isProfiloBO, gestoriUtente));
+		List<TsddrTDichAnnuale> dichAnnuali = dichAnnualeRepository.findAll(TsddrTDichAnnualeSpecification.searchByParams(parametriRicerca, currentDate, isProfiloBO, isProfiloPregresso, gestoriUtente));
 		
 		if(dichAnnuali.isEmpty()) {
 			MessaggioVO messaggioVO = messaggioService.getMessaggioByCodMsg(CodiceMessaggio.A002.name());
@@ -440,10 +441,15 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 	public GenericResponse<Boolean> existsDichiarazione(HttpSession httpSession,
 			ExistsDichiarazioneVO existsDichiarazioneVO) {
 		LoggerUtil.debug(logger, "[DichiarazioneServiceImpl::existsDichiarazione] BEGIN");
-		Optional<List<TsddrTDichAnnuale>> dichAnnuali = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazione(existsDichiarazioneVO.getIdImpianto(), existsDichiarazioneVO.getAnno(), existsDichiarazioneVO.getIdGestore(), StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
+		List<Long> idStatoDichiarazioneList = new ArrayList<Long>();
+		idStatoDichiarazioneList.add(StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
+		idStatoDichiarazioneList.add(StatoDichiarazione.PREGRESSO_CONSOLIDATO.getId());
+		Optional<List<TsddrTDichAnnuale>> dichAnnuali = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazioneIn(existsDichiarazioneVO.getIdImpianto(), existsDichiarazioneVO.getAnno(), existsDichiarazioneVO.getIdGestore(), idStatoDichiarazioneList);
 		GenericResponse<Boolean> response = null;
 		if(dichAnnuali.isEmpty()){
-			dichAnnuali = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazione(existsDichiarazioneVO.getIdImpianto(), existsDichiarazioneVO.getAnno(), existsDichiarazioneVO.getIdGestore(), StatoDichiarazione.BOZZA.getId());
+			idStatoDichiarazioneList = new ArrayList<Long>();
+			idStatoDichiarazioneList.add(StatoDichiarazione.BOZZA.getId());
+			dichAnnuali = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazioneIn(existsDichiarazioneVO.getIdImpianto(), existsDichiarazioneVO.getAnno(), existsDichiarazioneVO.getIdGestore(), idStatoDichiarazioneList);
 		}
 		response = GenericResponse.build(!dichAnnuali.isEmpty());		
 		LoggerUtil.debug(logger, "[DichiarazioneServiceImpl::existsDichiarazione] END");
@@ -542,26 +548,34 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
         	
     		Optional<TsddrTUtente> user = tsddrTUtenteRepository.findByIdUtente(idUtente);
         	ResponseProtocollaDocumento responseProtocollaDocumento = null;
-    		MessaggioVO message = new MessaggioVO();
+			if(!dichAnnualeVO.getPregresso()){
+				MessaggioVO message = new MessaggioVO();
 
-    		try {
-    			responseProtocollaDocumento = doquiServiceFacade.protocollaDocumentoFisico(dichAnnuale, generaReportPDFToByte(dichAnnuale), this.generaPdfFilename(dichAnnuale), user.isPresent()? user.get():null);
-            	dichAnnuale.setNumProtocollo(responseProtocollaDocumento.getProtocollo());
-    		} catch (Exception e) {
-    			LoggerUtil.error(logger, "[DichiarazioneServiceImpl::generaDichiarazionePDF] Errore nella generazione del PDF", e);
-    			// TODO impostare messagio
-    			message = new MessaggioVO();
-    			GenericResponse<DichAnnualeVO> response = GenericResponse.build(message,
-    					this.getDichiarazioneAnnualeVO(dichAnnuale));
-    			LoggerUtil.debug(logger, "[DichiarazioneServiceImpl::insertDichAnnuale] END");
-    			return response;
-    		}
-        	
-            dichAnnuale.setDataProtocollo(new Date());
-//            dichAnnuale.setStatoDichiarazione(statoDichiarazioneRepository.findStatoDichiarazioneById(StatoDichiarazione.INVIATA_PROTOCOLLATA.getId()).get());
-            Optional<TsddrDStatoDichiarazione> stato = statoDichiarazioneRepository.findStatoDichiarazioneById(StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
-            if(stato.isPresent()) dichAnnuale.setStatoDichiarazione(stato.get());   
-            EntityUtil.setUpdated(dichAnnuale, idUtente, new Date());
+				try {
+					responseProtocollaDocumento = doquiServiceFacade.protocollaDocumentoFisico(dichAnnuale, generaReportPDFToByte(dichAnnuale), this.generaPdfFilename(dichAnnuale), user.isPresent()? user.get():null);
+					dichAnnuale.setNumProtocollo(responseProtocollaDocumento.getProtocollo());
+				} catch (Exception e) {
+					LoggerUtil.error(logger, "[DichiarazioneServiceImpl::generaDichiarazionePDF] Errore nella generazione del PDF", e);
+					// TODO impostare messagio
+					message = new MessaggioVO();
+					GenericResponse<DichAnnualeVO> response = GenericResponse.build(message,
+							this.getDichiarazioneAnnualeVO(dichAnnuale));
+					LoggerUtil.debug(logger, "[DichiarazioneServiceImpl::insertDichAnnuale] END");
+					return response;
+				}
+				
+				dichAnnuale.setDataProtocollo(new Date());
+	//            dichAnnuale.setStatoDichiarazione(statoDichiarazioneRepository.findStatoDichiarazioneById(StatoDichiarazione.INVIATA_PROTOCOLLATA.getId()).get());
+				Optional<TsddrDStatoDichiarazione> stato = statoDichiarazioneRepository.findStatoDichiarazioneById(StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
+				if(stato.isPresent()) dichAnnuale.setStatoDichiarazione(stato.get());   
+				EntityUtil.setUpdated(dichAnnuale, idUtente, new Date());
+			}else{
+				// In caso di pregresso non devo generare il pdf e non devo caricare su acta, ma devo solo salvare il protocollo, la data protocollo e lo stato
+				Optional<TsddrDStatoDichiarazione> stato = statoDichiarazioneRepository.findStatoDichiarazioneById(StatoDichiarazione.PREGRESSO_CONSOLIDATO.getId());
+				if(stato.isPresent()) dichAnnuale.setStatoDichiarazione(stato.get());   
+				dichAnnuale.setNumProtocollo(dichAnnualeVO.getNumProtocollo());
+				dichAnnuale.setDataProtocollo(dichAnnualeVO.getDataProtocollo());
+			}
             dichAnnuale = dichAnnualeRepository.save(dichAnnuale);
             this.logSalvaDichAnnuale(httpSession, idDatiSogg, dichAnnuale.getIdDichAnnuale());
         }
@@ -620,6 +634,12 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 		
 		dichAnnuale = this.valorizzaCreditoSaldoImposta(dichAnnuale);
 		EntityUtil.setInserted(dichAnnuale, idUtente, currentDate);
+
+		dichAnnuale.setPregresso(dichAnnualeVO.getPregresso());
+		if(dichAnnualeVO.getPregresso()){
+			dichAnnuale.setNumProtocollo(dichAnnualeVO.getNumProtocollo());
+			dichAnnuale.setDataProtocollo(dichAnnualeVO.getDataProtocollo());
+		}
 		
 		dichAnnuale = dichAnnualeRepository.save(dichAnnuale);
 		return dichAnnuale;
@@ -663,6 +683,13 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 		
 		dichAnnuale.setAnnotazioni(dichAnnualeVO.getAnnotazioni());
 		dichAnnuale = this.valorizzaCreditoSaldoImposta(dichAnnuale);
+
+		dichAnnuale.setPregresso(dichAnnualeVO.getPregresso());
+		if(dichAnnualeVO.getPregresso()){
+			dichAnnuale.setNumProtocollo(dichAnnualeVO.getNumProtocollo());
+			dichAnnuale.setDataProtocollo(dichAnnualeVO.getDataProtocollo());
+		}
+
 		EntityUtil.setUpdated(dichAnnuale, idUtente, currentDate);
 		dichAnnuale = dichAnnualeRepository.save(dichAnnuale);
 		return dichAnnuale;
@@ -920,7 +947,9 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 	}
 	
 	private Optional<List<TsddrTDichAnnuale>> findDichAnnualiByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichiarazione(Long idImpianto, Long anno, Long idGestore, long idStatoDichiarazione) {
-		return dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazione(idImpianto, anno, idGestore, idStatoDichiarazione);
+		List<Long> idStatoDichiarazioneList = new ArrayList<Long>();
+		idStatoDichiarazioneList.add(idStatoDichiarazione);
+		return dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazioneIn(idImpianto, anno, idGestore, idStatoDichiarazioneList);
 	}
 	
 	/* Versamenti
@@ -1148,7 +1177,10 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
         boolean isDuplicaAllowed;
 //        Optional<TsddrTDichAnnuale> dichAnnuale = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndVersione(idImpianto, anno, idGestore, versione, StatoDichiarazione.BOZZA.getId());
 //        Optional<TsddrTDichAnnuale> dichAnnuale = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndVersione(idImpianto, anno, idGestore, versione, StatoDichiarazione.BOZZA.getId());
-        Optional<List<TsddrTDichAnnuale>> dichAnnuale = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazione(idImpianto, anno, idGestore, StatoDichiarazione.BOZZA.getId());
+
+		List<Long> idStatoDichiarazioneList = new ArrayList<Long>();
+		idStatoDichiarazioneList.add(StatoDichiarazione.BOZZA.getId());
+        Optional<List<TsddrTDichAnnuale>> dichAnnuale = dichAnnualeRepository.findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazioneIn(idImpianto, anno, idGestore, idStatoDichiarazioneList);
         if(dichAnnuale.isPresent()) {
             isDuplicaAllowed = false;
         } else {
@@ -1250,6 +1282,12 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
         sheet.addColumn("Importo a Credito");
 //      12	Colonna L 	Annotazioni
         sheet.addColumn("Annotazioni");
+//      13	Colonna L 	Numero protocollo
+		sheet.addColumn("Numero protocollo");
+//      14	Colonna L 	Data protocollo
+		sheet.addColumn("Data protocollo");
+//      15	Colonna L 	Pregresso
+		sheet.addColumn("Pregresso");
 
         addContent(sheet, listaGestiori.getContent());
         
@@ -1323,7 +1361,10 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 						dichAnnualeVO.getRifiutiConferiti().getTotali().getTotale().getImporto(),
 						dichAnnualeVO.getVersamenti().getTotale(),
 						dichAnnualeVO.getVersamenti().getCredito(),
-						dichAnnualeVO.getAnnotazioni());
+						dichAnnualeVO.getAnnotazioni(),
+						dichVO.getNumProtocollo(),
+						dichVO.getDataProtocollo()!=null?new SimpleDateFormat(DateUtil.ddMMyyyy).format(dichVO.getDataProtocollo()):"",
+						dichAnnualeVO.getPregresso());
 		}
 	}
 
@@ -1336,8 +1377,9 @@ public class DichiarazioneServiceImpl implements DichiarazioneService {
 		Date currentDate = new Date();
 		
 		boolean isProfiloBO = profiloService.isProfiloBO(idProfilo);
+		boolean isProfiloPregresso = profiloService.isProfiloPregresso(idProfilo);
 		List<TsddrTGestore> gestoriUtente = gestoreRepository.findGestoriByIdUtenteIdProfilo(idUtente, idProfilo, currentDate);
-		List<TsddrTDichAnnuale> dichAnnuali = dichAnnualeRepository.findAll(TsddrTDichAnnualeSpecification.searchByParams(parametriRicerca, currentDate, isProfiloBO, gestoriUtente));
+		List<TsddrTDichAnnuale> dichAnnuali = dichAnnualeRepository.findAll(TsddrTDichAnnualeSpecification.searchByParams(parametriRicerca, currentDate, isProfiloBO, isProfiloPregresso, gestoriUtente));
 		
 		if(dichAnnuali.isEmpty()) {
 			MessaggioVO messaggioVO = messaggioService.getMessaggioByCodMsg(CodiceMessaggio.A002.name());

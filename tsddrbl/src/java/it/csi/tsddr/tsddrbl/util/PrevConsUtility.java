@@ -27,7 +27,7 @@ public class PrevConsUtility {
         vo.setDenominazione(impianto.getDenominazione());
         vo.setRagSociale(gestore.getRagSociale());
         vo.setDescrStatoDichiarazione(entity.getStatoDichiarazione().getDescrStatoDichiarazione());
-        vo.setPrintable(StatoDichiarazione.INVIATA_PROTOCOLLATA.getId() == entity.getStatoDichiarazione().getIdStatoDichiarazione());
+        vo.setPrintable(StatoDichiarazione.INVIATA_PROTOCOLLATA.getId() == entity.getStatoDichiarazione().getIdStatoDichiarazione() && !entity.getPregresso());
 //        if (ignoreDescrStatoDichiarazione) {
 //            vo.setDescrStatoDichiarazione(null);
 //        }
@@ -46,6 +46,7 @@ public class PrevConsUtility {
         vo.setLineeRichiesta(lineeRichiesta != null ? lineeRichiesta.trim() : null);
         vo.setDataDoc(entity.getDataDoc());
         vo.setNumProtocollo(entity.getNumProtocollo());
+        vo.setPregresso(entity.getPregresso());
         vo.setAnnullable((acl.getDelete() == Boolean.TRUE) && StatoDichiarazione.BOZZA.getDesc().toString().equals(vo.getDescrStatoDichiarazione()));
         return vo;
     }

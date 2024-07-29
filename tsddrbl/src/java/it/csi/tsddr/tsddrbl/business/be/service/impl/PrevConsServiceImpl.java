@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -232,7 +233,7 @@ public class PrevConsServiceImpl implements PrevConsService {
         Date currentDate = new Date();
         List<TsddrTGestore> gestori = gestoreRepository.findGestoriByIdUtenteIdProfilo(idUtente, idProfilo, currentDate);
         
-        if (CollectionUtils.isEmpty(gestori) && profiloService.isProfiloBO(idProfilo)) {
+        if (CollectionUtils.isEmpty(gestori) && (profiloService.isProfiloBO(idProfilo) || profiloService.isProfiloPregresso(idProfilo))) {
             gestori = gestoreRepository.findGestori(currentDate);
         }
         
@@ -266,7 +267,7 @@ public class PrevConsServiceImpl implements PrevConsService {
                 ? impiantoRepository.findByIdUtenteAndIdProfiloAndIdGestore(idUtente, idProfilo, idGestore, currentDate)
                 : impiantoRepository.findByIdUtenteAndIdProfilo(idUtente, idProfilo, currentDate);
         
-        if (CollectionUtils.isEmpty(impianti) && profiloService.isProfiloBO(idProfilo)) {
+        if (CollectionUtils.isEmpty(impianti) && (profiloService.isProfiloBO(idProfilo) || profiloService.isProfiloPregresso(idProfilo))) {
             impianti = idGestore != null
             ? impiantoRepository.findImpiantiByIdGestore(idGestore, currentDate)
             : impiantoRepository.findImpianti(currentDate);
@@ -311,6 +312,7 @@ public class PrevConsServiceImpl implements PrevConsService {
         
         Optional<TsddrTPrevCons> prevConsOpt = this.getPrevCons(idImpianto, idGestore, prevConsVO.getAnnoTributo(), tipoDoc.getIdTipoDoc());
         TsddrTPrevCons prevCons = null;
+        
         if(prevConsOpt.isEmpty()) {
             // INSERT BOZZA
             prevCons = this.createBozza(prevConsVO, idImpianto, idUtente, tipoDoc);
@@ -357,6 +359,12 @@ public class PrevConsServiceImpl implements PrevConsService {
         List<TsddrRPrevConsLinea> prevConsLinee = this.insertPrevConsLinee(prevConsVO, prevCons, idUtente, currentDate);
         
         prevCons.setPrevConsLinee(prevConsLinee);
+
+        prevCons.setPregresso(prevConsVO.getPregresso());
+        if(prevConsVO.getPregresso()){
+            prevCons.setNumProtocollo(prevConsVO.getNumProtocollo());
+            prevCons.setDataProtocollo(prevConsVO.getDataProtocollo());
+        }
         prevCons = prevConsRepository.save(prevCons);
         return prevCons;
     }
@@ -389,7 +397,15 @@ public class PrevConsServiceImpl implements PrevConsService {
                 if(prevConsLineaVO.getIdPrevConsLinee() == null && (prevConsLineaVO.getDescSommaria() != null || (prevConsLineaVO.getPrevConsDett() != null && !prevConsLineaVO.getPrevConsDett().isEmpty()))) { // INSERT PREV CONS LINEE
                     prevConsLinea = new TsddrRPrevConsLinea();
                     prevConsLinea.setPrevCons(prevCons);
-                    prevConsLinea.setDescSommaria(prevConsLineaVO.getDescSommaria());
+                    
+                    //bugfixing TASK 203
+	                String auxDescSommaria =prevConsLineaVO.getDescSommaria();
+	                if(StringUtils.isNotBlank(auxDescSommaria)) {
+	                	auxDescSommaria=auxDescSommaria.length() <= 1000 ? auxDescSommaria : auxDescSommaria.substring(0, 1000);
+	                }
+	                
+                    
+                    prevConsLinea.setDescSommaria(auxDescSommaria);
                     prevConsLinea.setImpiantoLinea(impiantoLineaRepository.findByIdImpiantoLinea(prevConsLineaVO.getIdImpiantoLinea()).orElseThrow(() -> new RecordNotFoundException(String.format("TsddrRImpiantoLinea non trovato con id = [%d]", prevConsLineaVO.getIdImpiantoLinea()))));
                     prevCons.addRPrevConsLinea(prevConsLinea);
                     EntityUtil.setInserted(prevConsLinea, idUtente, currentDate);
@@ -463,7 +479,7 @@ public class PrevConsServiceImpl implements PrevConsService {
     }
     
     private Optional<TsddrTPrevCons> getPrevCons(Long idImpianto, Long idGestore, Long annoTributo, Long idTipoDoc) {
-        List<Long> idStatiDich = List.of(StatoDichiarazione.BOZZA.getId(), StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
+        List<Long> idStatiDich = List.of(StatoDichiarazione.BOZZA.getId(), StatoDichiarazione.INVIATA_PROTOCOLLATA.getId(), StatoDichiarazione.PREGRESSO_CONSOLIDATO.getId());
         Optional<TsddrTPrevCons> prevCons = prevConsRepository.findByIdImpiantoAndIdGestoreAndAnnoTributoAndIdTipoDocAndIdStatiDich(idImpianto, idGestore, annoTributo, idTipoDoc, idStatiDich);
         return prevCons;
     }
@@ -530,21 +546,39 @@ public class PrevConsServiceImpl implements PrevConsService {
         ResponseProtocollaDocumento responseProtocollaDocumento = null;
         try {         	
             if(tipoDoc.getIdTipoDoc().compareTo(TipoDoc.RICHIESTA.getId()) == 0) {
-                responseProtocollaDocumento = doquiServiceFacade.protocollaDocumentoFisicoRichiesta(prevCons, richiestaGeneraReportPDFToByte(prevCons), this.richiestaGeneraPdfFilename(prevCons), user);
-                prevCons.setNumProtocollo(responseProtocollaDocumento.getProtocollo());
-                prevCons.setDataProtocollo(new Date());
-                Optional<TsddrDStatoDichiarazione> statoDichOpt = statoDichiarazioneRepository.findStatoDichiarazioneById(StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
-                if(statoDichOpt.isPresent()) {
-                    prevCons.setStatoDichiarazione(statoDichOpt.get());
+                if(!prevCons.getPregresso()){
+                    responseProtocollaDocumento = doquiServiceFacade.protocollaDocumentoFisicoRichiesta(prevCons, richiestaGeneraReportPDFToByte(prevCons), this.richiestaGeneraPdfFilename(prevCons), user);
+                    prevCons.setNumProtocollo(responseProtocollaDocumento.getProtocollo());
+                    prevCons.setDataProtocollo(new Date());
+                    Optional<TsddrDStatoDichiarazione> statoDichOpt = statoDichiarazioneRepository.findStatoDichiarazioneById(StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
+                    if(statoDichOpt.isPresent()) {
+                        prevCons.setStatoDichiarazione(statoDichOpt.get());
+                    }
+                }else{
+                    prevCons.setNumProtocollo(prevConsVO.getNumProtocollo());
+                    prevCons.setDataProtocollo(prevConsVO.getDataProtocollo());
+                    Optional<TsddrDStatoDichiarazione> statoDichOpt = statoDichiarazioneRepository.findStatoDichiarazioneById(StatoDichiarazione.PREGRESSO_CONSOLIDATO.getId());
+                    if(statoDichOpt.isPresent()) {
+                        prevCons.setStatoDichiarazione(statoDichOpt.get());
+                    }
                 }
                 this.logSalvaRichiestaPrevCons(httpSession, idDatiSogg, prevCons.getIdPrevCons());
             } else if (tipoDoc.getIdTipoDoc().compareTo(TipoDoc.DICHIARAZIONE.getId()) == 0) {
-            	responseProtocollaDocumento = doquiServiceFacade.protocollaDocumentoFisicoDichiarazione(prevCons, dichiarazioneGeneraReportPDFToByte(prevCons), this.dichiarazioneGeneraPdfFilename(prevCons), user);
-                prevCons.setNumProtocollo(responseProtocollaDocumento.getProtocollo());
-                prevCons.setDataProtocollo(new Date());
-                Optional<TsddrDStatoDichiarazione> statoDichOpt = statoDichiarazioneRepository.findStatoDichiarazioneById(StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
-                if(statoDichOpt.isPresent()) {
-                    prevCons.setStatoDichiarazione(statoDichOpt.get());
+                if(!prevCons.getPregresso()){
+                    responseProtocollaDocumento = doquiServiceFacade.protocollaDocumentoFisicoDichiarazione(prevCons, dichiarazioneGeneraReportPDFToByte(prevCons), this.dichiarazioneGeneraPdfFilename(prevCons), user);
+                    prevCons.setNumProtocollo(responseProtocollaDocumento.getProtocollo());
+                    prevCons.setDataProtocollo(new Date());
+                    Optional<TsddrDStatoDichiarazione> statoDichOpt = statoDichiarazioneRepository.findStatoDichiarazioneById(StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
+                    if(statoDichOpt.isPresent()) {
+                        prevCons.setStatoDichiarazione(statoDichOpt.get());
+                    }
+                }else{
+                    prevCons.setNumProtocollo(prevConsVO.getNumProtocollo());
+                    prevCons.setDataProtocollo(prevConsVO.getDataProtocollo());
+                    Optional<TsddrDStatoDichiarazione> statoDichOpt = statoDichiarazioneRepository.findStatoDichiarazioneById(StatoDichiarazione.PREGRESSO_CONSOLIDATO.getId());
+                    if(statoDichOpt.isPresent()) {
+                        prevCons.setStatoDichiarazione(statoDichOpt.get());
+                    }
                 }
                 this.logSalvaDichiarazionePrevCons(httpSession, idDatiSogg, prevCons.getIdPrevCons());
             }
@@ -596,7 +630,14 @@ public class PrevConsServiceImpl implements PrevConsService {
     }
     
     private TsddrTPrevConsDett valorizzaPrevConsDett(TsddrTPrevConsDett prevConsDett, PrevConsDettVO prevConsDettVO, Date currentDate) {
-        prevConsDett.setDescMatUscita(prevConsDettVO.getDescMatUscita());
+    	
+    	//bugfixing TASK 203
+        String auxDescMatUscita =prevConsDettVO.getDescMatUscita();
+        if(StringUtils.isNotBlank(auxDescMatUscita)) {
+        	auxDescMatUscita = auxDescMatUscita.length() <= 50 ? auxDescMatUscita : auxDescMatUscita.substring(0, Math.min(auxDescMatUscita.length(), 50));
+        }
+          	
+        prevConsDett.setDescMatUscita(auxDescMatUscita);
         prevConsDett.setSezione(sezioneRepository.findByIdSezione(prevConsDettVO.getSezione().getIdSezione(), currentDate).orElseThrow(() -> new RecordNotFoundException(String.format("TsddrDSezione non trovato con id = [%d]", prevConsDettVO.getSezione().getIdSezione()))));
         prevConsDett.setUnitaMisura(unitaMisuraRepository.findByIdUnitaMisura(prevConsDettVO.getUnitaMisura().getIdUnitaMisura()).orElseThrow(() -> new RecordNotFoundException(String.format("TsddrDUnitaMisura non trovato con id = [%d]", prevConsDettVO.getUnitaMisura().getIdUnitaMisura()))));
         if(prevConsDettVO.getEer() != null) {
@@ -756,6 +797,7 @@ public class PrevConsServiceImpl implements PrevConsService {
         Long idDatiSogg = SessionUtil.getIdDatiSoggetto(httpSession);
         Long idUtente = SessionUtil.getIdUtente(httpSession);
         boolean isProfiloBO = profiloService.isProfiloBO(idProfilo);
+		boolean isProfiloPregresso = profiloService.isProfiloPregresso(idProfilo);
         Date currentDate = new Date();
         TsddrDTipoDoc tipoDoc = tipoDocRepository.findTipoDocById(parametriRicerca.getIdTipoDoc(), currentDate).orElseThrow(() -> new RecordNotFoundException(String.format(TIPODOC_NOT_FOUND, parametriRicerca.getIdTipoDoc())));
         
@@ -765,7 +807,7 @@ public class PrevConsServiceImpl implements PrevConsService {
         
         List<TsddrTGestore> gestoriUtente = gestoreRepository.findGestoriByIdUtenteIdProfilo(idUtente, idProfilo, currentDate);
         
-        List<TsddrTPrevCons> prevCons = prevConsRepository.findAll(TsddrTPrevConsSpecification.searchByParams(parametriRicerca, currentDate, isProfiloBO, gestoriUtente, false));
+        List<TsddrTPrevCons> prevCons = prevConsRepository.findAll(TsddrTPrevConsSpecification.searchByParams(parametriRicerca, currentDate, isProfiloBO, isProfiloPregresso, gestoriUtente, false));
         if(prevCons.isEmpty()) {
             MessaggioVO messaggioVO = messaggioService.getMessaggioByCodMsg(CodiceMessaggio.A002.name());
             throw new FunctionalException(String.format("Nessuna dichiarazione annuale trovato con i parametri di ricerca inseriti"), messaggioVO);
@@ -1075,7 +1117,13 @@ public class PrevConsServiceImpl implements PrevConsService {
             if(prevConsLineeVO.getDescSommaria() != null || (prevConsLineeVO.getPrevConsDett() != null && !prevConsLineeVO.getPrevConsDett().isEmpty() && isQuantitaPrevConsDettPresent(prevConsLineeVO.getPrevConsDett()))) {
                 TsddrRPrevConsLinea prevConsLinea = new TsddrRPrevConsLinea();
                 prevConsLinea.setPrevCons(prevCons);
-                prevConsLinea.setDescSommaria(prevConsLineeVO.getDescSommaria());
+              //bugfixing TASK 203
+                String auxDescSommaria =prevConsLineeVO.getDescSommaria();
+                if(StringUtils.isNotBlank(auxDescSommaria)) {
+                	auxDescSommaria = auxDescSommaria.length() <= 1000 ? auxDescSommaria : auxDescSommaria.substring(0, Math.min(auxDescSommaria.length(), 1000));
+                }
+                
+                prevConsLinea.setDescSommaria(auxDescSommaria);
                 prevConsLinea.setImpiantoLinea(impiantoLineaRepository.findByIdImpiantoLinea(prevConsLineeVO.getIdImpiantoLinea()).orElseThrow(() -> new RecordNotFoundException(String.format("TsddrRImpiantoLinea non trovato con id = [%d]", prevConsLineeVO.getIdImpiantoLinea()))));
                 EntityUtil.setInserted(prevConsLinea, idUtente, currentDate);
                 List<TsddrTPrevConsDett> prevConsDettList = new ArrayList<>();
@@ -1191,8 +1239,10 @@ public class PrevConsServiceImpl implements PrevConsService {
 //        	6	Colonna F	Stato
             sheet.addColumn("Stato");
 //        	7	Colonna G	Protocollo
-            sheet.addColumn("Protocollo");
-//        	8	Colonna H	N° Dichiarazioni collegate inviate
+            sheet.addColumn("Protocollo / Data protocollo");
+//        	8	Colonna H	Protocollo
+            sheet.addColumn("Pregresso");
+//        	9	Colonna I	N° Dichiarazioni collegate inviate
             // CR OB 258-259-260
             sheet.addColumn("N° Dichiarazioni collegate inviate");
         
@@ -1210,8 +1260,10 @@ public class PrevConsServiceImpl implements PrevConsService {
 //        	6	Colonna F	Stato
             sheet.addColumn("Stato");
 //        	7	Colonna G	Protocollo
-            sheet.addColumn("Protocollo");
-//        	8	Colonna H	Richiesta R-MR Riferimento
+            sheet.addColumn("Protocollo / Data protocollo");
+//        	8	Colonna H	Protocollo
+            sheet.addColumn("Pregresso");
+//        	9	Colonna I	Richiesta R-MR Riferimento
             sheet.addColumn("Richiesta R-MR Riferimento");   
         	
         }
@@ -1258,6 +1310,8 @@ public class PrevConsServiceImpl implements PrevConsService {
 		
 		for(PrevConsBasicVO prevCons : list){
 			PrevConsExtendedVO prevConsExtVO = getPrevConsInternal(prevCons.getIdPrevCons());
+			String prot = (prevConsExtVO.getNumProtocollo()!=null?prevConsExtVO.getNumProtocollo():"");
+			prot += prevConsExtVO.getDataProtocollo()!=null?(" - " + new SimpleDateFormat(DateUtil.ddMMyyyy).format(prevConsExtVO.getDataProtocollo())):"";
 			if(tipoDoc == 1L) {
 				sheet.addDataToBody(
 						prevConsExtVO.getImpianto().getGestore().getCodFiscPartiva() + " - " + prevConsExtVO.getImpianto().getGestore().getRagSociale(),
@@ -1271,7 +1325,8 @@ public class PrevConsServiceImpl implements PrevConsService {
 						prevConsExtVO.getIdPrevCons(),
 						new SimpleDateFormat(DateUtil.ddMMyyyy).format(prevConsExtVO.getDataDoc()),
 						prevConsExtVO.getStatoDichiarazione().getDescrStatoDichiarazione(),
-						prevConsExtVO.getNumProtocollo(),
+						prot,
+                        prevConsExtVO.getPregresso(),
 						getNumeroCollegate(prevConsExtVO));				
 			}else {
 				sheet.addDataToBody(
@@ -1285,7 +1340,8 @@ public class PrevConsServiceImpl implements PrevConsService {
 						prevConsExtVO.getIdPrevCons(),
 						new SimpleDateFormat(DateUtil.ddMMyyyy).format(prevConsExtVO.getDataDoc()),
 						prevConsExtVO.getStatoDichiarazione().getDescrStatoDichiarazione(),
-						prevConsExtVO.getNumProtocollo(),
+						prot,
+                        prevConsExtVO.getPregresso(),
 						getInfoRichiesta(prevConsExtVO));				
 			}
 		}
@@ -1324,12 +1380,13 @@ public class PrevConsServiceImpl implements PrevConsService {
 	        Long idDatiSogg = SessionUtil.getIdDatiSoggetto(httpSession);
 	        Long idUtente = SessionUtil.getIdUtente(httpSession);
 	        boolean isProfiloBO = profiloService.isProfiloBO(idProfilo);
+            boolean isProfiloPregresso = profiloService.isProfiloPregresso(idProfilo);
 	        Date currentDate = new Date();
 	        TsddrDTipoDoc tipoDoc = tipoDocRepository.findTipoDocById(parametriRicerca.getIdTipoDoc(), currentDate).orElseThrow(() -> new RecordNotFoundException(String.format(TIPODOC_NOT_FOUND, parametriRicerca.getIdTipoDoc())));
 	        
 	        List<TsddrTGestore> gestoriUtente = gestoreRepository.findGestoriByIdUtenteIdProfilo(idUtente, idProfilo, currentDate);
 	        
-	        List<TsddrTPrevCons> prevCons = prevConsRepository.findAll(TsddrTPrevConsSpecification.searchByParams(parametriRicerca, currentDate, isProfiloBO, gestoriUtente, true));
+	        List<TsddrTPrevCons> prevCons = prevConsRepository.findAll(TsddrTPrevConsSpecification.searchByParams(parametriRicerca, currentDate, isProfiloBO, isProfiloPregresso, gestoriUtente, true));
 	        if(prevCons.isEmpty()) {
 	            MessaggioVO messaggioVO = messaggioService.getMessaggioByCodMsg(CodiceMessaggio.A002.name());
 	            throw new FunctionalException(String.format("Nessuna dichiarazione annuale trovato con i parametri di ricerca inseriti"), messaggioVO);

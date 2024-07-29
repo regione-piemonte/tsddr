@@ -18,6 +18,7 @@ public class PrevConsBasicVO extends AbstractVO {
     private String numProtocollo;
     private String lineeRichiesta;
     private Date dataDoc;
+	private Boolean pregresso;
 
     private Boolean annullable;
     private Boolean printable;
@@ -165,6 +166,24 @@ public class PrevConsBasicVO extends AbstractVO {
     public void setDataDoc(Date dataDoc) {
         this.dataDoc = dataDoc;
     }
+
+	/**
+	 * Gets the pregresso.
+	 *
+	 * @return the pregresso
+	 */
+	public Boolean getPregresso() {
+		return pregresso;
+	}
+
+	/**
+	 * Sets the data pregresso.
+	 *
+	 * @param pregresso the new data pregresso
+	 */
+	public void setPregresso(Boolean pregresso) {
+		this.pregresso = pregresso;
+	}
 
     /**
      * Gets the annullable.

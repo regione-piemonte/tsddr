@@ -33,6 +33,21 @@ public interface TsddrTRifiutoTariffaRepository extends BaseRepository<TsddrTRif
 			+ "ORDER BY ttrt.idRifiutoTariffa")
 	List<TsddrTRifiutoTariffa> findRifiutiTariffe(@Param("currentDate") Date currentDate);
 	
+
+	/**
+	 * Find rifiuti tariffe.
+	 *
+	 * @param currentDate the current date
+	 * @return the list
+	 */
+	@Query("SELECT ttrt "
+			+ "FROM TsddrTRifiutoTariffa ttrt "
+			+ "WHERE "
+			+ RepositoryUtil.TTRT_RIFIUTO_TARIFFA_VALIDITY_YEAR_CHECK
+			+ "ORDER BY ttrt.idRifiutoTariffa")
+	List<TsddrTRifiutoTariffa> findRifiutiTariffe(@Param("currentYear") String currentYear);
+	
+	
 	/**
 	 * Find rifiuti tariffe by id dich annuale.
 	 *
@@ -51,8 +66,30 @@ public interface TsddrTRifiutoTariffaRepository extends BaseRepository<TsddrTRif
 			+ 	RepositoryUtil.TTDA_DICH_ANNUALE_DELETE_VALIDITY_CHECK
 			+ 	") AND "
 			+ RepositoryUtil.TTRT_RIFIUTO_TARIFFA_VALIDITY_CHECK
-			+ "ORDER BY ttrt.idRifiutoTariffa")
+			+ "ORDER BY ttrt.descrizione ASC")
 	List<TsddrTRifiutoTariffa> findRifiutiTariffeByIdDichAnnuale(@Param("idDichAnnuale") Long idDichAnnuale, @Param("currentDate") Date currentDate);
+	
+	/**
+	 * Find rifiuti tariffe by id dich annuale.
+	 *
+	 * @param idDichAnnuale the id dich annuale
+	 * @param currentDate the current date
+	 * @return the list
+	 */
+	@Query("SELECT ttrt "
+			+ "FROM TsddrTRifiutoTariffa ttrt "
+			+ "WHERE ttrt.idRifiutoTariffa NOT IN ( "
+			+ 	"SELECT ttrt.idRifiutoTariffa "
+			+ 	"FROM TsddrTRifiutoTariffa ttrt "
+			+ 	"INNER JOIN ttrt.conferimenti ttc "
+			+ 	"INNER JOIN ttc.dichAnnuale ttda "
+			+ 	"WHERE ttda.idDichAnnuale = :idDichAnnuale AND "
+			+ 	RepositoryUtil.TTDA_DICH_ANNUALE_DELETE_VALIDITY_CHECK
+			+ 	") AND "
+			+ RepositoryUtil.TTRT_RIFIUTO_TARIFFA_VALIDITY_YEAR_CHECK
+			+ "ORDER BY ttrt.descrizione ASC")
+	List<TsddrTRifiutoTariffa> findRifiutiTariffeByIdDichAnnuale(@Param("idDichAnnuale") Long idDichAnnuale, @Param("currentYear") String currentYear);
+	
 	
 	/**
 	 * Find by id rifiuto tariffa.

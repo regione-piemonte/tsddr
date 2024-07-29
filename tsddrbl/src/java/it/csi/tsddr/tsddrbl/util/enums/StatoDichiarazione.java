@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public enum StatoDichiarazione {
 
-    BOZZA(1, "Bozza"), INVIATA_PROTOCOLLATA(2, "Inviata (Protocollata)"), ELIMINATA(3, "Eliminata");
+    BOZZA(1, "Bozza"), INVIATA_PROTOCOLLATA(2, "Inviata (Protocollata)"), ELIMINATA(3, "Eliminata"), PREGRESSO_CONSOLIDATO(4, "Pregresso consolidato");
 
     private long id;
     private String desc;

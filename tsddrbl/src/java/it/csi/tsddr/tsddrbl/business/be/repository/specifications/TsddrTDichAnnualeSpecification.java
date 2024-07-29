@@ -27,13 +27,13 @@ import it.csi.tsddr.tsddrbl.vo.dichiarazione.DichiarazioneParametriRicerca;
 public class TsddrTDichAnnualeSpecification extends BaseSpecification {
 
     public static Specification<TsddrTDichAnnuale> searchByParams(DichiarazioneParametriRicerca parametriRicerca,
-            Date targetDate, boolean isProfiloBO, List<TsddrTGestore> gestoriUtente) {
+            Date targetDate, boolean isProfiloBO, boolean isProfiloPregresso, List<TsddrTGestore> gestoriUtente) {
         return new Specification<TsddrTDichAnnuale>() {
             @Override
             public Predicate toPredicate(Root<TsddrTDichAnnuale> root, CriteriaQuery<?> query,
                     CriteriaBuilder builder) {
                 boolean isEnableAllGestori = false;
-                if (isProfiloBO && gestoriUtente.isEmpty()) {
+                if ((isProfiloBO || isProfiloPregresso)&& gestoriUtente.isEmpty()) {
                     isEnableAllGestori = true;
                 }
                 Join<TsddrTDichAnnuale, TsddrDStatoDichiarazione> statoDichiarazione = root.join("statoDichiarazione");
@@ -52,6 +52,17 @@ public class TsddrTDichAnnualeSpecification extends BaseSpecification {
                 predicate = addGestori(isEnableAllGestori, gestoriUtente, predicate, builder, gestore);
                 predicate = addIdGestore(parametriRicerca, predicate, builder, gestore);
 
+                if(isProfiloPregresso){
+                    predicate = builder.and(predicate, builder.equal(root.get("pregresso"), true));
+                } else if (!isProfiloBO){
+                    // si tratta di un profilo FO, che deve prendere tutte le dich non pregresse, oppure quelle pregresse in stato CONSOLIDATO (4)
+                    predicate = builder.and(predicate, builder.or(  builder.equal(root.get("pregresso"), false), 
+                                                                    builder.and(    builder.equal(root.get("pregresso"), true), 
+                                                                                    builder.equal(statoDichiarazione.get("idStatoDichiarazione"),
+                                                                                                    StatoDichiarazione.PREGRESSO_CONSOLIDATO.getId()))));
+                }
+
+                
                 List<Order> orderList = new ArrayList<>();
                 //  Issue 121
                 orderList.add(builder.asc(gestore.get("codFiscPartiva")));
@@ -87,8 +98,10 @@ public class TsddrTDichAnnualeSpecification extends BaseSpecification {
     private static Predicate addStatoDichiarazione(boolean isProfiloBO, Predicate predicate, CriteriaBuilder builder,
             Join<TsddrTDichAnnuale, TsddrDStatoDichiarazione> statoDichiarazione) {
         if (isProfiloBO) {
-            return builder.and(predicate, builder.equal(statoDichiarazione.get("idStatoDichiarazione"),
-                    StatoDichiarazione.INVIATA_PROTOCOLLATA.getId()));
+            return builder.and(builder.or(  builder.equal(statoDichiarazione.get("idStatoDichiarazione"),
+                                                StatoDichiarazione.PREGRESSO_CONSOLIDATO.getId()), 
+                                            builder.equal(statoDichiarazione.get("idStatoDichiarazione"),
+                                                StatoDichiarazione.INVIATA_PROTOCOLLATA.getId())));
         }
         return predicate;
     }

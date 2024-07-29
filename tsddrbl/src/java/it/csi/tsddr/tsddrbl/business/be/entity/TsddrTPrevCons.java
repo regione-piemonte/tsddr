@@ -85,6 +85,9 @@ public class TsddrTPrevCons extends AbstractEntity {
     @Column(name="data_protocollo")
     private Date dataProtocollo;
 	
+	@Column(nullable = false)
+	private Boolean pregresso;
+
 	/** The stato dichiarazione. */
 	//bi-directional many-to-one association to TsddrDStatoDichiarazione
     @ManyToOne
@@ -420,4 +423,21 @@ public class TsddrTPrevCons extends AbstractEntity {
 		this.numProtDoc = numProtDoc;
 	}
     
+	/**
+	 * Gets the data pregresso.
+	 *
+	 * @return the data pregresso
+	 */
+	public Boolean getPregresso() {
+		return pregresso;
+	}
+
+	/**
+	 * Sets the num pregresso.
+	 *
+	 * @param pregresso the new pregresso
+	 */
+	public void setPregresso(Boolean pregresso) {
+		this.pregresso = pregresso;
+	}
 }

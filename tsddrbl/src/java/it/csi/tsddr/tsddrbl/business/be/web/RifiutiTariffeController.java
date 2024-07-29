@@ -4,6 +4,7 @@
  */
 package it.csi.tsddr.tsddrbl.business.be.web;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,10 +51,11 @@ public interface RifiutiTariffeController {
 	 * @param httpHeaders the http headers
 	 * @param httpRequest the http request
 	 * @param idDichAnnuale the id dich annuale
+	 * @param anno the year of dich annuale
 	 * @return the rifiuto tariffa
 	 */
 	@GET
     GenericResponse<List<RifiutoTariffaVO>> getRifiutoTariffa(@Context SecurityContext securityContext, @Context HttpHeaders httpHeaders, @Context HttpServletRequest httpRequest,
-            @QueryParam("idDichAnnuale") Long idDichAnnuale);
+            @QueryParam("idDichAnnuale") Long idDichAnnuale, @QueryParam("anno") String anno);
 	
 }

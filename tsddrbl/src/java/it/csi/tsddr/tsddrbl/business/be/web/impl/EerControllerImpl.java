@@ -4,6 +4,7 @@
  */
 package it.csi.tsddr.tsddrbl.business.be.web.impl;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,9 +31,14 @@ private static Logger logger = Logger.getLogger(NatureGiuridicheControllerImpl.c
 
     @Override
     public GenericResponse<List<SelectVO>> getComboEer(SecurityContext securityContext, HttpHeaders httpHeaders,
-            HttpServletRequest httpRequest) {
+            HttpServletRequest httpRequest, String anno) {
         LoggerUtil.debug(logger, "[EerControllerImpl::getComboEer] BEGIN");
-        GenericResponse<List<SelectVO>> response = eerService.getComboEer(httpRequest.getSession());
+        GenericResponse<List<SelectVO>> response = null;
+        if(anno == null){
+            response = eerService.getComboEer(httpRequest.getSession());
+        }else{
+            response = eerService.getComboEerByDate(httpRequest.getSession(), anno);
+        }
         LoggerUtil.debug(logger, "[EerControllerImpl::getComboEer] END");
         return response;
     }

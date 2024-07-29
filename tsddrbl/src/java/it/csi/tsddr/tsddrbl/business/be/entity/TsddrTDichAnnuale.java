@@ -61,6 +61,9 @@ public class TsddrTDichAnnuale extends AbstractEntity {
 	@Column(name="data_protocollo")
 	private Date dataProtocollo;
 
+	@Column(nullable = false)
+	private Boolean pregresso;
+
 	//bi-directional many-to-one association to TsddrTConferimento
 	@OneToMany(mappedBy="dichAnnuale", cascade = CascadeType.PERSIST)
 	private List<TsddrTConferimento> conferimenti;
@@ -87,6 +90,7 @@ public class TsddrTDichAnnuale extends AbstractEntity {
 	//bi-directional many-to-one association to TsddrTVersamento
 	@OneToMany(mappedBy="dichAnnuale", cascade = CascadeType.PERSIST)
 	private List<TsddrTVersamento> versamenti;
+	
 
 	/**
 	 * Instantiates a new tsddr T dich annuale.
@@ -442,5 +446,25 @@ public class TsddrTDichAnnuale extends AbstractEntity {
 	public void setDataProtocollo(Date dataProtocollo) {
 		this.dataProtocollo = dataProtocollo;
 	}
+
+	/**
+	 * Gets the data pregresso.
+	 *
+	 * @return the data pregresso
+	 */
+	public Boolean getPregresso() {
+		return pregresso;
+	}
+
+	/**
+	 * Sets the num pregresso.
+	 *
+	 * @param pregresso the new pregresso
+	 */
+	public void setPregresso(Boolean pregresso) {
+		this.pregresso = pregresso;
+	}
+
+	
 
 }

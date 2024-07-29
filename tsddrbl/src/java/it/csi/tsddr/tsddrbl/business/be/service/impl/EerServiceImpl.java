@@ -41,4 +41,14 @@ public class EerServiceImpl implements EerService {
         return response;
     }
 
+    
+    @Override
+    public GenericResponse<List<SelectVO>> getComboEerByDate(HttpSession httpSession, String year) {
+        LoggerUtil.debug(logger, "[EerServiceImpl::getComboEerByDate] BEGIN");
+        List<TsddrDEer> eers = eerRepository.findEer(year);
+        GenericResponse<List<SelectVO>> response = GenericResponse.build(eerEntityMapper.mapListEntityToListSelectVO(eers));
+        LoggerUtil.debug(logger, "[EerServiceImpl::getComboEerByDate] END");
+        return response;
+    }
+
 }

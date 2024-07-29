@@ -49,7 +49,6 @@ public class RifiutoTariffaServiceImpl implements RifiutoTariffaService {
 		LoggerUtil.debug(logger, "[RifiutoTariffaServiceImpl::getComboConferimenti] END");
 		return response;
 	}
-
     @Override
     public GenericResponse<List<RifiutoTariffaVO>> getRifiutoTariffa(HttpSession session, Long idDichAnnuale) {
         LoggerUtil.debug(logger, "[RifiutoTariffaServiceImpl::getRifiutoTariffa] BEGIN");
@@ -58,6 +57,22 @@ public class RifiutoTariffaServiceImpl implements RifiutoTariffaService {
             rifiutiTariffe = rifiutoTariffaRepository.findRifiutiTariffeByIdDichAnnuale(idDichAnnuale, new Date());
         } else {
             rifiutiTariffe = rifiutoTariffaRepository.findRifiutiTariffe(new Date());
+        }
+        GenericResponse<List<RifiutoTariffaVO>> response = GenericResponse.build(rifiutoTariffaEntityMapper.mapListEntityToListVO(rifiutiTariffe));
+        LoggerUtil.debug(logger, "[RifiutoTariffaServiceImpl::getRifiutoTariffa] END");
+        return response;
+    }
+
+	
+    @Override
+    public GenericResponse<List<RifiutoTariffaVO>> getRifiutoTariffaByDate(HttpSession session, Long idDichAnnuale, String year) {
+        LoggerUtil.debug(logger, "[RifiutoTariffaServiceImpl::getRifiutoTariffa] BEGIN");
+        System.out.println(year);
+        List<TsddrTRifiutoTariffa> rifiutiTariffe = null;
+        if(idDichAnnuale != null) {
+            rifiutiTariffe = rifiutoTariffaRepository.findRifiutiTariffeByIdDichAnnuale(idDichAnnuale, year);
+        } else {
+            rifiutiTariffe = rifiutoTariffaRepository.findRifiutiTariffe(year);
         }
         GenericResponse<List<RifiutoTariffaVO>> response = GenericResponse.build(rifiutoTariffaEntityMapper.mapListEntityToListVO(rifiutiTariffe));
         LoggerUtil.debug(logger, "[RifiutoTariffaServiceImpl::getRifiutoTariffa] END");

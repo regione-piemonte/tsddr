@@ -93,6 +93,14 @@ public interface ProfiloService {
 	 * @return true, if is profilo BO
 	 */
 	boolean isProfiloBO(Long idProfilo);
+
+	/**
+	 * Checks if is profilo Pregresso.
+	 *
+	 * @param idProfilo the id profilo
+	 * @return true, if is profilo BO
+	 */
+	boolean isProfiloPregresso(Long idProfilo);
 	
 	/**
      * Checks if is profilo BO.

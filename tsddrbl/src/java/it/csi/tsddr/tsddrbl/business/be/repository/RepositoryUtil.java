@@ -131,11 +131,16 @@ public abstract class RepositoryUtil {
 	public static final String TRIL_RIMPIANTOLINEA_DELETE_VALIDITY_CHECK = "tril.dataDelete IS NULL AND "
 			+ "tril.idUserDelete IS NULL ";
 	
+	public static final String TDAPREGRESSO_VALIDITY_CHECK = "tdaPregresso.dataInizioValidita <= :currentDate AND "
+			+ "(tdaPregresso.dataFineValidita IS NULL OR tdaPregresso.dataFineValidita >= :currentDate) AND "
+			+ "tdaPregresso.dataDelete IS NULL AND "
+			+ "tdaPregresso.idUserDelete IS NULL ";
+				
 	public static final String TDTPROVV_TIPO_PROVVEDIMENTO_VALIDITY_CHECK = "tdtprovv.dataInizioValidita <= :currentDate AND "
-			+ "(tdtprovv.dataFineValidita IS NULL OR tdtprovv.dataFineValidita >= :currentDate) AND "
-			+ "tdtprovv.dataDelete IS NULL AND "
-			+ "tdtprovv.idUserDelete IS NULL ";
-	
+	+ "(tdtprovv.dataFineValidita IS NULL OR tdtprovv.dataFineValidita >= :currentDate) AND "
+	+ "tdtprovv.dataDelete IS NULL AND "
+	+ "tdtprovv.idUserDelete IS NULL ";
+
 	public static final String TTA_ATTO_DELETE_VALIDITY_CHECK = "tta.dataDelete IS NULL AND "
 			+ "tta.idUserDelete IS NULL ";
 	
@@ -171,10 +176,17 @@ public abstract class RepositoryUtil {
 	
 	public static final String TTRT_RIFIUTO_TARIFFA_DELETE_VALIDITY_CHECK =  "ttrt.dataDelete IS NULL AND ttrt.idUserDelete IS NULL ";
 	
+	public static final String TTRT_RIFIUTO_TARIFFA_VALIDITY_YEAR_CHECK = "TO_CHAR (ttrt.dataInizioValidita, 'YYYY') <= :currentYear AND "
+			+ "(ttrt.dataFineValidita IS NULL OR TO_CHAR (ttrt.dataFineValidita, 'YYYY') >= :currentYear) AND "
+			+ "ttrt.dataDelete IS NULL AND "
+			+ "ttrt.idUserDelete IS NULL ";
+	
+
 	public static final String TTRT_RIFIUTO_TARIFFA_VALIDITY_CHECK = "ttrt.dataInizioValidita <= :currentDate AND "
 			+ "(ttrt.dataFineValidita IS NULL OR ttrt.dataFineValidita >= :currentDate) AND "
 			+ "ttrt.dataDelete IS NULL AND "
 			+ "ttrt.idUserDelete IS NULL ";
+	
 	
 	public static final String TTSM_SOGGETTO_MR_DELETE_VALIDITY_CHECK = "ttsm.dataDelete IS NULL AND ttsm.idUserDelete IS NULL ";
 	
@@ -190,6 +202,12 @@ public abstract class RepositoryUtil {
             + "(tde.dataFineValidita IS NULL OR tde.dataFineValidita >= :currentDate) AND "
             + "tde.dataDelete IS NULL AND "
             + "tde.idUserDelete IS NULL ";
+	
+	public static final String TDE_EER_VALIDITY_YEAR_CHECK = "TO_CHAR (tde.dataInizioValidita, 'YYYY')  <= :currentYear AND "
+            + "(tde.dataFineValidita IS NULL OR TO_CHAR (tde.dataFineValidita, 'YYYY') >= :currentYear) AND "
+            + "tde.dataDelete IS NULL AND "
+            + "tde.idUserDelete IS NULL ";
+	
 	
 	public static final String TDTD_TIPO_DOC_VALIDITY_CHECK = "tdtd.dataInizioValidita <= :currentDate AND "
 	        + "(tdtd.dataFineValidita IS NULL OR tdtd.dataFineValidita >= :currentDate) AND "

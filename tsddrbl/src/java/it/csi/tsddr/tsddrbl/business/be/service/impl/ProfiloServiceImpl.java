@@ -262,6 +262,19 @@ public class ProfiloServiceImpl implements ProfiloService {
 		return isProfiloBO;
 	}
 
+	@Override
+	public boolean isProfiloPregresso(Long idProfilo) {
+		LoggerUtil.debug(logger, "[ProfiloServiceImpl::isProfiloPregresso] BEGIN");
+		boolean isProfiloPregresso = false;
+		Optional<TsddrDProfilo> profiloOpt = tsddrDProfiliRepository.findByIdProfilo(idProfilo);
+		if(!profiloOpt.isPresent()) {
+			throw new RecordNotFoundException(String.format(PROFILO_NOT_FOUND, idProfilo));
+		}
+		isProfiloPregresso = profiloOpt.get().getTipoProfilo().getIdTipoProfilo() == TipoProfilo.PREGRESSO.getId();
+		LoggerUtil.debug(logger, "[ProfiloServiceImpl::isProfiloPregresso] END");
+		return isProfiloPregresso;
+	}
+
     @Override
     public GenericResponse<Boolean> isProfiloBO(HttpSession httpSession, Long idProfilo) {
         LoggerUtil.debug(logger, "[ProfiloServiceImpl::isProfiloBO] BEGIN");

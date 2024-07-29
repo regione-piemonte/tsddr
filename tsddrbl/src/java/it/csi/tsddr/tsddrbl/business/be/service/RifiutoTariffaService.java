@@ -4,6 +4,7 @@
  */
 package it.csi.tsddr.tsddrbl.business.be.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -34,5 +35,15 @@ public interface RifiutoTariffaService {
      * @return the rifiuto tariffa
      */
     GenericResponse<List<RifiutoTariffaVO>> getRifiutoTariffa(HttpSession session, Long idDichAnnuale);
+
+    /**
+     * Gets the rifiuto tariffa.
+     *
+     * @param session the session
+     * @param idDichAnnuale the id dich annuale
+     * @param date the date of dich annuale
+     * @return the rifiuto tariffa
+     */
+    public GenericResponse<List<RifiutoTariffaVO>> getRifiutoTariffaByDate(HttpSession session, Long idDichAnnuale, String Year);
 
 }

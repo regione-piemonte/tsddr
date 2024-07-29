@@ -33,12 +33,12 @@ public class TsddrTPrevConsSpecification extends BaseSpecification {
     private static final String ID_PREV_CONS = "idPrevCons";
 
     public static Specification<TsddrTPrevCons> searchByParams(PrevConsParametriRicerca parametriRicerca,
-            Date targetDate, boolean isProfiloBO, List<TsddrTGestore> gestoriUtente, boolean isReport) {
+            Date targetDate, boolean isProfiloBO, boolean isProfiloPregresso, List<TsddrTGestore> gestoriUtente, boolean isReport) {
         return new Specification<TsddrTPrevCons>() {
             @Override
             public Predicate toPredicate(Root<TsddrTPrevCons> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
                 boolean isEnableAllGestori = false;
-                if (isProfiloBO && gestoriUtente.isEmpty()) {
+                if ((isProfiloBO || isProfiloPregresso) && gestoriUtente.isEmpty()) {
                     isEnableAllGestori = true;
                 }
 
@@ -65,7 +65,21 @@ public class TsddrTPrevConsSpecification extends BaseSpecification {
                 predicate = addImpiantoFilter(predicate, builder, impianto, parametriRicerca);
                 predicate = addGestoreFilter(predicate, builder, gestore, isEnableAllGestori, parametriRicerca, gestoriUtente);
                 predicate = addTipoDocFilter(predicate, builder, tipoDocumento, parametriRicerca);
+                if(isProfiloPregresso && parametriRicerca.getIdStatoDichiarazione()!=null && parametriRicerca.getIdStatoDichiarazione() == StatoDichiarazione.INVIATA_PROTOCOLLATA.getId()){
+                    // nella ricerca R-MR per la creazione D-MR il FE passa lo stato 2 (INVIATA), ma il profilo pregresso può vedere solo lo stato $(PREGRESSO CONSOLIDATO)
+                    parametriRicerca.setIdStatoDichiarazione(StatoDichiarazione.PREGRESSO_CONSOLIDATO.getId());
+                }
                 predicate = addStatoDichiarazioneFilter(predicate, builder, statoDichiarazione, parametriRicerca);
+                
+                if(isProfiloPregresso){
+                    predicate = builder.and(predicate, builder.equal(root.get("pregresso"), true));
+                } else if (!isProfiloBO){
+                    // si tratta di un profilo FO, che deve prendere tutte le dich non pregresse, oppure quelle pregresse in stato CONSOLIDATO (4)
+                    predicate = builder.and(predicate, builder.or(  builder.equal(root.get("pregresso"), false), 
+                                                                    builder.and(    builder.equal(root.get("pregresso"), true), 
+                                                                                    builder.equal(statoDichiarazione.get("idStatoDichiarazione"),
+                                                                                                    StatoDichiarazione.PREGRESSO_CONSOLIDATO.getId()))));
+                }
 
                 List<Order> orderList = new ArrayList<>();
                 if(!isReport) {
@@ -114,8 +128,10 @@ public class TsddrTPrevConsSpecification extends BaseSpecification {
             Join<TsddrTPrevCons, TsddrDStatoDichiarazione> statoDichiarazione, Predicate predicate,
             CriteriaBuilder builder, PrevConsParametriRicerca parametriRicerca) {
         if (isProfiloBO) {
-            predicate = builder.and(predicate, builder.equal(statoDichiarazione.get("idStatoDichiarazione"),
-                    StatoDichiarazione.INVIATA_PROTOCOLLATA.getId()));
+            predicate = builder.and(builder.or(  builder.equal(statoDichiarazione.get("idStatoDichiarazione"),
+                                                    StatoDichiarazione.PREGRESSO_CONSOLIDATO.getId()), 
+                                                builder.equal(statoDichiarazione.get("idStatoDichiarazione"),
+                                                    StatoDichiarazione.INVIATA_PROTOCOLLATA.getId())));
         }
         return predicate;
     }

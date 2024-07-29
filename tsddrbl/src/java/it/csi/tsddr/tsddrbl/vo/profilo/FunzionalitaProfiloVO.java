@@ -18,6 +18,7 @@ public class FunzionalitaProfiloVO extends AbstractVO {
 	private Boolean insert;
 	private Boolean read;
 	private Boolean update;
+	private Boolean profiloPregresso;
 	
 	/**
 	 * Instantiates a new funzionalita profilo VO.
@@ -45,6 +46,30 @@ public class FunzionalitaProfiloVO extends AbstractVO {
 		this.insert = insert;
 		this.read = read;
 		this.update = update;
+		this.profiloPregresso = false;
+	}
+	/**
+	 * Instantiates a new funzionalita profilo VO.
+	 *
+	 * @param idProfilo the id profilo
+	 * @param idFunzione the id funzione
+	 * @param descFunzione the desc funzione
+	 * @param delete the delete
+	 * @param insert the insert
+	 * @param read the read
+	 * @param update the update
+	 * @param profiloPregresso the pregesso profile
+	 */
+	public FunzionalitaProfiloVO(Long idProfilo, Long idFunzione, String descFunzione, Boolean delete,
+			Boolean insert, Boolean read, Boolean update, Boolean profiloPregresso) {
+		this.idProfilo = idProfilo;
+		this.idFunzione = idFunzione;
+		this.descFunzione = descFunzione;
+		this.delete = delete;
+		this.insert = insert;
+		this.read = read;
+		this.update = update;
+		this.profiloPregresso = profiloPregresso;
 	}
 	
 	/**
@@ -53,8 +78,10 @@ public class FunzionalitaProfiloVO extends AbstractVO {
 	 * @param rfp the rfp
 	 */
 	public FunzionalitaProfiloVO(TsddrRFunzProf rfp) {
+
+		//TODO - verificare il tipo profilo, se 3 allora pregresso = true
 		this(rfp.getId().getIdProfilo(), rfp.getId().getIdFunzione(), rfp.getFunzione().getDescFunzione(),
-				rfp.getIsDelete(), rfp.getIsInsert(), rfp.getIsRead(), rfp.getIsUpdate());
+				rfp.getIsDelete(), rfp.getIsInsert(), rfp.getIsRead(), rfp.getIsUpdate(), false);
 	}
 
 	/**
@@ -182,5 +209,14 @@ public class FunzionalitaProfiloVO extends AbstractVO {
 	public void setUpdate(Boolean update) {
 		this.update = update;
 	}
+
+	public Boolean getProfiloPregresso() {
+		return profiloPregresso;
+	}
+
+	public void setProfiloPregresso(Boolean profiloPregresso) {
+		this.profiloPregresso = profiloPregresso;
+	}
+
 
 }

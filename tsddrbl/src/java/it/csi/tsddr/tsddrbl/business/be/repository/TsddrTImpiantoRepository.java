@@ -29,7 +29,8 @@ public interface TsddrTImpiantoRepository extends BaseRepository<TsddrTImpianto,
 	@Query("SELECT ttimp "
 			+ "FROM TsddrTImpianto ttimp "
 			+ "WHERE ttimp.idImpianto = :idImpianto AND "
-			+ RepositoryUtil.TTIMP_IMPIANTO_DELETE_VALIDITY_CHECK)
+			+ RepositoryUtil.TTIMP_IMPIANTO_DELETE_VALIDITY_CHECK
+			+ "ORDER BY ttimp.denominazione ASC")
 	Optional<TsddrTImpianto> findByIdImpianto(@Param("idImpianto") Long idImpianto);
 	
 	/**
@@ -70,7 +71,8 @@ public interface TsddrTImpiantoRepository extends BaseRepository<TsddrTImpianto,
 	@Query("SELECT ttimp "
 			+ "FROM TsddrTImpianto ttimp "
 			+ "WHERE "
-			+ RepositoryUtil.TTIMP_IMPIANTO_VALIDITY_CHECK)
+			+ RepositoryUtil.TTIMP_IMPIANTO_VALIDITY_CHECK
+			+ "ORDER BY ttimp.denominazione ASC")
 	List<TsddrTImpianto> findImpianti(@Param("currentDate") Date currentDate);
 	
 	/**
@@ -83,7 +85,8 @@ public interface TsddrTImpiantoRepository extends BaseRepository<TsddrTImpianto,
             + "FROM TsddrTImpianto ttimp "
             + "INNER JOIN ttimp.gestore ttg "
             + "WHERE ttg.idGestore = :idGestore AND "
-            + RepositoryUtil.TTIMP_IMPIANTO_VALIDITY_CHECK)
+            + RepositoryUtil.TTIMP_IMPIANTO_VALIDITY_CHECK
+			+ "ORDER BY ttimp.denominazione ASC")
     List<TsddrTImpianto> findImpiantiByIdGestore(@Param("idGestore") Long idGestore, @Param("currentDate") Date currentDate);
 	
 	/**

@@ -180,7 +180,7 @@ public interface DichAnnualeEntityMapper extends BaseMapper {
 	 */
 	@AfterMapping
 	default void setPrintableAndAnnullable(FunzionalitaProfiloVO acl, @MappingTarget DichAnnualeBasicVO vo) {
-		vo.setPrintable(vo.getStatoDichiarazione().getIdStatoDichiarazione() == StatoDichiarazione.INVIATA_PROTOCOLLATA.getId());
+		vo.setPrintable(vo.getStatoDichiarazione().getIdStatoDichiarazione() == StatoDichiarazione.INVIATA_PROTOCOLLATA.getId() && !vo.getPregresso());
 		vo.setAnnullable((acl.getDelete() == Boolean.TRUE) && vo.getStatoDichiarazione().getIdStatoDichiarazione() == StatoDichiarazione.BOZZA.getId());
 	}
 

@@ -31,6 +31,7 @@ public class PrevConsVO extends AbstractVO {
     private StatoDichiarazioneVO statoDichiarazione;
     private List<PrevConsLineeVO> prevConsLinee;
     private IndirizzoVO indirizzo;
+	private Boolean pregresso;
     
     private Boolean richiestaAmmissioneHasBeenUpdated;
 
@@ -160,6 +161,14 @@ public class PrevConsVO extends AbstractVO {
 
 	public void setNumProtDoc(String numProtDoc) {
 		this.numProtDoc = numProtDoc;
+	}
+
+	public Boolean getPregresso() {
+		return pregresso;
+	}
+
+	public void setPregresso(Boolean pregresso) {
+		this.pregresso = pregresso;
 	}
     
 }

@@ -34,6 +34,21 @@ public interface TsddrDEerRepository extends JpaRepository<TsddrDEer, Long> {
             + "ORDER BY tde.codiceEer ASC")
     List<TsddrDEer> findEer(@Param("currentDate") Date currentDate);
     
+
+    /**
+     * Find eer.
+     *
+     * @param currentDate the current date
+     * @return the list
+     */
+    @Query("SELECT tde "
+            + "FROM TsddrDEer tde "
+            + "WHERE "
+            + RepositoryUtil.TDE_EER_VALIDITY_YEAR_CHECK
+            + "ORDER BY tde.codiceEer ASC")
+    List<TsddrDEer> findEer(@Param("currentYear") String currentYear);
+    
+    
     /**
      * Find by id eer.
      *

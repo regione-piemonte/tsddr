@@ -52,10 +52,10 @@ public interface TsddrTDichAnnualeRepository
 			//+ "ttda.versione = (SELECT MAX(ttda1.versione) FROM TsddrTDichAnnuale ttda1 WHERE ttda1.impianto.idImpianto = :idImpianto AND ttda1.anno = :anno) AND "
 			+ "ttimp.idImpianto = :idImpianto AND "
 			+ "ttg.idGestore = :idGestore AND "
-			+ "tdsdich.idStatoDichiarazione = :idStatoDichiarazione AND "
+			+ "tdsdich.idStatoDichiarazione in :idStatoDichiarazione AND "
             + RepositoryUtil.TTDA_DICH_ANNUALE_DELETE_VALIDITY_CHECK)
-	Optional<List<TsddrTDichAnnuale>> findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazione(@Param("idImpianto")Long idImpianto, @Param("anno")Long anno, 
-			@Param("idGestore")Long idGestore, @Param("idStatoDichiarazione")Long idStatoDichiarazione);
+	Optional<List<TsddrTDichAnnuale>> findByIdImpiantoAndAnnoAndIdGestoreAndIdStatoDichichiarazioneIn(@Param("idImpianto")Long idImpianto, @Param("anno")Long anno, 
+			@Param("idGestore")Long idGestore, @Param("idStatoDichiarazione")List<Long> idStatoDichiarazioneList);
 	
 	
 	/**

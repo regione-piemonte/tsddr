@@ -34,6 +34,7 @@ import it.csi.tsddr.tsddrbl.business.be.service.MessaggioService;
 import it.csi.tsddr.tsddrbl.util.LoggerUtil;
 import it.csi.tsddr.tsddrbl.util.enums.CodiceFunzione;
 import it.csi.tsddr.tsddrbl.util.enums.CodiceMessaggio;
+import it.csi.tsddr.tsddrbl.util.enums.TipoProfilo;
 import it.csi.tsddr.tsddrbl.util.log.LogConstants;
 import it.csi.tsddr.tsddrbl.util.web.SessionUtil;
 import it.csi.tsddr.tsddrbl.vo.common.SelectVO;
@@ -223,7 +224,11 @@ public class FunzionalitaProfiloServiceImpl implements FunzionalitaProfiloServic
 	public FunzionalitaProfiloVO getFunzionalitaProfiloByCodFunzione(Long idProfilo, CodiceFunzione codFunzione) {
 		LoggerUtil.debug(logger, "[FunzionalitaProfiloServiceImpl::getFunzionalitaProfiloByCodFunzione] BEGIN");
 		FunzionalitaProfiloVO funzionalitaProfiloVO = tsddrRFunzProfRepository.findProfiloFunzionalitaByIdProfiloAndCodFunzione(idProfilo, codFunzione.name(), new Date());
-		funzionalitaProfiloVO = funzionalitaProfiloVO != null ? funzionalitaProfiloVO : new FunzionalitaProfiloVO(idProfilo, codFunzione.getIdFunzione(), codFunzione.getDescFunzione(), false, false, false, false);
+		TsddrDProfilo profilo = tsddrDProfiliRepository.findOne(idProfilo);
+		funzionalitaProfiloVO.setProfiloPregresso(profilo.getTipoProfilo().getIdTipoProfilo()==TipoProfilo.PREGRESSO.getId());
+		
+		//TODO - verificare il tipo profilo, se 3 allora pregresso = true
+		funzionalitaProfiloVO = funzionalitaProfiloVO != null ? funzionalitaProfiloVO : new FunzionalitaProfiloVO(idProfilo, codFunzione.getIdFunzione(), codFunzione.getDescFunzione(), false, false, false, false, false);
 		LoggerUtil.debug(logger, "[FunzionalitaProfiloServiceImpl::getFunzionalitaProfiloByCodFunzione] END");
 		return funzionalitaProfiloVO;
 	}

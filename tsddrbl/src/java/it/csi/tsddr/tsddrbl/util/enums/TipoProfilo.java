@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  */
 public enum TipoProfilo {
 	
-	BACK_OFFICE(1), FRONT_OFFICE(2);
+	BACK_OFFICE(1), FRONT_OFFICE(2), PREGRESSO(3);
 	
 	private long id;
 	
