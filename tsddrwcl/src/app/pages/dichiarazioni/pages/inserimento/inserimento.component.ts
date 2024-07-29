@@ -8,8 +8,10 @@ import {
 import { DichiarazioniACL } from '@pages/dichiarazioni/models/acl.model';
 import {
   AutocompleteInput,
+  CheckboxInput,
   DateInput,
   Form,
+  NopInput,
   SelectOption,
   TextInput,
   ValidationStatus
@@ -40,6 +42,7 @@ import { DichiarazioneEditingStoreService } from '../../services/dichiarazione-e
 import { PopupDichiarazioneExistComponent } from '../../components/popup-dichiarazione-exist/popup-dichiarazione-exist.component';
 import { ConfirmSaveComponent } from '../../components';
 import { Console } from 'console';
+import { Validators } from '@angular/forms';
 
 @UntilDestroy()
 @Component({
@@ -94,6 +97,8 @@ export class InserimentoComponent implements OnInit {
   currentDichiarazione: Dichiarazione;
   isProfileBo: boolean;
   keyDichiarazione: string;
+  //REQ4
+  comboAnni:any;
   constructor(
     private service: DichiarazioneService,
     private router: Router,
@@ -120,13 +125,19 @@ export class InserimentoComponent implements OnInit {
       this.service.getComboDichiarazioneGestori().pipe(untilDestroyed(this)),
       this.utility.getMessage('E010').pipe(untilDestroyed(this)),
       this.utility.getMessage('A017').pipe(untilDestroyed(this)),
-      this.utility.getMessage('A018').pipe(untilDestroyed(this))
+      this.utility.getMessage('A018').pipe(untilDestroyed(this)),
+      this.service.getComboAnnoPregresso().pipe(untilDestroyed(this))
     ]).subscribe((results) => {
       this.comboGestori = results[0];
+
+
       this.mandatoryMessage = results[1];
       this.soggettiMessage = (results[2] as any).content;
       this.soggettiObiettiviMessage = (results[3] as any).content;
+      this.comboAnni = results[4]
+      console.log(results)
       this._initForm();
+      this.setGestoreValue()
       this.loadingService.hide();
     });
 
@@ -144,10 +155,12 @@ export class InserimentoComponent implements OnInit {
       .subscribe((statusFormEditingStore) => {
         this._changeStatus(statusFormEditingStore);
       });
+
+
   }
 
   checkValidity(dichiarazione, rifiutiConfIsEmpty, versamentiIsEmpty) {
-    
+
     if (
       dichiarazione?.dichiarazione?.rifiutiConferiti?.rifiutiConferiti ===
         null ||
@@ -243,10 +256,11 @@ if (dichiarazione?.dichiarazione?.versamenti?.versamenti) {
 
   onVerificaPresenza() {
     this.loadingService.show();
+    let yearPregresso = this.comboAnni.content?.find((anno) => anno.id ===this.form.get('anno').value)
     this.service
       .existDichiarazione({
         idImpianto: this.form.get('idImpianto').value,
-        anno: this.form.get('anno').value,
+        anno: this.acl.content.profiloPregresso? yearPregresso.value : this.form.get('anno').value,
         idGestore: this.form.get('idGestore').value
       })
       .pipe(untilDestroyed(this))
@@ -273,7 +287,9 @@ if (dichiarazione?.dichiarazione?.versamenti?.versamenti) {
           });
           this.utility.getMessage('E014').pipe(untilDestroyed(this));
         } else {
-          const annoPrec: number = +this.form.get('anno').value - 1;
+          const annoPrec: number =  this.acl.content.profiloPregresso?
+          this.comboAnni.content.find((anno) => anno.id ===this.form.get('anno').value).value - 1 :
+          +this.form.get('anno').value - 1;
           forkJoin([
             this.service
               .getGestore(this.form.get('idGestore').value)
@@ -329,9 +345,12 @@ if (dichiarazione?.dichiarazione?.versamenti?.versamenti) {
                   annotazioni: null,
                   indirizzo: null,
                   rifiutiConferiti: { rifiutiConferiti: [] },
-                  anno: +this.form.get('anno').value,
+                  anno:  this.acl.content.profiloPregresso? this.comboAnni.content.find((anno) => anno.id ===this.form.get('anno').value).value : +this.form.get('anno').value,
                   versione: +this.form.get('versione').value,
-                  dataDichiarazione: this.form.get('dataDichiarazione').value
+                  dataDichiarazione: this.form.get('dataDichiarazione').value,
+                  numProtocollo: this.acl.content.profiloPregresso ? this.form.get('numProtocollo').value : null,
+                  dataProtocollo:  this.acl.content.profiloPregresso ? (this.form.get('dataProtocollo').value) : null,
+                  pregresso: this.form.get('pregresso').value.toString() === 'true'? true : false
                 },
                 dichiarazionePrecedente: dichiarazionePrecedente
               });
@@ -569,6 +588,11 @@ if (dichiarazione?.dichiarazione?.versamenti?.versamenti) {
     });
   }
 
+  setGestoreValue(){
+   let value=  this.comboGestori?.content?.length === 1 ? this.comboGestori?.content[0].id: null;
+   this.form.get('idGestore').setValue(value)
+  }
+  
   private _initForm() {
     const size = '12|6|6|6|6';
     this.form = new Form({
@@ -579,6 +603,7 @@ if (dichiarazione?.dichiarazione?.versamenti?.versamenti) {
           label: 'DICHIARAZIONI.CREATE.FORM.GESTORE.LABEL',
           placeholder: 'DICHIARAZIONI.CREATE.FORM.GESTORE.PLACEHOLDER',
           options: of(this.comboGestori),
+
           required: true,
           valueChange: (idGestore: string) => {
             if (idGestore) {
@@ -640,6 +665,7 @@ if (dichiarazione?.dichiarazione?.versamenti?.versamenti) {
           placeholder: 'DICHIARAZIONI.CREATE.FORM.DATA.PLACEHOLDER',
           size,
           clearable: true,
+          readonly:  true ,
           value: this.datePipe.transform(new Date(), 'yyyy-MM-dd'),
           required: true,
           validationStatus: [
@@ -662,10 +688,84 @@ if (dichiarazione?.dichiarazione?.versamenti?.versamenti) {
               text: this.mandatoryMessage.content.testoMsg
             })
           ]
-        })
+        }),
+        noInput: new NopInput( {}),
+        numProtocollo:  new TextInput({
+          label: 'DICHIARAZIONI.CREATE.FORM.PROTOCOLLO.LABEL',
+          placeholder: this.acl.content.profiloPregresso ? 'DICHIARAZIONI.CREATE.FORM.PROTOCOLLO.PLACEHOLDER': ' ',
+
+          type: 'text',
+          size,
+
+          required:this.acl.content.profiloPregresso? true: false,
+          /*value: this.currentDichiarazione.numProtocollo
+            ? this.currentDichiarazione.numProtocollo.toString()
+            : null*/
+           // pattern: '/^(\d){8}(\/)(\d){4}$/',
+            validatorOrOpts: [Validators.pattern('^[0-9]{8}(\/)[0-9]{4}$'), Validators.required],
+          readonly: (this.acl.content.profiloPregresso ) ? false: true,
+          validationStatus: [
+            ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+              text: this.mandatoryMessage.content.testoMsg
+            }),
+            ValidationStatus.ERROR.CUSTOM((control) => control.hasError('pattern'), {
+              //da definire se viene tornato dal be
+              text: 'Numero protocollo non valido'
+            })
+          ]
+        }),
+
+        dataProtocollo: new DateInput({
+          label: 'DICHIARAZIONI.CREATE.FORM.DATA_PROTOCOLLO.LABEL',
+          placeholder: 'DICHIARAZIONI.CREATE.FORM.DATA_PROTOCOLLO.PLACEHOLDER',
+          size,
+
+          /*value: this.currentDichiarazione.dataProtocollo
+            ? this.datePipe.transform(
+                this.currentDichiarazione.dataProtocollo,
+                'yyyy-MM-dd'
+              )
+            : this.datePipe.transform(new Date(), 'yyyy-MM-dd'),*/
+            required:this.acl.content.profiloPregresso? true: false,
+          validationStatus: [
+            ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+              text: this.mandatoryMessage.content.testoMsg
+            })
+          ],
+          readonly: (this.acl.content.profiloPregresso ? false: true)
+        }),
+        pregresso: new CheckboxInput({
+          label: 'DICHIARAZIONI.CREATE.FORM.PREGRESSO',
+        size:'12',
+        value: this.acl.content.profiloPregresso ? true : false
+          ,
+        required: true,
+        validationStatus: [
+          ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+            text: this.mandatoryMessage.content.testoMsg
+          })
+        ],
+        readonly: true})
       }
     });
+//EVOLUTIVA REQ_4
+if(this.acl.content.profiloPregresso){
+  //TODO: manca da aggiungere anno con select
+this.form.removeControl('anno');
+this.form.addControlAfter('anno',   new AutocompleteInput({
+  label: 'DICHIARAZIONI.CREATE.FORM.ANNO.LABEL',
+  placeholder: 'DICHIARAZIONI.CREATE.FORM.ANNO.PLACEHOLDER',
+  options: of(this.comboAnni),
+  required: true,
+  size,
+  clearable: true
+}), 'idImpianto')
 
+
+
+
+
+}
     let call = this.service.getComboDichiarazioneImpianti();
     this._callImpiantiCallback(call);
     (this.form.get('idImpianto') as AutocompleteInput).setOptions(call as any);

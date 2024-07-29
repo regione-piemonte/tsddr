@@ -10,16 +10,16 @@
                     <app-form [form]="form"></app-form>
                     <div class="row" *ngIf="acl.content.insert && !onVerificaPresenzaDa">
                         <div class="col-12">
-                            <button 
-                            [disabled]="form.invalid" 
+                            <button
+                            [disabled]="form.invalid"
                             (click)="onVerificaPresenza()" aria-label="Inserisci nuovo utente" type="button"
                                 class="btn btn-primary float-right">
                             {{'DICHIARAZIONI.RICERCA.NUOVA_DICHIARAZIONE'|translate}}
                             </button>
                         </div>
                     </div>
-                    <app-dichiarazione-tabs *ngIf="acl.content.insert && 
-                        onVerificaPresenzaDa 
+                    <app-dichiarazione-tabs *ngIf="acl.content.insert &&
+                        onVerificaPresenzaDa
                         && gestore
                         && impianto"
                         [gestore]="gestore"
@@ -28,17 +28,20 @@
                     </app-dichiarazione-tabs>
                     <div class="row buttons" *ngIf="acl.content.insert && onVerificaPresenzaDa && !isProfileBo">
                         <div class="col-6">
-                            <button (click)="onDraft()" 
-                            [disabled]="!draftEnabled" 
+                            <button (click)="onDraft()"
+                            [disabled]="!draftEnabled"
                             aria-label="Inserisci nuova Dichiarazione Annuale"
                                     type="button"
                                     class="btn btn-primary float-left">
                                 {{'DICHIARAZIONI.CREATE.FORM.BUTTONDRAFT'|translate}}
                             </button>
                         </div>
+                        <!---la validita del form in testa va controllata solo se il profilo è pregresso e quindi i campi
+                         dataProtocollo e num protocollo sono modificabili -->
                         <div class="col-6">
-                            <button (click)="onCreate()" 
-                            [disabled]="!sendEnabled" 
+                            <button (click)="onCreate()"
+                            [disabled]="!sendEnabled || (acl?.content.profiloPregresso ? !form.valid : false)"
+
                             aria-label="Inserisci nuova Dichiarazione Annuale"
                                     type="button"
                                     class="btn btn-primary float-right">

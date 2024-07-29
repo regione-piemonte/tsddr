@@ -15,12 +15,15 @@ export class PrevConsClass implements IPrevCons {
   modalita?: string;
   richiestaAmmissioneHasBeenUpdated?: boolean;
   numProtocollo?: string;
+  dataProtocollo?: string;
   prevConsLinee: (IPrevConsLineeEntity)[] | null;
   statoDichiarazione?: IStatoPrevCons;
   tipoDoc: ITipoDoc;
   impianto: ImpiantoMr;
   indirizzo?: Indirizzo;
   numProtDoc?: any;
+  pregresso?: boolean;
+
 
   idCount = 0;
 
@@ -46,9 +49,11 @@ export class PrevConsClass implements IPrevCons {
     this.modalita = prevCons.modalita ?? null;
     this.numProtDoc = prevCons.numProtDoc ?? null;
     this.numProtocollo = prevCons.numProtocollo ?? null;
+    this.dataProtocollo = prevCons.dataProtocollo ?? null;
     this.statoDichiarazione = prevCons.statoDichiarazione ?? null;
     this.impianto = prevCons.impianto ?? null;
     this.indirizzo = prevCons.indirizzo ?? null;
+    this.pregresso = prevCons.pregresso ?? false;
 
     if(!prevCons.idPrevConsRMr){
       this.prevConsLinee = this.setPrevConsLineeEdit(prevCons.lineeImpianto, prevCons.prevConsLinee);

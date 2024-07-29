@@ -32,7 +32,7 @@ export abstract class ListaAbstract {
    * @description messaggio da far apparire se non trovo risultati a BE
    */
   public abstract initListenOnSize(messageA002: IMessage): void;
-  public abstract initTable(actionsTemplate: TemplateRef<any>): void;
+  public abstract initTable(actionsTemplate: TemplateRef<any>,pregressoTemplate?: TemplateRef<any>): void;
   public abstract onDowloadReport(): void;
   public abstract initForm(): Form;
 }

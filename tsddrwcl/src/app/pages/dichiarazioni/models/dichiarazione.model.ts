@@ -35,7 +35,7 @@ export interface Dichiarazione {
   versione?: number;
   statoDichiarazione?: StatoDichiarazione;
   impianto?: Impianto;
-  numProtocollo?: number;
+  numProtocollo?: number | string;
   dataProtocollo?: string;
   annullable?: boolean;
   printable?: boolean;
@@ -43,6 +43,7 @@ export interface Dichiarazione {
   creditoImposta?: number;
   saldoImposta?: number;
   indirizzo?: Indirizzo;
+  pregresso?:boolean;
   rifiutiConferiti?: RifiutiConferiti;
   versamenti?: Versamenti;
   soggettiMr?: SoggettoMrExtended[]; // con flag per capire se sta in ram il soggetto

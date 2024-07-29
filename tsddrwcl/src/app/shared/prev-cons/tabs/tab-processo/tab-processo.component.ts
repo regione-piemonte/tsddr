@@ -19,6 +19,8 @@ import { SEZIONE } from '../../models/constants';
 import { ActionType } from '../sotto-tabs/tab-rifiuti/tab-rifiuti.component';
 import { MrStoreService } from '../../services/mr-store.service';
 import { forkJoin } from 'rxjs';
+import { TabsRifiutiService } from '../../services/tabs-rifiuti.service';
+import { LoadingService } from '@app/theme/layouts/loading.services';
 
 export interface ITabElem {
   id: string;
@@ -101,13 +103,22 @@ export class TabProcessoComponent implements OnInit, AfterViewInit {
     private mrService: MrService,
     private mrStoreService: MrStoreService,
     private modalService: ModalService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private rifiutiService: TabsRifiutiService,
+    private loadingService: LoadingService,
   ) {}
 
   ngOnInit(): void {
     this._initHelper();
     this._initACL();
 
+
+
+    //precarico i rifiuti
+    this.rifiutiService.getComboEerObservable((this.prevCons.annoTributo)).subscribe((data)=>{
+      this.rifiutiService.setRifiuti(data)
+    })
+    ///
     forkJoin([
       this.utility.getMessage('A021'),
       this.utility.getMessage('A013'),
@@ -169,10 +180,8 @@ export class TabProcessoComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit():void{
 
-		//console.log(this.found);
- 		//this.form.get('linee')?.setValue(this.found?.idImpiantoLinea)
-	 setTimeout(()=>{
 
+	 setTimeout(()=>{
 
 	    this.form.get('linee')?.setValue(this.found?.id);
 	    console.log('found ' , this.found);
@@ -187,8 +196,10 @@ export class TabProcessoComponent implements OnInit, AfterViewInit {
    * @description al cambiamento del tab, aggiorno la proprietà da mandare in input al figlio
    */
   onChangeActiveTab(tabElement: ITabElem, changeLinea: boolean = false) {
+
     this.activeElement = tabElement.link;
     this.activeId = tabElement.id;
+
 
     if (this.selectedTabObject?.prevConsDett?.length && !changeLinea) {
       let condition = this.selectedTabObject.prevConsDett[0].sezione.idSezione;
@@ -245,9 +256,8 @@ export class TabProcessoComponent implements OnInit, AfterViewInit {
     /////
     //////
     this._setValue();
-    this._setPercentuali();
+      this._setPercentuali();
 
-    //
   }
 
   onDeleteLinea() {
@@ -376,7 +386,7 @@ export class TabProcessoComponent implements OnInit, AfterViewInit {
 				this.percRecupero = this.selectedPrevConsLinea.percRecupero;
 			});
 
-
+//this.loadingService.show()
 		this.mrService
 			.getPercScartoVisible(this.selectedPrevConsLinea.codLinea?this.selectedPrevConsLinea.codLinea:this.selectedPrevConsLinea.codSottoLinea, this.prevCons.annoTributo)
 			.subscribe((response: any) => {
@@ -391,7 +401,10 @@ export class TabProcessoComponent implements OnInit, AfterViewInit {
 					this.selectedPrevConsLinea.percScarto = null;
 				}
 				this.percScarto = this.selectedPrevConsLinea.percScarto;
-			});
+
+     //this.loadingService.hide()
+
+      });
 
 
   }
@@ -421,7 +434,7 @@ export class TabProcessoComponent implements OnInit, AfterViewInit {
           options: this._getLineeOptions() as any,
           value: this.selectedPrevConsLinea?.idImpiantoLinea,
           size,
-       
+
           required: false,
           clearable: false,
           readonly: false,
@@ -518,6 +531,7 @@ export class TabProcessoComponent implements OnInit, AfterViewInit {
   }
 
   private _setPopulatedLines(): void {
+
     let lineePopolate: string[] = this.prevCons.prevConsLinee?.map((item) => {
       if (!!item.totMat || !!item.totRii || !!item.totRru || !!item.totRu) {
         return item.codLinea ? item.codLinea : item.codSottoLinea;

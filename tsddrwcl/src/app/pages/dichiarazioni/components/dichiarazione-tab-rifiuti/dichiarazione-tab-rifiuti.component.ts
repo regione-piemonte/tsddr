@@ -44,6 +44,7 @@ export class DichiarazioneTabRifiutiComponent implements OnInit {
   totalForm: Form;
   updateForms: { id: number; form: Form; changed: boolean; combo: any }[];
   rifiutiTariffa: RifiutoTariffa[];
+
   dichiarazioneEditingStore: DichiarazioneEditingStore;
   rifiutiConferiti: RifiutiConferiti;
   unitaMisura: UnitaMisura = {
@@ -69,6 +70,7 @@ export class DichiarazioneTabRifiutiComponent implements OnInit {
     rifiutoTariffa: null,
     riduzione: ' '
   };
+year: any;
 
   constructor(
     private loadingService: LoadingService,
@@ -79,19 +81,27 @@ export class DichiarazioneTabRifiutiComponent implements OnInit {
   ) {
     this.updateForms = [];
     this.idRifiutoConferito = 1;
+
   }
 
   ngOnInit(): void {
     this._initACL();
+    this.editingStoreService
+    .getStoredDichiarazione(this.keyDichiarazione).subscribe((data)=>{
+
+this.year= data.dichiarazione.anno
+    })
 
     forkJoin([
-      this.service.getRifiutiTariffa(),
+      this.service.getRifiutiTariffa(null, this.year),
       this.service.getPeriodi(),
       this.utilityService.getMessage('A005')
     ])
       .pipe(untilDestroyed(this))
       .subscribe((results) => {
-        this.rifiutiTariffa = (results[0] as any).content;
+        this.rifiutiTariffa = (results[0] as any).content ? (results[0] as any).content : [] ;
+
+
         let periodi = (results[1] as any).content;
         periodi.forEach((item, index, object) => {
           if (item.idPeriodo === 5) {
@@ -104,6 +114,7 @@ export class DichiarazioneTabRifiutiComponent implements OnInit {
         this.editingStoreService
           .getStoredDichiarazione(this.keyDichiarazione)
           .subscribe((dichiarazione) => {
+           // console.log(dichiarazione)
             if (dichiarazione && dichiarazione.key === this.keyDichiarazione) {
               this._changeDichiarazione(dichiarazione);
             }
@@ -139,6 +150,21 @@ export class DichiarazioneTabRifiutiComponent implements OnInit {
         descrizione: i.descrizione
       });
     });
+
+
+
+    //sort by property description
+
+    items.sort((a, b) => {
+      if (a.descrizione < b.descrizione) {
+          return -1;
+      }
+      if (a.descrizione > b.descrizione) {
+          return 1;
+      }
+      return 0;
+    });
+
     this.comboRifiutiTariffaCompleta = {
       content: [...items]
     };
@@ -330,7 +356,7 @@ export class DichiarazioneTabRifiutiComponent implements OnInit {
       ...this.dichiarazioneEditingStore.dichiarazione.rifiutiConferiti,
       rifiutiConferiti: newRF
     };
-    
+
     this._addRifiutoTariffa(current.rifiutoTariffa.idRifiutoTariffa);
     this._removeRifiutoTariffa(
       rifiutoConferitoSave.rifiutoTariffa.idRifiutoTariffa
@@ -439,25 +465,26 @@ export class DichiarazioneTabRifiutiComponent implements OnInit {
     let _tipologia3;
     if (idRifiutoTariffa) {
       const rt = this._getRifiutoTariffa(idRifiutoTariffa);
-      if (rt.idTipologia3 === undefined) {
+      if (rt?.idTipologia3 === undefined) {
         _tipologia3 = '';
       } else {
         _tipologia3 = rt.idTipologia3 + ', ';
       }
 
       items.push({
-        id: rt.idRifiutoTariffa.toString(),
+        id: rt?.idRifiutoTariffa.toString(),
         value:
-          rt.idTipoRifiuto +
+          rt?.idTipoRifiuto +
           ', ' +
-          rt.idTipologia2 +
+          rt?.idTipologia2 +
           ', ' +
           _tipologia3 +
-          rt.descrizione,
-        descrizione: rt.descrizione
+          rt?.descrizione,
+        descrizione: rt?.descrizione
       });
     }
-    items.sort((a, b) => (a.idRifiutoTariffa < b.idRifiutoTariffa ? -1 : 1));
+    //items.sort((a, b) => (a.idRifiutoTariffa < b.idRifiutoTariffa ? -1 : 1));
+    items.sort((a, b) => a.descrizione < b.descrizione ? -1 : a.descrizione > b.descrizione ? 1 : 0);
     return of({ content: items });
   }
 

@@ -81,6 +81,7 @@ export class RichiestaInserimento extends PrevConsEditAbstract {
    */
   public sendEnabled(): boolean {
     this.status = this.storeService.getStatus();
+    console.log('this.status', this.status);
     if (this.status.sedeValid && this.status.processoValid){
         return true;
       } else {

@@ -36,10 +36,11 @@ import { TableColumn } from '@shared/table/models/column.model';
 import { EMPTY, Observable, Subject, forkJoin, merge, of } from 'rxjs';
 import { SEZIONE, TOT_LABEL } from '@app/shared/prev-cons/models/constants';
 import { FormControl } from '@angular/forms';
-import { PopupMrExistComponent } from '@app/shared/prev-cons/modals/popup-mr-exist/popup-mr-exist.component';
 import { map, share, switchMap } from 'rxjs/operators';
 import { TypeMessages } from '../../tab-processo/tab-processo.component';
 import { formatNumber } from '@angular/common';
+import { ICombo } from '@app/shared/prev-cons/interfaces/api-mr.model';
+import { LoadingService } from '@app/theme/layouts/loading.services';
 
 export type ActionType = 'add' | 'update' | 'delete';
 @UntilDestroy()
@@ -55,6 +56,7 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() tabName: 'rii' | 'mat' | 'rru' | 'ru';
   @Input() selectedTabObject: IRifiutiObject;
   @Input() messages: TypeMessages;
+  @Input() annoTributoPrevCons: number;
 
   @Output() sendEvent = new EventEmitter<ActionType>();
 
@@ -69,7 +71,7 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
   totLabel: string;
   columns: TableColumn[] = [];
   labelCodiceEer: string;
-
+rifiutiList : ICombo;
   createForm: Form;
   updateForms: { id: number; form: Form }[] = [];
 
@@ -92,13 +94,23 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
     private tabsService: TabsRifiutiService,
     private modalService: ModalService,
     @Inject(LOCALE_ID) public locale: string,
-  ) {}
+    private loadingService: LoadingService,
+  ) {
+
+
+this.rifiutiList =  this.tabsService.getRifiuti()
+
+
+  }
 
   ngOnInit(): void {
      //This is intentional
+
+
   }
 
   ngAfterViewInit(): void {
+
     this._populateColumns();
 
     this.action$
@@ -123,13 +135,18 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
           const selectedEer = this.tabsService.comboEer.content.find(
             (eer) => eer.id == value.codice
           );
-          value.form.get('descrizioneEer')?.setValue(selectedEer?.additionalValue);
-        }
+
+        value.form.get('descrizioneEer')?.setValue(selectedEer?.additionalValue);
+
       }
+
+      }
+
     })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+
     let { tabName, selectedTabObject } = changes;
     //Setto il nuovo valore delle prevConsDett (che può essere anche un array vuoto) e mostro la tabella aggiornata
     if (selectedTabObject.currentValue) {
@@ -137,18 +154,24 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     if (tabName.currentValue) {
+
       this._populateColumns();
       this.createForm = this._initCreateForm();
+
+
       //quando cambio tab il form viene rigenerato e devo di nuovo sottoscrivermi ai cambiamenti del codice eer
+
       this.createForm.get('codiceEer')?.valueChanges
       .pipe(
         share(),
         untilDestroyed(this))
       .subscribe(codiceEer => {
-        const selectedEer = this.tabsService.comboEer.content.find(
+        const selectedEer = this.rifiutiList.content.find(
           (eer) => eer.id == codiceEer
         );
+        console.log('finish2')
         this.createForm.get('descrizioneEer')?.setValue(selectedEer?.additionalValue);
+   //this.loadingService.hide()
       })
     }
     /**
@@ -157,11 +180,15 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
      * e forzare la tabella ad andare a pagina 1, altrimenti rischio di non vedere alcuni dati.
      * Se quando aggiorno provo a richiamare il setDatasource, le tabelle non funzionano (vai a capire perchè...)
      */
+this.loadingService.show()
     if (this.dataSource) {
       this._updateDatasource();
       this.dataSource.paging(1, 10);
+   //   this.loadingService.hide()
+
     } else {
       this._setDatasource();
+     // this.loadingService.hide()
     }
   }
 
@@ -384,6 +411,8 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
   //END ACTIONS
 
   getUpdateFormControl(prevConsDett: IPrevConsDettEntity, name: string): FormControl {
+
+
     const formControl = this.updateForms.find((i) => i.id == prevConsDett?.idPrevConsDett);
     return formControl?.form.get(name);
   }
@@ -422,6 +451,7 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
    * @description primo settaggio del datasource
    */
   private _setDatasource(): void {
+
     this.dataSource = new LocalPagedDataSource<IPrevConsDettEntity>({
       observable: this._getPrevConsDett.bind(this),
       tablePage: new TablePage()
@@ -433,16 +463,22 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
         if(!!this.updateForms?.length) {
           this.action$.next();
         }
+        this.loadingService.hide()
       }
+
     );
+
   }
 
   /**
    * @description aggiornamenti dell'observable (quindi delle prevConsDett) successivi al primo settaggio del datasource
    */
   private _updateDatasource(): void {
+
     this.dataSource.setObservable(this._getPrevConsDett.bind(this));
     this.dataSource.refresh();
+    this.loadingService.hide()
+
   }
 
   private _initCreateForm(prevConsDett?: IPrevConsDettEntity): Form {
@@ -451,6 +487,7 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
 
     switch (this.tabName) {
       case 'rii':
+
         return new Form({
           header: { show: false },
           filter: false,
@@ -461,7 +498,9 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
             codiceEer: new AutocompleteInput({
               placeholder: 'Seleziona codice eer',
               value: prevConsDett?.eer?.idEer ?? '',
-              options: this.tabsService.getComboEerObservable() as any,
+              options:of(this.rifiutiList) as any,
+            // options: this.tabsService.getComboEerObservable(this.annoTributoPrevCons) as any,
+
               size: sizeS,
               clearable: true,
               readonly: !this.isEditMode || !!prevConsDett?.idPrevConsDettRmr,
@@ -493,6 +532,7 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
               ]
             })
           }
+
         });
       case 'mat':
         return new Form({
@@ -509,6 +549,7 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
               required: false,
               size,
               readonly: !this.isEditMode || !!prevConsDett?.idPrevConsDettRmr,
+              maxLenght: 50,
             }),
             quantita: new TextInput({
               placeholder: 'Tonnellate',
@@ -541,7 +582,8 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
             codiceEer: new AutocompleteInput({
               placeholder: 'Seleziona codice eer',
               value: prevConsDett?.eer?.idEer ?? '',
-              options: this.tabsService.getComboEerObservable() as any,
+              options: of(this.rifiutiList) as any,
+            //  options: this.tabsService.getComboEerObservable(this.annoTributoPrevCons) as any,
               size: sizeS,
               clearable: true,
               readonly: !this.isEditMode || !!prevConsDett?.idPrevConsDettRmr,
@@ -581,6 +623,7 @@ export class TabRifiutiComponent implements OnInit, AfterViewInit, OnChanges {
           }
         });
     }
+
   }
 
   private _populateColumns(): void {

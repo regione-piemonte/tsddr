@@ -47,7 +47,7 @@
                 <div *ngIf="activeId != 'descrizione'">
                   <app-tab-rifiuti [isEditMode]="isEditMode" [tabName]="activeId" [selectedTabObject]="selectedTabObject"
                                     [isLegameRmr]="isLegameRmr" [idPrevCons]="prevCons.idPrevCons" [messages]="messages"
-                                    (sendEvent)="listenerAction($event)">
+                                    (sendEvent)="listenerAction($event)" [annoTributoPrevCons]="prevCons.annoTributo">
                   </app-tab-rifiuti>
                 </div>
             </div>

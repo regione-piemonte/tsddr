@@ -107,6 +107,26 @@ export class DichiarazioneService {
     );
   }
 
+
+  getComboAnnoPregresso():Observable<SelectOption<string, string>[]> {
+    return this.apiClient.request<SelectOption<string, string>[]>('annoPregresso').pipe(
+      map((response: any) => {
+        let selectOptions=[];
+        response.content.forEach(element => {
+          selectOptions.push(
+            {
+              id: element.id,
+             // name: element.value,
+              value: element.value
+            } as SelectOption<string, string>
+          )
+        });
+        response.content = selectOptions;
+        return response;
+      })
+    );
+  }
+
   getComboLineeImpianto(idImpianto:number):Observable<SelectOption<string, string>[]> {
     return this.apiClient.request<SelectOption<string, string>[]>('getComboImpiantiLinee',null,null,{ idImpianto: idImpianto }).pipe(
       map((response: any) => {
@@ -234,11 +254,14 @@ export class DichiarazioneService {
       return this.apiClient.request('getComboRifiutiTariffa');
     }
   }
-  getRifiutiTariffa(idDichAnnuale:string=null) {
+  getRifiutiTariffa(idDichAnnuale:string=null, anno?:any) {
     if(idDichAnnuale){
       return this.apiClient.request('getRifiutiTariffa',null,{idDichAnnuale:idDichAnnuale});
+    }else if(anno){
+      return this.apiClient.request('getRifiutiTariffa', null, {anno:anno});
     }else{
       return this.apiClient.request('getRifiutiTariffa');
+
     }
   }
   getPeriodi() {

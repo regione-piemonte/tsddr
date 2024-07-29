@@ -33,7 +33,7 @@ export interface IPrevCons {
   annoTributo?: number;
   dataDoc?: string;
   dataInvioDoc?: string;
-  dataProcollo?: string;
+  dataProtocollo?: string;
   modalita?: string;
   richiestaAmmissioneHasBeenUpdated?: boolean;
   numProtocollo?: string;
@@ -47,6 +47,7 @@ export interface IPrevCons {
   indirizzo?: Indirizzo;
   lineeImpianto?: IGetImpiantoLinee[];
   message?: IMessage;
+  pregresso?: boolean;
 }
 
 export interface IPrevConsLineeEntity {

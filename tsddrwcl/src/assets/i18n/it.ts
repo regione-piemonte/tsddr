@@ -1276,7 +1276,8 @@ export const IT = {
           STATODA: 'Stato da',
           VERSIONE: 'Versione',
           PROTOCOLLO: 'Protocollo',
-          AZIONI: 'Azioni'
+          AZIONI: 'Azioni',
+          PREGRESSO:'Pregresso'
         }
       }
     },
@@ -1386,7 +1387,13 @@ export const IT = {
         PROTOCOLLO: {
           LABEL:  'Protocollo',
           PLACEHOLDER: 'Protocollo'
-        }
+        },
+        DATA_PROTOCOLLO:{
+          LABEL: 'Data protocollo',
+          PLACEHOLDER: "Seleziona la Data Dichiarazione"
+
+        },
+        PREGRESSO: 'Pregresso'
       },
     },
     FORMDATIIMPIANTO: {

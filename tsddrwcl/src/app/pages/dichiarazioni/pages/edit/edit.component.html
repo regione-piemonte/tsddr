@@ -25,10 +25,12 @@
                                 {{'DICHIARAZIONI.CREATE.FORM.BUTTONDRAFT'|translate}}
                             </button>
                         </div>
+                           <!---la validita del form in testa va controllata solo se il profilo è pregresso e quindi i campi
+                         dataProtocollo e num protocollo sono modificabili -->
                         <div class="col-6">
                             <button (click)="onUpdate()"
                             *ngIf="acl.content.update && editMode"
-                            [disabled]="!sendEnabled"
+                            [disabled]="!sendEnabled || (acl?.content.profiloPregresso ? !form.valid : false)"
                             aria-label="Inserisci nuova Dichiarazione Annuale"
                                     type="button"
                                     class="btn btn-primary float-right">
@@ -37,7 +39,8 @@
                         </div>
                         <div class="col-12">
                             <button (click)="onDuplicate()"
-                            *ngIf="acl.content.insert && duplicateEnabled"
+                            *ngIf="acl.content.insert && duplicateEnabled
+                            && !(currentDichiarazione.pregresso && currentDichiarazione.statoDichiarazione.idStatoDichiarazione === 3)"
                             aria-label="Duplica Dichiarazione Annuale"
                                     type="button"
                                     class="btn btn-primary float-right">

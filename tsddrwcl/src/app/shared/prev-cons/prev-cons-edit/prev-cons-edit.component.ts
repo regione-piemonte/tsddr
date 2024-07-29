@@ -4,13 +4,23 @@ import { ActivatedRoute, Data, Router } from '@angular/router';
 import { SecurityService, UtilityService } from '@app/core/services';
 import {
   AutocompleteInput,
+  CheckboxInput,
   DateInput,
   Form,
+  NopInput,
   SelectOption,
   TextInput,
   ValidationStatus
 } from '@app/shared/form';
-import { distinct, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import {
+  distinct,
+  finalize,
+  map,
+  mergeMap,
+  switchMap,
+  take,
+  tap
+} from 'rxjs/operators';
 import { concat, forkJoin, iif, Observable, of, throwError } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MrService } from '../services/mr.service';
@@ -33,6 +43,9 @@ import { ICombo } from '../interfaces/api-mr.model';
 import { DichiarazioneModifica } from '../models/dichiarazione/dichiarazione-modifica';
 import { RichiestaModifica } from '../models/richiesta/richiesta-modifica';
 import { STATO_PREV_CONS } from '../models/constants';
+import { DichiarazioniACL } from '@app/pages/dichiarazioni/models/acl.model';
+import { Validators } from '@angular/forms';
+import { debug } from 'console';
 
 @UntilDestroy()
 @Component({
@@ -47,6 +60,8 @@ export class PrevConsEditComponent implements OnInit {
   gestore: Gestore;
   impianto: Impianto;
   isProfileBO = false;
+
+  acl: DichiarazioniACL;
 
   private comboLocalImpianti: Observable<ICombo>;
   E014message: IMessage;
@@ -65,6 +80,8 @@ export class PrevConsEditComponent implements OnInit {
   draftEnabled: boolean = true;
 
   isInserimento: boolean;
+  comboAnni: any;
+  rescombo: any;
 
   constructor(
     readonly route: ActivatedRoute,
@@ -86,12 +103,25 @@ export class PrevConsEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.isProfileBO = this.securityService.isProfileBo();
+
     this._fork().subscribe((res) => {
+      if ('comboAnnoPregresso' in res) {
+        this.comboAnni = res.comboAnnoPregresso;
+      }
+      if ('combo' in res) {
+        this.rescombo = res.combo;
+      }
       if ('help' in res) {
         this.mr.setHelperTitle(res.help.content.testoInfo);
       }
       if ('acl' in res) {
         this.mr.setProfiloACL(res.acl);
+        this.form = this.initForm(this.rescombo, this.prevConsRMR);
+
+        if (this.mr.profiloACL?.content.profiloPregresso) {
+          this.form.get('pregresso').setValue(true);
+          //this.isProfileBO=true;
+        }
         // controllo per verificare se ho la prevCons o la R-MR
         const specificChek = this.isInserimento
           ? this.onVerificaPresenzaMr
@@ -110,12 +140,6 @@ export class PrevConsEditComponent implements OnInit {
         this.mr.setModalPros(A019.content);
         this.A019message = A019.content;
       }
-      if ('combo' in res) {
-        this.form = this.initForm(res.combo, this.prevConsRMR);
-        this.form.statusChanges.pipe(distinct()).subscribe((res) => {
-          this.disabledForm = res === 'INVALID';
-        });
-      }
       this.loadingService.hide();
     });
   }
@@ -126,10 +150,16 @@ export class PrevConsEditComponent implements OnInit {
    */
   onVerificaPresenza() {
     this.loadingService.show();
+    let yearPregresso = this.comboAnni.content?.find(
+      (anno) => anno.id === this.form.get('annoTributo').value
+    );
     this.mrService
       .existPrevCons({
         idImpianto: this.form.get('idImpianto').value,
-        annoTributo: this.form.get('annoTributo').value,
+        //annoTributo: this.form.get('annoTributo').value,
+        annoTributo: this.mr.profiloACL?.content.profiloPregresso
+          ? yearPregresso.value
+          : this.form.get('annoTributo').value,
         idGestore: this.form.get('idGestorePrevCons').value,
         idTipoDoc: this.mr.idTipoDoc
       })
@@ -159,8 +189,11 @@ export class PrevConsEditComponent implements OnInit {
             this.mr.prevCons.prevConsLinee =
               this.mr.prevCons.setPrevConsLineeInsert(impiantiLinee);
           }
-          this.mr.prevCons.annoTributo = +this.form.get('annoTributo').value;
-          this.mr.prevCons.dataDoc = this.form.get('dataDoc').value;
+          (this.mr.prevCons.annoTributo = this.mr.profiloACL?.content
+            .profiloPregresso
+            ? yearPregresso.value
+            : +this.form.get('annoTributo').value),
+            (this.mr.prevCons.dataDoc = this.form.get('dataDoc').value);
 
           this._setOnVerificaPresenzaMr();
           this.loadingService.hide();
@@ -209,6 +242,13 @@ export class PrevConsEditComponent implements OnInit {
     const prevCons = this._parsePrevConsSave({
       ...this.mr.prevCons
     });
+
+    //REQ4
+    prevCons.dataProtocollo = this.form.get('dataProtocollo').value;
+    prevCons.numProtocollo = this.form.get('numProtocollo').value;
+    prevCons.pregresso =
+      this.form.get('pregresso').value.toString() === 'true' ? true : false;
+
     this.loadingService.show();
     this.mrService
       .insertDichiarazioneBozza(prevCons, {
@@ -266,6 +306,9 @@ export class PrevConsEditComponent implements OnInit {
 
   private _fork() {
     return concat(
+      this.mrService
+        .getComboAnnoPregresso()
+        .pipe(map((res) => ({ comboAnnoPregresso: res }))), //REQ4
       this.utilityService
         .getNotaInfo('INSERISCI')
         .pipe(map((res) => ({ help: res }))),
@@ -281,9 +324,160 @@ export class PrevConsEditComponent implements OnInit {
     ).pipe(untilDestroyed(this));
   }
 
+  /*
+  public addPregresso(){
+    //EVOLUTIVA REQ_4
+    this.form.addControl(
+      'pregresso',
+      new CheckboxInput({
+        label: 'DICHIARAZIONI.CREATE.FORM.PREGRESSO',
+        size: '12',
+        value: this.mr.profiloACL?.content.profiloPregresso ?? false,
+        required: true,
+        validationStatus: [
+          ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+            text: this.mandatoryMessage.testoMsg
+          })
+        ],
+        readonly: true
+      })
+
+
+    );
+  }
+  */
+  public addDataProtocollo() {
+    //EVOLUTIVA REQ_4
+    //if (this.mr.profiloACL?.content?.profiloPregresso ) {
+    //if(this.mr.prevCons?.pregresso){
+    let readonly = true;
+    if (
+      (this.isInserimento ||
+        this.mr.prevCons?.statoDichiarazione?.idStatoDichiarazione ==
+          STATO_PREV_CONS.BOZZA) &&
+      this.mr.profiloACL?.content?.profiloPregresso
+    ) {
+      readonly = false;
+    } else {
+      readonly = //this.mr.profiloACL.content.profiloPregresso  &&
+        //!this.mr.prevCons?.statoDichiarazione?.descrStatoDichiarazione?.toLowerCase().includes('bozza')
+        this.isInserimento &&
+        this.mr.profiloACL?.content.profiloPregresso &&
+        this.mr.prevCons?.statoDichiarazione?.descrStatoDichiarazione
+          ?.toLowerCase()
+          .includes('bozza') &&
+        this.mr.prevCons?.pregresso
+          ? false
+          : true;
+    }
+
+    this.form.addControlAfter(
+      'dataProtocollo',
+      new DateInput({
+        label: 'DICHIARAZIONI.CREATE.FORM.DATA_PROTOCOLLO.LABEL',
+        placeholder: 'DICHIARAZIONI.CREATE.FORM.DATA_PROTOCOLLO.PLACEHOLDER',
+        size: '12|6|6|6|6',
+        // clearable: true,
+        //value: this.mr.prevCons?.dataProtocollo ??  this.datePipe.transform(new Date(), 'yyyy-MM-dd'),
+        value: this.mr.prevCons?.dataProtocollo
+          ? this.mr.prevCons.dataProtocollo
+          : this.mr.profiloACL?.content.profiloPregresso
+          ? this.datePipe.transform(new Date(), 'yyyy-MM-dd')
+          : null,
+        required: this.mr.profiloACL?.content.profiloPregresso ? true : false,
+        validationStatus: [
+          ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+            text: this.mandatoryMessage.testoMsg
+          })
+        ],
+        readonly: readonly
+      }),
+      'numProtocollo'
+    );
+    //}
+    ///////////////////////////
+  }
+  public addNumProtocollo() {
+    if (!this.form.get('numProtocollo')) {
+      let readonly = true;
+      if (
+        (this.isInserimento ||
+          this.mr.prevCons?.statoDichiarazione?.idStatoDichiarazione ==
+            STATO_PREV_CONS.BOZZA) &&
+        this.mr.profiloACL?.content?.profiloPregresso
+      ) {
+        readonly = false;
+      } else {
+        readonly =
+          this.isInserimento &&
+          this.mr.profiloACL?.content.profiloPregresso &&
+          this.mr.prevCons?.statoDichiarazione?.descrStatoDichiarazione
+            ?.toLowerCase()
+            .includes('bozza') &&
+          this.mr.prevCons?.pregresso
+            ? false
+            : true;
+      }
+      this.form.addControlBefore(
+        'numProtocollo',
+        new TextInput({
+          label: 'DICHIARAZIONI.CREATE.FORM.PROTOCOLLO.LABEL',
+          placeholder: ' ',
+          type: 'text',
+          size: '12|6|6|6|6',
+          clearable: true,
+          value: this.mr.prevCons?.numProtocollo ?? null,
+          required: this.mr.profiloACL?.content.profiloPregresso ? true : false,
+          readonly: readonly,
+          validatorOrOpts: [
+            Validators.pattern(/^\d{8}\/\d{4}$/),
+            Validators.required
+          ],
+          validationStatus: [
+            ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+              text: this.mandatoryMessage.testoMsg
+            }),
+            ValidationStatus.ERROR.CUSTOM(
+              (control) => control.hasError('pattern'),
+              {
+                //da definire se viene tornato dal be
+                text: 'Numero protocollo non valido'
+              }
+            )
+          ]
+        }),
+        'pregresso'
+      );
+    }
+  }
+
   //se dichiarazione legata a RMR, gestori e impianto saranno readonly e popolati con i dati che arrivano da RMR
   public initForm(comboGestori: any, prevConsRMR?: PrevConsClass): Form {
     const size = '12|6|6|6|6';
+    let readonlyDataDoc = false;
+    if (this.isInserimento) {
+      readonlyDataDoc = true;
+    }
+    let readonlyProt = true;
+    if (
+      (this.isInserimento ||
+        this.mr.prevCons?.statoDichiarazione?.idStatoDichiarazione ==
+          STATO_PREV_CONS.BOZZA) &&
+      this.mr.profiloACL?.content?.profiloPregresso
+    ) {
+      readonlyProt = false;
+    } else {
+      readonlyProt =
+        this.isInserimento &&
+        this.mr.profiloACL?.content.profiloPregresso &&
+        this.mr.prevCons?.statoDichiarazione?.descrStatoDichiarazione
+          ?.toLowerCase()
+          .includes('bozza') &&
+        this.mr.prevCons?.pregresso
+          ? false
+          : true;
+    }
+
     this.form = new Form({
       header: { show: false },
       filter: false,
@@ -335,12 +529,14 @@ export class PrevConsEditComponent implements OnInit {
                 let impianto = value.content.find(
                   (item) => item.id === selected
                 );
-                this.form
-                  .get('idGestorePrevCons')
-                  .setValue(impianto.additionalValue.toString() ?? null, {
-                    emitEvent: false
-                  });
-                this.form.get('idGestorePrevCons').setErrors(null);
+                if (impianto) {
+                  this.form
+                    .get('idGestorePrevCons')
+                    .setValue(impianto?.additionalValue.toString() ?? null, {
+                      emitEvent: false
+                    });
+                  this.form.get('idGestorePrevCons').setErrors(null);
+                }
               });
             }
           },
@@ -379,6 +575,7 @@ export class PrevConsEditComponent implements OnInit {
               : 'DICHIARAZIONI.CREATE.FORM.DATA.PLACEHOLDER',
           size,
           clearable: true,
+          readonly: readonlyDataDoc,
           value:
             this.mr.prevCons?.dataDoc ??
             this.datePipe.transform(new Date(), 'yyyy-MM-dd'),
@@ -406,8 +603,97 @@ export class PrevConsEditComponent implements OnInit {
             'BOZZA',
           readonly: true,
           validatorOrOpts: { updateOn: 'blur' }
+        }),
+        nop: new NopInput({
+          size
+        }),
+        numProtocollo: new TextInput({
+          label: 'DICHIARAZIONI.CREATE.FORM.PROTOCOLLO.LABEL',
+          placeholder: ' ',
+          type: 'text',
+          size: '12|6|6|6|6',
+          clearable: true,
+          value: this.mr.prevCons?.numProtocollo ?? null,
+          required: this.mr.profiloACL?.content.profiloPregresso ? true : false,
+          readonly: readonlyProt,
+          validatorOrOpts: [
+            Validators.pattern(/^\d{8}\/\d{4}$/),
+            Validators.required
+          ],
+          validationStatus: [
+            ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+              text: this.mandatoryMessage.testoMsg
+            }),
+            ValidationStatus.ERROR.CUSTOM(
+              (control) => control.hasError('pattern'),
+              {
+                //da definire se viene tornato dal be
+                text: 'Numero protocollo non valido'
+              }
+            )
+          ]
+        }),
+        dataProtocollo: new DateInput({
+          label: 'DICHIARAZIONI.CREATE.FORM.DATA_PROTOCOLLO.LABEL',
+          placeholder: 'DICHIARAZIONI.CREATE.FORM.DATA_PROTOCOLLO.PLACEHOLDER',
+          size: '12|6|6|6|6',
+          // clearable: true,
+          //value: this.mr.prevCons?.dataProtocollo ??  this.datePipe.transform(new Date(), 'yyyy-MM-dd'),
+          value: this.mr.prevCons?.dataProtocollo
+            ? this.mr.prevCons.dataProtocollo
+            : this.mr.profiloACL?.content.profiloPregresso
+            ? null
+            : null,
+          required: this.mr.profiloACL?.content.profiloPregresso ? true : false,
+          validationStatus: [
+            ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+              text: this.mandatoryMessage.testoMsg
+            })
+          ],
+          readonly: readonlyProt
+        }),
+        pregresso: new CheckboxInput({
+          label: 'DICHIARAZIONI.CREATE.FORM.PREGRESSO',
+          size: '12',
+          value: this.mr.prevCons?.pregresso ?? false,
+          required: true,
+          validationStatus: [
+            ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+              text: this.mandatoryMessage.testoMsg
+            })
+          ],
+          readonly: true
         })
       }
+    });
+
+    //EVOLUTIVA REQ_4
+    //this.addDataProtocollo();
+    if (this.isInserimento && this.mr.profiloACL?.content.profiloPregresso) {
+      this.form.removeControl('annoTributo');
+      this.form.addControlAfter(
+        'annoTributo',
+        new AutocompleteInput({
+          label: 'DICHIARAZIONI.CREATE.FORM.ANNO.LABEL',
+          placeholder: 'DICHIARAZIONI.CREATE.FORM.ANNO.PLACEHOLDER',
+          options: of(this.comboAnni),
+          required: true,
+          validationStatus: [
+            ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+              text: this.mandatoryMessage.testoMsg
+            })
+          ],
+          validatorOrOpts: { updateOn: 'blur' },
+          size: '12|6|6|6|6',
+          clearable: true
+        }),
+        'idImpianto'
+      );
+      this.form.updateValueAndValidity();
+    }
+
+    this.form.statusChanges.pipe(distinct()).subscribe((res) => {
+      this.disabledForm = res === 'INVALID';
     });
 
     // in inserimento DMR legato a RMR prendo gestore e impianto dalla RMR e non sono modificabili
@@ -417,30 +703,19 @@ export class PrevConsEditComponent implements OnInit {
     this.checkInserimento();
 
     // se sono in visualizzazione devo vedere anche la colonna protocollo
+    /* REQ4 inutile questo check visto che numero protocollo deve essere sempre visualizzato
     if (
-      this.mr.prevCons?.statoDichiarazione?.idStatoDichiarazione ==
-        STATO_PREV_CONS.INVIATA ||
-      this.isProfileBO
+      this.mr.prevCons?.statoDichiarazione?.idStatoDichiarazione == STATO_PREV_CONS.INVIATA
+        ||  this.isProfileBO
     ) {
-      this.form.addControl(
-        'numProtocollo',
-        new TextInput({
-          label: 'DICHIARAZIONI.CREATE.FORM.PROTOCOLLO.LABEL',
-          placeholder: ' ',
-          type: 'text',
-          size,
-          clearable: true,
-          value: this.mr.prevCons?.numProtocollo ?? null,
-          readonly: true
-        })
-      );
+      this.addNumProtocollo();
     }
+    */
 
     this.comboLocalImpianti = this.mrService.getComboDichiarazioneImpianti();
     (this.form.get('idImpianto') as AutocompleteInput).setOptions(
       this.comboLocalImpianti as any
     );
-
     return this.form;
   }
 
@@ -448,7 +723,8 @@ export class PrevConsEditComponent implements OnInit {
     if (prevConsRMR) {
       this.form.get('idGestorePrevCons').disable({ emitEvent: false });
       this.form.get('idImpianto').disable({ emitEvent: false });
-      this.disabledForm = false;
+      //nel momento in disabilito un control la sua validità o meno non influisce sul form
+      // this.disabledForm = false;
     }
   }
   checkInserimento() {
@@ -547,6 +823,12 @@ export class PrevConsEditComponent implements OnInit {
       ...this.mr.prevCons
     });
 
+    //REQ4
+    prevCons.dataProtocollo = this.form.get('dataProtocollo').value;
+    prevCons.numProtocollo = this.form.get('numProtocollo').value;
+    prevCons.pregresso =
+      this.form.get('pregresso').value.toString() === 'true' ? true : false;
+
     this.mrService
       .insertDichiarazioneMr(prevCons, {
         idImpianto: this.form.get('idImpianto').value,
@@ -559,7 +841,13 @@ export class PrevConsEditComponent implements OnInit {
           text: response.message.testoMsg
         });
         this.loadingService.hide();
-        this.router.navigate([this.mr.path]);
+        ///
+
+        if (this.mr.path.includes('lista')) {
+          this.router.navigate([this.mr.path]);
+        } else {
+          this.router.navigate([this.mr.path, 'lista']);
+        }
       });
   }
 

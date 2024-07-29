@@ -11,24 +11,35 @@ import { IPrevConsDettEntity } from '../interfaces/prev-cons.interface';
 })
 export class TabsRifiutiService {
   private comboEerArray: ICombo = null;
-
+private rifiuti: ICombo;
   constructor(private mrService: MrService,
               private i18n: I18nService,) {}
 
-  getComboEerObservable(): Observable<ICombo> {
+  getComboEerObservable(anno): Observable<ICombo> {
     // se non ho il comboarray lo popolo, altrimenti mi torno quello che già ho
-    if (this.comboEerArray === null) {
+    //if (this.comboEerArray === null) {
       return this.mrService
-        .getComboEer()
+        .getComboEer(anno)
         .pipe(tap((res) => (this.comboEerArray = res)));
-    }
-    return of(this.comboEerArray);
+    //}
+    //return of(this.comboEerArray);
   }
 
   get comboEer(): ICombo {
+
     return this.comboEerArray;
   }
 
+
+  setRifiuti(combo : ICombo){
+
+this.rifiuti = combo;
+  }
+
+  getRifiuti(): ICombo {
+
+    return this.rifiuti;
+  }
   /**
    * @description per aggiornare gli id locali dei prevConsDett
    */

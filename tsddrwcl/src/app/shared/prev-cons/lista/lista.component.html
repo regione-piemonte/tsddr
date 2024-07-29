@@ -72,6 +72,19 @@
     </div>
 </div>
 
+<!-----EVOLUTIVA REQ4-->
+<ng-template let-row="row" #pregressoTemplate>
+    <div class="d-flex justify-content-center mr-4">
+      <app-checkbox-input
+        [name]="'checkbox' + row.idPrevCons"
+        [label]="row.idPrevCons"
+        [checked]="row.pregresso"
+        [disable]="true"
+        [showLabel]="false"
+      ></app-checkbox-input>
+    </div>
+</ng-template>
+
 <ng-template let-row='row' #actionsTemplate>
     <div class="actions ng-star-inserted">
         <button *ngIf="row && acl.content.read" (click)="mr.detail(row)" [attr.aria-label]="mr.labelShow | translate"
@@ -82,8 +95,13 @@
         <button *ngIf="row && acl.content.read && row.printable && !isPreInserimento" (click)="downloadPdf(row)" [attr.aria-label]="mr.labelDownload | translate" [title]="mr.labelDownload | translate" class="btn btn-action p-0 px-2">
             <img [alt]="mr.labelDownload | translate" height="20px" src="assets/icon/pdf.svg">
         </button>
-        <button *ngIf="row && acl.content.read && acl.content.delete && row.annullable && !isPreInserimento" (click)="mr.delete(row)" [attr.aria-label]="mr.labelDelete | translate"  [title]="mr.labelDelete | translate" class="btn btn-action p-0 px-2">
+
+        <button *ngIf="(row && acl.content.read && acl.content.delete && row.annullable && !isPreInserimento)
+            || (row && acl.content.profiloPregresso && row.statoDichiarazione?.descrStatoDichiarazione?.toLowerCase().includes('bozza') && row.pregresso)"
+            (click)="mr.delete(row)" [attr.aria-label]="mr.labelDelete | translate"  [title]="mr.labelDelete | translate" class="btn btn-action p-0 px-2">
             <img [alt]="mr.labelDelete | translate" height="20px" src="assets/icon/icon-table-elimina.svg">
         </button>
+
+
     </div>
 </ng-template>

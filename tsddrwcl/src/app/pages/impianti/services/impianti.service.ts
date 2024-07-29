@@ -361,11 +361,16 @@ export class ImpiantiService {
     return (
       formgroup: FormGroup
     ): { [key: string]: any } | null => {
+
       const d1 = formgroup.controls[start].value as string;
       const d2 = formgroup.controls[end].value as string;
+   const today =  new Date()
       if(d1 && d2 && ('' + d1).localeCompare(
         ''+d2
       )>0){
+        return { dataFineValidita: true };
+      }
+      else if(d2 != null && new Date(d2) < today){
         return { dataFineValidita: true };
       }
       return null;

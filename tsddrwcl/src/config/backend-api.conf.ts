@@ -766,4 +766,10 @@ export const backendApi: ApiConfig[] = [
     method: 'GET',
     url: '/impianti/checkDelete/{idImpianto}'
   },
+  //REQ4
+  {
+    name: 'annoPregresso',
+    method: 'GET',
+    url: '/anno-pregresso/combo'
+  },
 ];

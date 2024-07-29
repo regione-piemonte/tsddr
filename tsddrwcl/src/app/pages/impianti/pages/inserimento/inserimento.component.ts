@@ -27,6 +27,7 @@ import { StoreGridMemoryService } from '../../services/store-grid-memory.service
 import { DatePipe, formatDate } from '@angular/common';
 import { Atto } from '../../models/atto.model';
 import { Impianto } from '../../models/impianto.model';
+import { ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @UntilDestroy()
 @Component({
@@ -388,7 +389,14 @@ export class InserimentoComponent implements OnInit {
           placeholder: 'IMPIANTI.FORMDATIIMPIANTO.DATAFINEVALIDITA.PLACEHOLDER',
           size,
           clearable: true,
+         // validatorOrOpts: {validators :[this._fineValiditaValidator], updateOn: 'change'},
           validationStatus: [
+           /* ValidationStatus.ERROR.CUSTOM(
+              (control) => control.touched && control.hasError('minorSysDate'),
+              {
+                text: this.messageIdDataTesto
+              }
+            ),*/
             ValidationStatus.ERROR.CUSTOM(
               (control) => control.touched && control.parent?.hasError('dataFineValidita'),
               {
@@ -879,5 +887,7 @@ export class InserimentoComponent implements OnInit {
     this.storeLineeGridMemoryService.removeAtto(atto);
     this.dataSource.refresh();
   }
+
+
 
 }

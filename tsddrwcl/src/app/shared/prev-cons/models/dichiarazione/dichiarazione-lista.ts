@@ -13,7 +13,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap } from 'rxjs/operators';
 import { AlertDialogComponent } from '@app/shared/components/alert-dialog/alert-dialog.component';
 import { ModalService } from '@shared/modal/modal.service';
-import { TemplateRef } from '@angular/core';
+import { TemplateRef, ViewChild } from '@angular/core';
 import { NotificationService } from '@shared/notification/notification.service';
 import { DeleteMrComponent } from '../../modals/delete-mr/delete-mr.component';
 import { AutocompleteInput, Form, TextInput } from '@app/shared/form';
@@ -22,6 +22,8 @@ import { ID_TIPO_DOC } from '../constants';
 
 @UntilDestroy()
 export class DichiarazioneLista extends ListaAbstract {
+  @ViewChild('pregressoTemplate') pregressoTemplate: TemplateRef<any>;
+
   public dataSource: LocalPagedDataSource<IProfiloACL>;
   public columns: TableColumn[] = [];
   public filter: any;
@@ -139,7 +141,7 @@ export class DichiarazioneLista extends ListaAbstract {
     this.helperTitle = value;
   }
 
-  public initTable(actionsTemplate: TemplateRef<any>): void {
+  public initTable(actionsTemplate: TemplateRef<any>,pregressoTemplate?: TemplateRef<any>): void {
     let columns = [
       {
         prop: 'annoTributo',
@@ -262,6 +264,12 @@ export class DichiarazioneLista extends ListaAbstract {
           }
           return yearCheck;
         }
+      },
+      {
+        name: this.i18n.translate('DICHIARAZIONI.LISTA.TABLE.COLUMNS.PREGRESSO'),
+        cellTemplate: pregressoTemplate,
+        cellClass: 'align-middle',
+        sortable: false
       },
       {
         name: this.i18n.translate('DICHIARAZIONI.LISTA.TABLE.COLUMNS.AZIONI'),

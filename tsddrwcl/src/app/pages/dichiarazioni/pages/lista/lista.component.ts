@@ -35,6 +35,9 @@ import { Dichiarazione } from '../../models/dichiarazione.model';
 })
 export class ListaComponent implements OnInit, AfterViewInit {
   @ViewChild('actionsTemplate') actionsTemplate: TemplateRef<any>;
+
+  @ViewChild('pregressoTemplate') pregressoTemplate: TemplateRef<any>;
+
   acl: DichiarazioniACL;
 
   // Table declaration
@@ -354,13 +357,19 @@ export class ListaComponent implements OnInit, AfterViewInit {
           }
           return yearCheck;
         }
+      },  {
+        name: this.i18n.translate('DICHIARAZIONI.LISTA.TABLE.COLUMNS.PREGRESSO'),
+        cellTemplate: this.pregressoTemplate,
+        cellClass: 'align-middle',
+        sortable: false
       },
       {
         name: this.i18n.translate('DICHIARAZIONI.LISTA.TABLE.COLUMNS.AZIONI'),
         cellTemplate: this.actionsTemplate,
         cellClass: 'align-middle',
         sortable: false
-      }
+      },
+
     ];
     if (this.isProfileBo) {
       // non mostro la colonna stato per il profiloBO

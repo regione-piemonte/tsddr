@@ -14,7 +14,7 @@
                   <div class="row" *ngIf="showNewPrevConsBtn">
                       <div class="col-12">
                           <button
-                          [disabled]="disabledForm"
+                          [disabled]="form.invalid"
                           (click)="onVerificaPresenza()" [attr.aria-label]="mr.ariaLabelNuovaMr | translate" type="button"
                               class="btn btn-primary float-right">
                           {{ mr.btnNuovaMr |translate}}
@@ -38,6 +38,7 @@
                               {{'DICHIARAZIONI.CREATE.FORM.BUTTONDRAFT'|translate}}
                           </button>
                       </div>
+                      <!--[disabled]="!mr.sendEnabled() && form.invalid"-->
                       <div class="col-6">
                           <button (click)="onCreate()"
                           [disabled]="!mr.sendEnabled()"

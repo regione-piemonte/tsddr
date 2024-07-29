@@ -8,6 +8,7 @@ import {
 import { DichiarazioniACL } from '@pages/dichiarazioni/models/acl.model';
 import {
   AutocompleteInput,
+  CheckboxInput,
   DateInput,
   Form,
   TextInput,
@@ -32,6 +33,7 @@ import {
 import { DichiarazioneEditingStoreService } from '../../services/dichiarazione-editing-store.service';
 import { ConfirmSaveComponent } from '../../components';
 import { Console } from 'console';
+import { Validators } from '@angular/forms';
 
 @UntilDestroy()
 @Component({
@@ -138,7 +140,7 @@ export class EditComponent implements OnInit, OnDestroy {
       this.editingStoreService
         .getStoredDichiarazione(this.keyDichiarazione)
         .subscribe((dichiarazione) => {
-          console.log(dichiarazione);
+          //console.log(dichiarazione);
           if (
             dichiarazione &&
             dichiarazione.key &&
@@ -157,23 +159,26 @@ export class EditComponent implements OnInit, OnDestroy {
         }*/
       });
   }
-//Refactor for sonar issues
- checkDichiarazione(dichiarazione):boolean {
-
-  return (dichiarazione?.dichiarazione?.rifiutiConferiti?.rifiutiConferiti ===
-    null ||
-  dichiarazione?.dichiarazione?.rifiutiConferiti?.rifiutiConferiti
-    ?.length == 0 ||
-  dichiarazione?.dichiarazione?.rifiutiConferiti?.rifiutiConferiti ==
-    undefined)
- }
- checkStatus(versamentiIsEmpty, rifiutiConfIsEmpty):boolean{
- return( !versamentiIsEmpty &&
-  !rifiutiConfIsEmpty &&
-  this.status.rifiutiValid &&
-  this.status.versamentiValid &&
-  this.status.sedeValid)
- }
+  //Refactor for sonar issues
+  checkDichiarazione(dichiarazione): boolean {
+    return (
+      dichiarazione?.dichiarazione?.rifiutiConferiti?.rifiutiConferiti ===
+        null ||
+      dichiarazione?.dichiarazione?.rifiutiConferiti?.rifiutiConferiti
+        ?.length == 0 ||
+      dichiarazione?.dichiarazione?.rifiutiConferiti?.rifiutiConferiti ==
+        undefined
+    );
+  }
+  checkStatus(versamentiIsEmpty, rifiutiConfIsEmpty): boolean {
+    return (
+      !versamentiIsEmpty &&
+      !rifiutiConfIsEmpty &&
+      this.status.rifiutiValid &&
+      this.status.versamentiValid &&
+      this.status.sedeValid
+    );
+  }
   _changeStatus(s: statusFormEditingStore) {
     let rifiutiConfIsEmpty = false;
     let versamentiIsEmpty = false;
@@ -188,9 +193,7 @@ export class EditComponent implements OnInit, OnDestroy {
     this.editingStoreService
       .getStoredDichiarazione(this.keyDichiarazione)
       .subscribe((dichiarazione) => {
-        if (
-         this.checkDichiarazione(dichiarazione)
-        ) {
+        if (this.checkDichiarazione(dichiarazione)) {
           rifiutiConfIsEmpty = true;
         } else {
           rifiutiConfIsEmpty = false;
@@ -202,18 +205,14 @@ export class EditComponent implements OnInit, OnDestroy {
             if (element.importoVersato != 0) {
               versamentiIsEmpty = false;
 
-              if (
-                this.checkStatus(versamentiIsEmpty, rifiutiConfIsEmpty)
-
-              ) {
-
-                console.log(
-                  !versamentiIsEmpty,
-                  !rifiutiConfIsEmpty,
-                  this.status.rifiutiValid,
-                  this.status.versamentiValid,
-                  this.status.sedeValid
-                );
+              if (this.checkStatus(versamentiIsEmpty, rifiutiConfIsEmpty)) {
+                // console.log(
+                //   !versamentiIsEmpty,
+                //   !rifiutiConfIsEmpty,
+                //   this.status.rifiutiValid,
+                //   this.status.versamentiValid,
+                //   this.status.sedeValid
+                // );
 
                 this.sendEnabled = true;
               } else {
@@ -229,13 +228,13 @@ export class EditComponent implements OnInit, OnDestroy {
           versamentiIsEmpty = true;
         }
       });
-    console.log(
+    /*console.log(
       !versamentiIsEmpty,
       !rifiutiConfIsEmpty,
       this.status.rifiutiValid,
       this.status.versamentiValid,
       this.status.sedeValid
-    );
+    );*/
     /*   if (
       !versamentiIsEmpty &&
       !rifiutiConfIsEmpty &&
@@ -303,7 +302,7 @@ export class EditComponent implements OnInit, OnDestroy {
     //let obj = dich.rifiutiConferiti?.totali;
     //let obj = (_c = dich.rifiutiConferiti) === null || _c === void 0 ? void 0 : _c.totali;
     if (!(dich.rifiutiConferiti === null || dich.rifiutiConferiti === void 0))
-    	delete dich.rifiutiConferiti.totali;
+      delete dich.rifiutiConferiti.totali;
 
     dich.soggettiMr?.forEach((item) => {
       if (typeof item.obbRagg == 'boolean') {
@@ -499,19 +498,72 @@ export class EditComponent implements OnInit, OnDestroy {
         }),
         numProtocollo: new TextInput({
           label: 'DICHIARAZIONI.CREATE.FORM.PROTOCOLLO.LABEL',
-          placeholder: 'DICHIARAZIONI.CREATE.FORM.PROTOCOLLO.PLACEHOLDER',
+          placeholder: this.currentDichiarazione.statoDichiarazione
+          .idStatoDichiarazione === 1 &&
+        this.currentDichiarazione.pregresso ? 'DICHIARAZIONI.CREATE.FORM.PROTOCOLLO.PLACEHOLDER': ' ',
           type: 'text',
           size,
-          clearable: true,
+          required:this.acl.content.profiloPregresso? true: false,
+          // clearable: true,
+          pattern: '^[0-9]{8}(\/)[0-9]{4}$',
           value: this.currentDichiarazione.numProtocollo
             ? this.currentDichiarazione.numProtocollo.toString()
             : null,
-          readonly: true,
+          readonly:
+            this.acl.content.profiloPregresso &&
+            this.currentDichiarazione.statoDichiarazione
+              .idStatoDichiarazione === 1 &&
+            this.currentDichiarazione.pregresso
+              ? false
+              : true,
+              validatorOrOpts: [Validators.pattern('^[0-9]{8}(\/)[0-9]{4}$'), Validators.required],
+
+          validationStatus: [
+            ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+              text: this.mandatoryMessage.content.testoMsg
+            }),
+            ValidationStatus.ERROR.CUSTOM((control) => control.hasError('pattern'), {
+              //da definire se viene tornato dal be
+              text: 'Numero protocollo non valido'
+            })
+          ]
+        }),
+        dataProtocollo:  new DateInput({
+          label: 'DICHIARAZIONI.CREATE.FORM.DATA_PROTOCOLLO.LABEL',
+          placeholder: 'DICHIARAZIONI.CREATE.FORM.DATA_PROTOCOLLO.PLACEHOLDER',
+          size,
+          // clearable: true,
+          value: this.currentDichiarazione.dataProtocollo
+            ? this.datePipe.transform(
+                this.currentDichiarazione.dataProtocollo,
+                'yyyy-MM-dd'
+              )
+            : null,
+            required:this.acl.content.profiloPregresso? true: false,
+
           validationStatus: [
             ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
               text: this.mandatoryMessage.content.testoMsg
             })
-          ]
+          ],
+          readonly:
+            this.acl.content.profiloPregresso &&
+            this.currentDichiarazione.statoDichiarazione
+              .idStatoDichiarazione === 1
+              ? false
+              : true
+        }),
+        pregresso: new CheckboxInput({
+          label: 'DICHIARAZIONI.CREATE.FORM.PREGRESSO',
+          size: '12',
+          value: this.currentDichiarazione?.pregresso,
+          required: true,
+          validationStatus: [
+            ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+              text: this.mandatoryMessage.content.testoMsg
+            })
+          ],
+          readonly: true
         })
       }
     });
@@ -523,6 +575,39 @@ export class EditComponent implements OnInit, OnDestroy {
         ) as any
       );
     }
+
+    //EVOLUTIVA REQ_4
+   /* if (this.currentDichiarazione.pregresso) {
+      this.form.addControlAfter(
+        'dataProtocollo',
+        new DateInput({
+          label: 'DICHIARAZIONI.CREATE.FORM.DATA_PROTOCOLLO.LABEL',
+          placeholder: 'DICHIARAZIONI.CREATE.FORM.DATA_PROTOCOLLO.PLACEHOLDER',
+          size,
+          // clearable: true,
+          value: this.currentDichiarazione.dataProtocollo
+            ? this.datePipe.transform(
+                this.currentDichiarazione.dataProtocollo,
+                'yyyy-MM-dd'
+              )
+            : this.datePipe.transform(new Date(), 'yyyy-MM-dd'),
+          required: true,
+          validationStatus: [
+            ValidationStatus.ERROR.REQUIRED_WITH_MESSAGE({
+              text: this.mandatoryMessage.content.testoMsg
+            })
+          ],
+          readonly:
+            this.acl.content.profiloPregresso &&
+            this.currentDichiarazione.statoDichiarazione
+              .idStatoDichiarazione === 1
+              ? false
+              : true
+        }),
+        'numProtocollo'
+      );
+    }*/
+    ///////////////////////////
   }
   checkDuplicate(results) {
     if (results.content) {
@@ -636,6 +721,17 @@ export class EditComponent implements OnInit, OnDestroy {
       let dich: Dichiarazione = {
         ...this.dichiarazioneEditingStore.dichiarazione
       };
+      //REQ4
+      console.log(this.form.get('pregresso').value);
+      if (
+        this.acl.content.profiloPregresso &&
+        this.dichiarazioneEditingStore.dichiarazione.pregresso
+      ) {
+        dich.dataProtocollo = this.form.get('dataProtocollo').value;
+        dich.numProtocollo = this.form.get('numProtocollo').value;
+        dich.pregresso =
+          this.form.get('pregresso').value.toString() === 'true' ? true : false;
+      }
 
       dich = this.parseDichiarazioneAnnualeSave(dich);
       this.loadingService.show();

@@ -79,7 +79,7 @@ export class TabRichiestaComponent implements OnInit {
     const size = '12|6|9|9|9';
     const sizeS = '12|6|1|1|1';
     const sizeM = '12|6|2|2|2';
-
+    //console.log('this.richiestaRMR?.',this.richiestaRMR);
     //I dati visualizzati in questo form fanno riferimento ad una Richiesta R-MR precedente e devono essere solamente visualizzati
     this.formData = new Form({
       header: { show: false },
@@ -96,13 +96,14 @@ export class TabRichiestaComponent implements OnInit {
             : ''
         }),
         _r_dataDoc: new TextInput({
-          label: 'DICHIARAZIONI_MR.CREATE.FORM.DATA_REGISTRAZIONE.LABEL',
+          label: 'DICHIARAZIONI.CREATE.FORM.DATA_PROTOCOLLO.LABEL',
           placeholder: ' ',
           type: 'text',
           size: sizeM,
           readonly: true,
           value: this.datePipe.transform(
-            this.richiestaRMR?.dataDoc,
+            //this.richiestaRMR?.dataDoc,
+            this.richiestaRMR?.dataProtocollo,
             'dd/MM/yyyy'
           )
           ?? ''

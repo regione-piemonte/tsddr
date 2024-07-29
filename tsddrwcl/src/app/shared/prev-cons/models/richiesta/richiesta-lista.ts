@@ -129,7 +129,7 @@ export class RichiestaLista extends ListaAbstract {
     this.helperTitle = value;
   }
 
-  public initTable(actionsTemplate: TemplateRef<any>): void {
+  public initTable(actionsTemplate: TemplateRef<any>, pregressoTemplate?: TemplateRef<any>): void {
     let columns = [
       {
         prop: 'annoTributo',
@@ -252,6 +252,11 @@ export class RichiestaLista extends ListaAbstract {
           }
           return yearCheck;
         }
+      },  {
+        name: this.i18n.translate('DICHIARAZIONI.LISTA.TABLE.COLUMNS.PREGRESSO'),
+        cellTemplate: pregressoTemplate,
+        cellClass: 'align-middle',
+        sortable: false
       },
       {
         name: this.i18n.translate('DICHIARAZIONI.LISTA.TABLE.COLUMNS.AZIONI'),

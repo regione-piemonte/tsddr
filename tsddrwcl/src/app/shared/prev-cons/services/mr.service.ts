@@ -67,6 +67,7 @@ export class MrService {
   }
 
   getPercScartoVisible(codLinea: string, anno: number){
+   
     return this.apiClient.request('isPercScartoVisible', null, {codLinea, anno});
   }
 
@@ -136,8 +137,31 @@ export class MrService {
     );
   }
 
-  getComboEer() {
-    return this.apiClient.request('getComboEer');
+  getComboEer(anno: number=null) {
+    if(anno){
+      return this.apiClient.request('getComboEer',null, {anno:anno });
+    }else{
+      return this.apiClient.request('getComboEer');
+    }
+  }
+
+  getComboAnnoPregresso():Observable<SelectOption<string, string>[]> {
+    return this.apiClient.request<SelectOption<string, string>[]>('annoPregresso').pipe(
+      map((response: any) => {
+        let selectOptions=[];
+        response.content.forEach(element => {
+          selectOptions.push(
+            {
+              id: element.id,
+             // name: element.value,
+              value: element.value
+            } as SelectOption<string, string>
+          )
+        });
+        response.content = selectOptions;
+        return response;
+      })
+    );
   }
 
   getDichiarazione(

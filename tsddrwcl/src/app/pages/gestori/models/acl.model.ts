@@ -8,5 +8,6 @@ export interface GestoriACL {
     insert: boolean;
     read: boolean;
     update: boolean;
+    profiloPregresso?:boolean;
   };
 }

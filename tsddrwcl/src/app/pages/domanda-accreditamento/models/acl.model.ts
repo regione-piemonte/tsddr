@@ -8,5 +8,6 @@ export interface DomandaAccreditamentoACL {
     insert: boolean;
     read: boolean;
     update: boolean;
+    profiloPregresso?:boolean;
   };
 }

@@ -8,5 +8,6 @@ export interface UtentiProfiloACL {
     insert: boolean;
     read: boolean;
     update: boolean;
+    profiloPregresso?:boolean;
   };
 }

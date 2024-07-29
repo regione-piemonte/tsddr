@@ -28,11 +28,12 @@ import { IPrevCons } from '../interfaces/prev-cons.interface';
 })
 export class ListaComponent implements OnInit, AfterViewInit {
   @ViewChild('actionsTemplate') actionsTemplate: TemplateRef<any>;
+  @ViewChild('pregressoTemplate') pregressoTemplate: TemplateRef<any>;
   mr: ListaAbstract;
   acl: IProfiloACL;
   isProfileBO: boolean = false;
   checkSuperAdmn: boolean = false;
-  /** 
+  /**
    * isPreInserimento mi serve per sapere se mi trovo nella pagina di inserimento
    * Dichiarazione in Misura Ridotta in cui visualizzo la lista
    * delle Richieste MR che possono essere legate alla DMR.
@@ -96,7 +97,8 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.mr.initTable(this.actionsTemplate);
+    this.mr.initTable(this.actionsTemplate, this.pregressoTemplate);
+    console.log('this.mr', this.mr);
   }
 
   private _fork() {
